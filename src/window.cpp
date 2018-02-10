@@ -45,3 +45,29 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
 twoCoords::Window::~Window() {
   glfwDestroyWindow(_window);
 }
+
+void twoCoords::Window::update() const {
+  // update window itself
+  glfwSwapBuffers(_window);
+  glfwPollEvents();
+}
+
+void twoCoords::Window::close() {
+  glfwSetWindowShouldClose(_window, GL_TRUE);
+}
+
+bool twoCoords::Window::isOpen() const {
+  return (glfwWindowShouldClose(_window) == false);
+}
+
+int twoCoords::Window::width() const {
+  int width;
+  glfwGetWindowSize(_window, &width, 0);
+  return width;
+}
+
+int twoCoords::Window::height() const {
+  int height;
+  glfwGetWindowSize(_window, 0, &height);
+  return height;
+}

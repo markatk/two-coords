@@ -37,7 +37,19 @@ TEST_CASE("Engine window", "[Two-Coords]") {
 
   SECTION("create a window") {
     window = new twoCoords::Window(640, 480, "Test window");
+
     REQUIRE(window != nullptr);
+
+    delete window;
+  }
+
+  SECTION("check window size") {
+    window = new twoCoords::Window(800, 600, "Test window");
+
+    REQUIRE(window != nullptr);
+    REQUIRE(window->width() == 800);
+    REQUIRE(window->height() == 600);
+
     delete window;
   }
 

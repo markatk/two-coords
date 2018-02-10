@@ -40,5 +40,12 @@ namespace twoCoords {
   public:
     Window(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
     virtual ~Window();
+
+    void update() const;
+    void close();
+    bool isOpen() const;
+
+    int width() const;
+    int height() const;
   };
 }
