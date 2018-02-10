@@ -1,6 +1,6 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
+ * File: include/version.h
  * Created: 10.02.2018
  * Author: MarkAtk
  * 
@@ -29,19 +29,6 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
-}
+#define TWO_COORDS_VERSION_MAJOR @TwoCoords_VERSION_MAJOR@
+#define TWO_COORDS_VERSION_MINOR @TwoCoords_VERSION_MINOR@
+#define TWO_COORDS_VERSION_PATCH @TwoCoords_VERSION_PATCH@

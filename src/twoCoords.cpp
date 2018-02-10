@@ -1,6 +1,6 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
+ * File: src/twoCoords.cpp
  * Created: 10.02.2018
  * Author: MarkAtk
  * 
@@ -27,21 +27,12 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "twoCoords.h"
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
+bool twoCoords::initialize() {
+  return false;
+}
 
-#include "version.h"
+void twoCoords::deinitialize() {
 
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
 }

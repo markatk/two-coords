@@ -1,6 +1,6 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
+ * File: tests/init.cpp
  * Created: 10.02.2018
  * Author: MarkAtk
  * 
@@ -27,21 +27,13 @@
  * SOFTWARE.
  */
 
-#pragma once
+#define CATCH_CONFIG_MAIN
+#include <catch.hpp>
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
+#include "twoCoords.h"
 
-#include "version.h"
+TEST_CASE("Test engine initialization", "[Two-Coords]") {
+  REQUIRE(twoCoords::initialize() == true);
 
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+  twoCoords::deinitialize();
 }
