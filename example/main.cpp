@@ -1,6 +1,6 @@
 /**
  * Project: Two-Coords
- * File: include/window.h
+ * File: example/main.cpp
  * Created: 10.02.2018
  * Author: MarkAtk
  * 
@@ -27,36 +27,27 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "twoCoords.h"
 
-#include <string>
-#include <GLFW/glfw3.h>
+#include <spdlog/spdlog.h>
 
-namespace twoCoords {
-  class Window {
-  private:
-  GLFWwindow *_window;
+int main() {
+  // initialize
+  if (twoCoords::initialize() == false) {
+    spdlog::get("console")->error("Unable to initialize Two-Coords");
+    return EXIT_SUCCESS;
+  }
 
-  public:
-    Window(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
-    virtual ~Window();
+  // create window
+  auto window = new twoCoords::Window(800, 600, "Two-Coords Example");
 
-    void update() const;
-    void close();
-    bool isOpen() const;
+  // main loop
+  while (window->isOpen()) {
+    window->update();
+  }
 
-    int width() const;
-    int height() const;
+  // cleanup
+  delete window;
 
-  private:
-    static void windowSizeCallback(GLFWwindow *window, int width, int height);
-    static void windowCloseCallback(GLFWwindow *window);
-    static void windowRefreshCallback(GLFWwindow *window);
-    static void windowFocusCallback(GLFWwindow *window, int focused);
-    static void windowIconifyCallback(GLFWwindow *window, int iconified);
-
-    // disable copying
-    Window(const Window &);
-    const Window &operator=(const Window &);
-  };
+  twoCoords::deinitialize();
 }

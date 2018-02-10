@@ -40,6 +40,13 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   // setup window
   glfwMakeContextCurrent(_window);
   glfwSetWindowUserPointer(_window, this);
+
+  // register callbacks
+  glfwSetWindowSizeCallback(_window, windowSizeCallback);
+  glfwSetWindowCloseCallback(_window, windowCloseCallback);
+  glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
+  glfwSetWindowFocusCallback(_window, windowFocusCallback);
+  glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
 }
 
 twoCoords::Window::~Window() {
@@ -47,6 +54,9 @@ twoCoords::Window::~Window() {
 }
 
 void twoCoords::Window::update() const {
+  // render
+  glClear(GL_COLOR_BUFFER_BIT);
+
   // update window itself
   glfwSwapBuffers(_window);
   glfwPollEvents();
@@ -70,4 +80,24 @@ int twoCoords::Window::height() const {
   int height;
   glfwGetWindowSize(_window, 0, &height);
   return height;
+}
+
+void twoCoords::Window::windowSizeCallback(GLFWwindow *window, int width, int height) {
+  
+}
+
+void twoCoords::Window::windowCloseCallback(GLFWwindow *window) {
+
+}
+
+void twoCoords::Window::windowRefreshCallback(GLFWwindow *window) {
+
+}
+
+void twoCoords::Window::windowFocusCallback(GLFWwindow *window, int focused) {
+
+}
+
+void twoCoords::Window::windowIconifyCallback(GLFWwindow *window, int iconified) {
+
 }

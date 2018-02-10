@@ -7,4 +7,5 @@ file(GLOB SOURCES "./*.cpp")
 add_library(TwoCoords SHARED ${SOURCES})
 
 # Link libraries
+target_link_libraries(TwoCoords GL)
 target_link_libraries(TwoCoords glfw)
