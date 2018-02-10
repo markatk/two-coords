@@ -29,24 +29,40 @@
 
 #include "twoCoords.h"
 
+#include <spdlog/spdlog.h>
 #include <GLFW/glfw3.h>
 
+static void errorCallback(int error, const char *description) {
+  spdlog::get("console")->error(description);
+}
+
 bool twoCoords::initialize() {
+  // setup logger
+  auto console = spdlog::stdout_color_mt("console");
+  console->info("Two-Coords starting...");
+  
   if (glfwInit() == false) {
     return false;
   }
 
   // set global glfw settings
-  // glfwSetErrorCallback();
+  glfwSetErrorCallback(errorCallback);
 
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+  console->info("Two-Coords started");
+
   return true;
 }
 
 void twoCoords::deinitialize() {
+  auto console = spdlog::get("console");
+  console->info("Two-Coords stopping...");
+
   glfwTerminate();
+
+  console->info("Two-Coords stopped");
 }
