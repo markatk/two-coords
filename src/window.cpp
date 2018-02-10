@@ -30,6 +30,7 @@
 #include "window.h"
 
 #include <stdexcept>
+#include <spdlog/spdlog.h>
 
 twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor *monitor) {
   _window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
@@ -40,6 +41,21 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   // setup window
   glfwMakeContextCurrent(_window);
   glfwSetWindowUserPointer(_window, this);
+
+  // init glew
+  if (glewInit() != GLEW_OK) {
+    throw std::runtime_error("glewInit failed");
+  }
+
+  auto console = spdlog::get("console");
+  console->info(std::string("OpenGL version: ") + (const char *)glGetString(GL_VERSION));
+  console->info(std::string("GLSL version: ") + (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
+  console->info(std::string("Vendor: ") + (const char *)glGetString(GL_VENDOR));
+  console->info(std::string("Renderer: ") + (const char *)glGetString(GL_RENDERER));
+
+  if (GLEW_VERSION_4_5 == false) {
+    throw std::runtime_error("OpenGL 4.5 not available");
+  }
 
   // register callbacks
   glfwSetWindowSizeCallback(_window, windowSizeCallback);
