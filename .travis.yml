@@ -1,0 +1,23 @@
+sudo: true
+dist: trusty
+language: cpp
+
+jobs:
+  include:
+    - stage: Test
+      script: 
+        - mkdir build && cd build
+        - cmake ..
+        - make
+        - tests/TwoCoordsTest
+    
+    - stage: GitHub Release
+      script: echo "Deploying to GitHub releases..."
+      deploy:
+        provider: releases
+        api_key:
+          secure: sc5wd3MV74P5uT2vX2Can7YU/8ID000N5Cnj0CdxMLH1bKA++f/zBe+Z6pX1+/iyp2rMvHMIvlNkjZN2EJE6leyvZ8etVT++pDp6/7Hfz49zac85HkOd/gtbSySOz2Y+uGCPE82Ng4RM9t3QcZ4pnySMB5MV5m5u9ThmNZ1onW4h52zGa56M2ELMs7hnq2y5muazvYFQzO8+loJY2JQ8mEKNOU0o1OnlTPvBA7K503sa82CLVmwXuTjM9PYLZNbmmhDq58ydGYhghvna3mfeiHFM8OOPQBCoX5CvZfvWOasOTpuotO3HH0ZLI5GpNndWpBOucmoojQFwxWZEoKmm5Jm1gcU8Engp/ghrPnY64SlQsJUXv5C8YHfHZaH0K+ImHifDBgt167rYItiwtP/kONFnCQUlft8DkTLnduYVFYobhosVfNs8T7B5miVioiNbv2fqWvCrbNrgRiwSWg/8Mu3q82PCZ6J536bSUhP0i1bDNKPY7AZRCKLmGdXI5EaVUQ5OpZwE/fBz+tHHJ3BzEnGh3lrrsIPOzftq/Fs7s71mb8kYYc7IkvQgP0OVskZLeUsuWkI9NP3o1LRHtrlUK9Im1GXowVIIxdvfxO/6emyerzAeqdLkHbuEwRff0AUSjGyWZonsKQ9tsJhOf9Jkcbo6MzSAOSGnvozkb8N0EEw=
+        on:
+          tags: true
+          branch:
+            - master
