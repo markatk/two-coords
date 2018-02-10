@@ -6,15 +6,16 @@ git:
 
 jobs:
   include:
-    - stage: Test
+    - stage: Compile
       before_install:
         - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
         - git submodule update --init --recursive
+        - sudo apt-get -qq update
+        - sudo apt-get install -y xorg-dev
       script: 
         - mkdir build && cd build
         - cmake ..
         - make
-        - tests/TwoCoordsTest
     
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases..."
