@@ -29,10 +29,13 @@
 
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
+#include <spdlog/spdlog.h>
 
 #include "twoCoords.h"
 
 TEST_CASE("Test engine initialization", "[Two-Coords]") {
+  spdlog::set_level(spdlog::level::err);
+
   REQUIRE(twoCoords::initialize() == true);
 
   twoCoords::deinitialize();

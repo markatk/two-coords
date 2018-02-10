@@ -40,6 +40,7 @@
 #endif
 
 #include "version.h"
+#include "window.h"
 
 namespace twoCoords {
   TWOCOORDS_API bool initialize();

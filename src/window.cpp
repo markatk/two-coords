@@ -1,6 +1,6 @@
 /**
  * Project: Two-Coords
- * File: src/twoCoords.cpp
+ * File: src/window.cpp
  * Created: 10.02.2018
  * Author: MarkAtk
  * 
@@ -27,46 +27,21 @@
  * SOFTWARE.
  */
 
-#include "twoCoords.h"
+#include "window.h"
 
-#include <spdlog/spdlog.h>
-#include <GLFW/glfw3.h>
+#include <stdexcept>
 
-static void errorCallback(int error, const char *description) {
-  spdlog::get("console")->error(description);
-}
-
-bool twoCoords::initialize() {
-  // setup logger
-  auto console = spdlog::get("console");
-  if (console == NULL) {
-    console = spdlog::stdout_color_mt("console");
-  }
-  
-  console->info("Two-Coords starting...");
-  
-  // setup glfw
-  if (glfwInit() == false) {
-    return false;
+twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor *monitor) {
+  _window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
+  if (_window == NULL) {
+    throw std::runtime_error("glfwCreateWindow failed");
   }
 
-  glfwSetErrorCallback(errorCallback);
-
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-  console->info("Two-Coords started");
-
-  return true;
+  // setup window
+  glfwMakeContextCurrent(_window);
+  glfwSetWindowUserPointer(_window, this);
 }
 
-void twoCoords::deinitialize() {
-  auto console = spdlog::get("console");
-  console->info("Two-Coords stopping...");
-
-  glfwTerminate();
-
-  console->info("Two-Coords stopped");
+twoCoords::Window::~Window() {
+  glfwDestroyWindow(_window);
 }
