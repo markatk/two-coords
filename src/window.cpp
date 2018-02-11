@@ -53,8 +53,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   console->info(std::string("Vendor: ") + (const char *)glGetString(GL_VENDOR));
   console->info(std::string("Renderer: ") + (const char *)glGetString(GL_RENDERER));
 
-  if (GLEW_VERSION_4_5 == false) {
-    throw std::runtime_error("OpenGL 4.5 not available");
+  if (GLEW_VERSION_4_1 == false) {
+    throw std::runtime_error("OpenGL 4.1 not available");
   }
 
   // register callbacks
