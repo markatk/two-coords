@@ -15,13 +15,15 @@ install:
   # - clang-cl -v
 
 before_build:
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - cd C:\projects\two-coords
   - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
-  - type .gitmodules
   - git submodule update --init --recursive
+  - cd C:\projects\two-coords\thirdparty\glew\
+  - make -C auto
 
 build_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -D
   - cmake --build . --target check
