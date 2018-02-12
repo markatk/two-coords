@@ -58,6 +58,12 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   }
 
   // register callbacks
+  _sizeCallback = nullptr;
+  _closeCallback = nullptr;
+  _refreshCallback = nullptr;
+  _focusCallback = nullptr;
+  _iconifyCallback = nullptr;
+
   glfwSetWindowSizeCallback(_window, windowSizeCallback);
   glfwSetWindowCloseCallback(_window, windowCloseCallback);
   glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
@@ -98,22 +104,57 @@ int twoCoords::Window::height() const {
   return height;
 }
 
+void twoCoords::Window::setSizeCallback(windowSizeCallback_t callback) {
+  _sizeCallback = callback;
+}
+
+void twoCoords::Window::setCloseCallback(windowCloseCallback_t callback) {
+  _closeCallback = callback;
+}
+
+void twoCoords::Window::setRefreshCallback(windowRefreshCallback_t callback) {
+  _refreshCallback = callback;
+}
+
+void twoCoords::Window::setFocusCallback(windowFocusCallback_t callback) {
+  _focusCallback = callback;
+}
+
+void twoCoords::Window::setIconifyCallback(windowIconifyCallback_t callback) {
+  _iconifyCallback = callback;
+}
+
 void twoCoords::Window::windowSizeCallback(GLFWwindow *window, int width, int height) {
-  
+  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->_sizeCallback) {
+		userPointer->_sizeCallback(userPointer, width, height);
+	}
 }
 
 void twoCoords::Window::windowCloseCallback(GLFWwindow *window) {
-
+  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->_closeCallback) {
+		userPointer->_closeCallback(userPointer);
+	}
 }
 
 void twoCoords::Window::windowRefreshCallback(GLFWwindow *window) {
-
+  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->_refreshCallback) {
+		userPointer->_refreshCallback(userPointer);
+	}
 }
 
 void twoCoords::Window::windowFocusCallback(GLFWwindow *window, int focused) {
-
+  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->_focusCallback) {
+		userPointer->_focusCallback(userPointer, focused);
+	}
 }
 
 void twoCoords::Window::windowIconifyCallback(GLFWwindow *window, int iconified) {
-
+  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->_iconifyCallback) {
+		userPointer->_iconifyCallback(userPointer, iconified);
+	}
 }

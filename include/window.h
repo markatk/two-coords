@@ -34,9 +34,23 @@
 #include <GLFW/glfw3.h>
 
 namespace twoCoords {
+  class Window;
+
+  typedef void (*windowSizeCallback_t)(Window *window, int width, int height);
+  typedef void (*windowCloseCallback_t)(Window *window);
+  typedef void (*windowRefreshCallback_t)(Window *window);
+  typedef void (*windowFocusCallback_t)(Window *window, int focused);
+  typedef void (*windowIconifyCallback_t)(Window *window, int iconified);
+
   class Window {
   private:
-  GLFWwindow *_window;
+    GLFWwindow *_window;
+
+    windowSizeCallback_t _sizeCallback;
+    windowCloseCallback_t _closeCallback;
+    windowRefreshCallback_t _refreshCallback;
+    windowFocusCallback_t _focusCallback;
+    windowIconifyCallback_t _iconifyCallback;
 
   public:
     Window(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
@@ -48,6 +62,12 @@ namespace twoCoords {
 
     int width() const;
     int height() const;
+
+    void setSizeCallback(windowSizeCallback_t callback);
+    void setCloseCallback(windowCloseCallback_t callback);
+    void setRefreshCallback(windowRefreshCallback_t callback);
+    void setFocusCallback(windowFocusCallback_t callbackl);
+    void setIconifyCallback(windowIconifyCallback_t callback);
 
   private:
     static void windowSizeCallback(GLFWwindow *window, int width, int height);

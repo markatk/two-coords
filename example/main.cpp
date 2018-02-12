@@ -31,6 +31,10 @@
 
 #include <spdlog/spdlog.h>
 
+void callback(twoCoords::Window *window, int width, int height) {
+  spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
+}
+
 int main() {
   // initialize
   if (twoCoords::initialize() == false) {
@@ -40,6 +44,7 @@ int main() {
 
   // create window
   auto window = new twoCoords::Window(800, 600, "Two-Coords Example");
+  window->setSizeCallback(callback);
 
   // main loop
   while (window->isOpen()) {
