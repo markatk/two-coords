@@ -1,6 +1,7 @@
 # Two-Coords
 
-[![Build Status](https://travis-ci.org/markatk/two-coords.svg?branch=master)](https://travis-ci.org/markatk/two-coords)
+[![Linux Build Status](https://travis-ci.org/markatk/two-coords.svg?branch=master)](https://travis-ci.org/markatk/two-coords)
+[![Window Build Status](https://ci.appveyor.com/api/projects/status/github/two-coords?branch=master&svg=true)](https://ci.appveyor.com/project/markatk/two-coords)
 
 ## Description
 
