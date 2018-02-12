@@ -16,6 +16,7 @@ install:
 
   # install automake
   - C:\MinGW\bin\mingw-get install autotools autoconf automake
+  - set PATH=C:\MinGW\bin;%PATH%
 
 before_build:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
