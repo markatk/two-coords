@@ -16,7 +16,7 @@ install:
 
 before_build:
   - cd C:\projects\two-coords
-  - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https:\/\/github.com\/') | Set-Content .gitmodules
+  - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
   - type .gitmodules
   - git submodule update --init --recursive
 
