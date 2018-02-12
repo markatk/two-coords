@@ -1,3 +1,5 @@
+os: Visual Studio 2015
+
 install:
   - mkdir C:\projects\dependencies
   - cd C:\projects\dependencies
