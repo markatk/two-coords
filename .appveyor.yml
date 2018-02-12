@@ -1,5 +1,8 @@
 os: Visual Studio 2015
 
+build:
+  verbosity: detailed
+
 install:
   - mkdir C:\projects\dependencies
   - cd C:\projects\dependencies
@@ -18,7 +21,6 @@ install:
 
   # install automake
   - C:\MinGW\bin\mingw-get install autotools autoconf automake
-  - set PATH=C:\MinGW\bin;%PATH%
 
 before_build:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
@@ -29,6 +31,7 @@ before_build:
   - make -C auto
 
 build_script:
+  - set PATH=C:\MinGW\msys/1.0\bin;C:\MinGW\bin;%PATH%
   - mkdir build
   - cd build
   - cmake .. -D
