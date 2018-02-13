@@ -28,10 +28,9 @@ before_build:
   - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
   - git submodule update --init --recursive
   - cd C:\projects\two-coords\thirdparty\glew\
-  - make -C auto
+  - C:\MinGW\msys\1.0\bin\bash -c "make -C auto"
 
 build_script:
-  - set PATH=C:\MinGW\msys/1.0\bin;C:\MinGW\bin;%PATH%
   - mkdir build
   - cd build
   - cmake .. -D
