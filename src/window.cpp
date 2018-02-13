@@ -44,6 +44,9 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   glfwMakeContextCurrent(_window);
   glfwSetWindowUserPointer(_window, this);
 
+  // disable v-sync
+  glfwSwapInterval(0);
+
   // init glew
   if (glewInit() != GLEW_OK) {
     throw std::runtime_error("glewInit failed");
@@ -58,6 +61,10 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   if (GLEW_VERSION_4_1 == false) {
     throw std::runtime_error("OpenGL 4.1 not available");
   }
+
+  _lastUpdateTime = glfwGetTime();
+  _renderedFrames = 0;
+  _lastFramesPerSecond = 0;
 
   // register callbacks
   _sizeCallback = nullptr;
@@ -79,9 +86,22 @@ twoCoords::Window::~Window() {
   glfwDestroyWindow(_window);
 }
 
-void twoCoords::Window::update() const {
+void twoCoords::Window::update() {
   // render next frame
   _renderer->update();
+
+  // calculate the FPS
+  double currentTime = glfwGetTime();
+  _renderedFrames++;
+
+  if (currentTime - _lastUpdateTime >= 1.0) {
+    // reset FPS counter
+    _lastFramesPerSecond = _renderedFrames;
+    _renderedFrames = 0;
+    _lastUpdateTime = currentTime;
+
+    spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
+  }
 
   // update window itself
   glfwSwapBuffers(_window);

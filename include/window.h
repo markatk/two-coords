@@ -49,6 +49,10 @@ namespace twoCoords {
 
     Renderer *_renderer;
 
+    double _lastUpdateTime;
+    int _renderedFrames;
+    int _lastFramesPerSecond;
+
     windowSizeCallback_t _sizeCallback;
     windowCloseCallback_t _closeCallback;
     windowRefreshCallback_t _refreshCallback;
@@ -59,7 +63,7 @@ namespace twoCoords {
     Window(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
     virtual ~Window();
 
-    void update() const;
+    void update();
     void close();
     bool isOpen() const;
 
