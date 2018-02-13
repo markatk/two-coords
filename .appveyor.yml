@@ -18,6 +18,7 @@ install:
   # add clang to buildpath
   # - set PATH="C:\Program Files\LLVM\bin";%PATH%
   # - clang-cl -v
+  set PATH=C:\MinGW\bin;%PATH%
 
 before_build:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
@@ -25,8 +26,7 @@ before_build:
   - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
   - git submodule update --init --recursive
   - cd C:\projects\two-coords\thirdparty\glew\
-  - dir C:\MinGW\bin
-  - C:\MinGW\msys\1.0\bin\bash -c "mingw32-make -C auto"
+  - mingw32-make.exe -C auto
 
 build_script:
   - mkdir build
