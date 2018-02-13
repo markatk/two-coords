@@ -19,16 +19,14 @@ install:
   # - set PATH="C:\Program Files\LLVM\bin";%PATH%
   # - clang-cl -v
 
-  # install automake
-  - C:\MinGW\bin\mingw-get install autotools autoconf automake
-
 before_build:
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" amd64
   - cd C:\projects\two-coords
   - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
   - git submodule update --init --recursive
   - cd C:\projects\two-coords\thirdparty\glew\
-  - C:\MinGW\msys\1.0\bin\bash -c "make -C auto"
+  - dir C:\MinGW\bin
+  - C:\MinGW\msys\1.0\bin\bash -c "mingw32-make -C auto"
 
 build_script:
   - mkdir build
