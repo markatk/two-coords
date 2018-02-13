@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: example/main.cpp
- * Created: 10.02.2018
+ * File: src/renderer.cpp
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,34 +27,50 @@
  * SOFTWARE.
  */
 
-#include "twoCoords.h"
+#include "renderer.h"
 
-#include <spdlog/spdlog.h>
+#include <GL/glew.h>
 
-void callback(twoCoords::Window *window, int width, int height) {
-  spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
+twoCoords::Renderer::Renderer(twoCoords::Window *window) {
+  _window = window;
+  _screenUnitsX = 1;
+  _screenUnitsY = 1;
+
+  // set open gl properties
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-int main() {
-  // initialize
-  if (twoCoords::initialize() == false) {
-    spdlog::get("console")->error("Unable to initialize Two-Coords");
-    return EXIT_SUCCESS;
-  }
+twoCoords::Renderer::~Renderer() {
+  
+}
 
-  // create window
-  auto window = new twoCoords::Window(640, 480, "Two-Coords Example");
-  window->setScreenUnits(800, 600);
+void twoCoords::Renderer::setScreenUnits(int x, int y) {
+  _screenUnitsX = x;
+  _screenUnitsY = y;
+}
 
-  window->setSizeCallback(callback);
+int twoCoords::Renderer::screenUnitsX() const {
+  return _screenUnitsX;
+}
 
-  // main loop
-  while (window->isOpen()) {
-    window->update();
-  }
+int twoCoords::Renderer::screenUnitsY() const {
+  return _screenUnitsY;
+}
 
-  // cleanup
-  delete window;
+void twoCoords::Renderer::update() {
+  renderEmptyScene();
+}
 
-  twoCoords::deinitialize();
+twoCoords::Window *twoCoords::Renderer::window() const {
+  return _window;
+}
+
+void twoCoords::Renderer::renderEmptyScene() const {
+  // only clear buffer and fill with black color
+  glClearColor(0.0, 0.0, 0.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

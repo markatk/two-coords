@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: example/main.cpp
- * Created: 10.02.2018
+ * File: include/renderer.h
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,34 +27,31 @@
  * SOFTWARE.
  */
 
-#include "twoCoords.h"
+#pragma once
 
-#include <spdlog/spdlog.h>
+namespace twoCoords {
+  class Window;
 
-void callback(twoCoords::Window *window, int width, int height) {
-  spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
-}
+  class Renderer {
+  private:
+    Window *_window;
 
-int main() {
-  // initialize
-  if (twoCoords::initialize() == false) {
-    spdlog::get("console")->error("Unable to initialize Two-Coords");
-    return EXIT_SUCCESS;
-  }
+    int _screenUnitsX;
+    int _screenUnitsY;
 
-  // create window
-  auto window = new twoCoords::Window(640, 480, "Two-Coords Example");
-  window->setScreenUnits(800, 600);
+  public:
+    Renderer(Window *window);
+    virtual ~Renderer();
 
-  window->setSizeCallback(callback);
+    void setScreenUnits(int x, int y);
+    int screenUnitsX() const;
+    int screenUnitsY() const;
 
-  // main loop
-  while (window->isOpen()) {
-    window->update();
-  }
+    void update();
 
-  // cleanup
-  delete window;
+    Window *window() const;
 
-  twoCoords::deinitialize();
+  private:
+    void renderEmptyScene() const;
+  };
 }

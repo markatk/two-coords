@@ -35,6 +35,7 @@
 
 namespace twoCoords {
   class Window;
+  class Renderer;
 
   typedef void (*windowSizeCallback_t)(Window *window, int width, int height);
   typedef void (*windowCloseCallback_t)(Window *window);
@@ -45,6 +46,8 @@ namespace twoCoords {
   class Window {
   private:
     GLFWwindow *_window;
+
+    Renderer *_renderer;
 
     windowSizeCallback_t _sizeCallback;
     windowCloseCallback_t _closeCallback;
@@ -63,11 +66,15 @@ namespace twoCoords {
     int width() const;
     int height() const;
 
+    void setScreenUnits(int x, int y);
+
     void setSizeCallback(windowSizeCallback_t callback);
     void setCloseCallback(windowCloseCallback_t callback);
     void setRefreshCallback(windowRefreshCallback_t callback);
     void setFocusCallback(windowFocusCallback_t callbackl);
     void setIconifyCallback(windowIconifyCallback_t callback);
+
+    Renderer *renderer() const;
 
   private:
     static void windowSizeCallback(GLFWwindow *window, int width, int height);

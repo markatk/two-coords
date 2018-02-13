@@ -29,6 +29,8 @@
 
 #include "window.h"
 
+#include "renderer.h"
+
 #include <stdexcept>
 #include <spdlog/spdlog.h>
 
@@ -69,6 +71,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
   glfwSetWindowFocusCallback(_window, windowFocusCallback);
   glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
+
+  _renderer = new twoCoords::Renderer(this);
 }
 
 twoCoords::Window::~Window() {
@@ -76,8 +80,8 @@ twoCoords::Window::~Window() {
 }
 
 void twoCoords::Window::update() const {
-  // render
-  glClear(GL_COLOR_BUFFER_BIT);
+  // render next frame
+  _renderer->update();
 
   // update window itself
   glfwSwapBuffers(_window);
@@ -104,6 +108,10 @@ int twoCoords::Window::height() const {
   return height;
 }
 
+void twoCoords::Window::setScreenUnits(int x, int y) {
+  _renderer->setScreenUnits(x, y);
+}
+
 void twoCoords::Window::setSizeCallback(windowSizeCallback_t callback) {
   _sizeCallback = callback;
 }
@@ -122,6 +130,10 @@ void twoCoords::Window::setFocusCallback(windowFocusCallback_t callback) {
 
 void twoCoords::Window::setIconifyCallback(windowIconifyCallback_t callback) {
   _iconifyCallback = callback;
+}
+
+twoCoords::Renderer *twoCoords::Window::renderer() const {
+  return _renderer;
 }
 
 void twoCoords::Window::windowSizeCallback(GLFWwindow *window, int width, int height) {
