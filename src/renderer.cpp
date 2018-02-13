@@ -29,12 +29,24 @@
 
 #include "renderer.h"
 
+#include "shader.h"
+#include "spriteShader.h"
+#include "shaderProgram.h"
+
+#include <vector>
 #include <GL/glew.h>
 
 twoCoords::Renderer::Renderer(twoCoords::Window *window) {
   _window = window;
   _screenUnitsX = 1;
   _screenUnitsY = 1;
+
+  // create new program with sprite shaders
+  std::vector<Shader> shaders;
+  shaders.push_back(Shader(SPRITE_VERTEX_SHADER, GL_VERTEX_SHADER));
+  shaders.push_back(Shader(SPRITE_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
+
+  _spriteProgram = new ShaderProgram(shaders);
 
   // set open gl properties
   glEnable(GL_DEPTH_TEST);
@@ -45,7 +57,7 @@ twoCoords::Renderer::Renderer(twoCoords::Window *window) {
 }
 
 twoCoords::Renderer::~Renderer() {
-  
+  delete _spriteProgram;
 }
 
 void twoCoords::Renderer::setScreenUnits(int x, int y) {
@@ -67,6 +79,10 @@ void twoCoords::Renderer::update() {
 
 twoCoords::Window *twoCoords::Renderer::window() const {
   return _window;
+}
+
+twoCoords::ShaderProgram *twoCoords::Renderer::shaderProgram() const {
+  return _spriteProgram;
 }
 
 void twoCoords::Renderer::renderEmptyScene() const {

@@ -31,9 +31,11 @@
 
 namespace twoCoords {
   class Window;
+  class ShaderProgram;
 
   class Renderer {
   private:
+    ShaderProgram *_spriteProgram;
     Window *_window;
 
     int _screenUnitsX;
@@ -50,6 +52,7 @@ namespace twoCoords {
     void update();
 
     Window *window() const;
+    ShaderProgram *shaderProgram() const;
 
   private:
     void renderEmptyScene() const;

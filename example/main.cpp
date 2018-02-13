@@ -43,10 +43,16 @@ int main() {
   }
 
   // create window
-  auto window = new twoCoords::Window(640, 480, "Two-Coords Example");
-  window->setScreenUnits(800, 600);
+  twoCoords::Window *window;
 
-  window->setSizeCallback(callback);
+  try {
+    window = new twoCoords::Window(640, 480, "Two-Coords Example");
+    window->setScreenUnits(800, 600);
+    window->setSizeCallback(callback);
+  } catch (std::exception &e) {
+    spdlog::get("console")->error(e.what());
+    return EXIT_FAILURE;
+  }
 
   // main loop
   while (window->isOpen()) {

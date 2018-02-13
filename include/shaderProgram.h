@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/shaderProgram.h
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,23 +29,37 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
+#include <vector>
+#include <stdexcept>
+#include <GL/glew.h>
+#include <glm/glm.hpp>
 
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+  class Shader;
+
+  class ShaderProgram {
+  private:
+    GLuint _object;
+
+  public:
+    ShaderProgram(const std::vector<Shader> &shaders);
+    virtual ~ShaderProgram();
+
+    void use() const;
+    void stopUsing() const;
+    bool isInUse() const;
+
+    GLint attrib(const GLchar *name) const;
+    GLint uniform(const GLchar *name) const;
+
+    void setUniform(const GLchar *name, const glm::mat4 &matrix, GLboolean transpose = GL_FALSE);
+    void setUniform(const GLchar *name, const GLuint value);
+
+    GLuint object() const;
+
+  private:
+    // disable copying
+    ShaderProgram(const ShaderProgram &);
+    const ShaderProgram &operator=(const ShaderProgram &);
+  };
 }

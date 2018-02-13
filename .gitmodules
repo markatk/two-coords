@@ -10,3 +10,6 @@
 [submodule "thirdparty/glew"]
 	path = thirdparty/glew
 	url = git@github.com:nigels-com/glew.git
+[submodule "thirdparty/glm"]
+	path = thirdparty/glm
+	url = git@github.com:g-truc/glm.git

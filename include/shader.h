@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/shader.h
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,23 +29,26 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
+#include <string>
+#include <GL/glew.h>
 
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+  class Shader {
+  private:
+    GLuint _object;
+    unsigned *_referenceCount;
+
+  public:
+    Shader(const std::string &code, GLenum type);
+    Shader(const Shader &other);
+    virtual ~Shader();
+
+    GLuint object() const;
+
+    Shader &operator=(const Shader &object);
+
+  private:
+    void retain();
+    void release();
+  };
 }

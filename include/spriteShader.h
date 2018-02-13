@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/spriteShader.h
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,23 +29,45 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+	const char *SPRITE_VERTEX_SHADER = R"(
+		#version 150
+
+		uniform mat4 projection;
+		uniform mat4 model;
+
+		in vec3 vert;
+		in vec2 vertTexCoord;
+		in vec4 vertColor;
+
+		out vec2 fragTexCoord;
+		out vec4 fragColor;
+
+		void main() {
+			// Pass the tex coord straight through to the fragment shader
+			fragTexCoord = vertTexCoord;
+			fragColor = vertColor;
+
+			// Apply all matrix transformations to vert
+			gl_Position = projection * model * vec4(vert, 1);
+		}
+	)";
+
+	const char *SPRITE_FRAGMENT_SHADER = R"(
+		#version 150
+
+		uniform sampler2D tex;
+
+		in vec2 fragTexCoord;
+		in vec4 fragColor;
+
+		out vec4 finalColor;
+
+		void main() {
+			//note: the texture function was called texture2D in older versions of GLSL
+			//finalColor = texture(tex, fragTexCoord) * fragColor;
+			finalColor = texture(tex, fragTexCoord);
+			//finalColor = vec4(1, 1, 1, 1) + texture(tex, fragTexCoord) * 0;
+		}
+	)";
 }
