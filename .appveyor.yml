@@ -24,7 +24,7 @@ before_build:
   - git submodule update --init
 
   - cd C:\projects\two-coords\thirdparty\glew\
-  - bash -c "ls C:/MinGW/bin"
+  - bash -c "ls C:/MinGW"
   - bash -c "mingw32-make.exe -C auto"
 
 build_script:
