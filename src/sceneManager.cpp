@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: src/sceneManager.cpp
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,28 +27,60 @@
  * SOFTWARE.
  */
 
-#pragma once
-
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
 #include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
 
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+#include "scene.h"
+#include "window.h"
+
+twoCoords::SceneManager::SceneManager(twoCoords::Window *window) {
+  _window = window;
+}
+
+twoCoords::SceneManager::~SceneManager() {
+
+}
+
+void twoCoords::SceneManager::pushScene(twoCoords::Scene *scene) {
+  // unload last scene
+  if (isEmpty() == false) {
+    twoCoords::Scene *lastScene = _scenes.back();
+    lastScene->exit();
+  }
+
+  // load new scene
+  _scenes.push_back(scene);
+  scene->enter();
+}
+
+twoCoords::Scene *twoCoords::SceneManager::popScene() {
+  // get current scene
+  if (isEmpty()) {
+    return nullptr;
+  }
+
+  twoCoords::Scene *scene = _scenes.back();
+  _scenes.pop_back();
+  scene->exit();
+
+  return scene;
+}
+
+twoCoords::Scene *twoCoords::SceneManager::currentScene() const {
+  if (isEmpty()) {
+    return nullptr;
+  }
+
+  return _scenes.back();
+}
+
+bool twoCoords::SceneManager::isEmpty() const {
+  return _scenes.empty();
+}
+
+int twoCoords::SceneManager::count() const {
+  return _scenes.size();
+}
+
+twoCoords::Window *twoCoords::SceneManager::window() const {
+  return _window;
 }

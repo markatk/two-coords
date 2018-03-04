@@ -30,6 +30,8 @@
 #include "window.h"
 
 #include "renderer.h"
+#include "sceneManager.h"
+#include "scene.h"
 
 #include <stdexcept>
 #include <spdlog/spdlog.h>
@@ -79,6 +81,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   glfwSetWindowFocusCallback(_window, windowFocusCallback);
   glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
 
+  // create objects
+  _sceneManager = new twoCoords::SceneManager(this);
   _renderer = new twoCoords::Renderer(this);
 }
 
@@ -87,6 +91,10 @@ twoCoords::Window::~Window() {
 }
 
 void twoCoords::Window::update() {
+  if (_sceneManager->isEmpty()) {
+    _sceneManager->currentScene()->update();
+  }
+
   // render next frame
   _renderer->update();
 
@@ -100,7 +108,7 @@ void twoCoords::Window::update() {
     _renderedFrames = 0;
     _lastUpdateTime = currentTime;
 
-    spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
+    // spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
   }
 
   // update window itself

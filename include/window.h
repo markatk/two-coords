@@ -36,6 +36,7 @@
 namespace twoCoords {
   class Window;
   class Renderer;
+  class SceneManager;
 
   typedef void (*windowSizeCallback_t)(Window *window, int width, int height);
   typedef void (*windowCloseCallback_t)(Window *window);
@@ -48,6 +49,7 @@ namespace twoCoords {
     GLFWwindow *_window;
 
     Renderer *_renderer;
+    SceneManager *_sceneManager;
 
     double _lastUpdateTime;
     int _renderedFrames;
@@ -79,6 +81,7 @@ namespace twoCoords {
     void setIconifyCallback(windowIconifyCallback_t callback);
 
     Renderer *renderer() const;
+    SceneManager *sceneManager() const;
 
   private:
     static void windowSizeCallback(GLFWwindow *window, int width, int height);

@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/sceneManager.h
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,26 +29,28 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
+#include <vector>
 
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+  class Scene;
+  class Window;
+
+  class SceneManager {
+  private:
+    Window *_window;
+    std::vector<Scene *> _scenes;
+
+  public:
+    SceneManager(Window *window);
+    virtual ~SceneManager();
+
+    void pushScene(Scene *scene);
+    Scene *popScene();
+    Scene *currentScene() const;
+
+    bool isEmpty() const;
+    int count() const;
+
+    Window *window() const;
+  };
 }

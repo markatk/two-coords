@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: src/scene.cpp
+ * Created: 13.02.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,28 +27,35 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "scene.h"
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
+#include "sceneNode.h"
 #include "window.h"
 #include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
 
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+twoCoords::Scene::Scene() {
+  _rootNode = new SceneNode();
+  _window = nullptr;
 }
+
+twoCoords::Scene::~Scene() {
+  delete _rootNode;
+}
+
+void twoCoords::Scene::update() {
+
+}
+
+void twoCoords::Scene::enter() {
+
+}
+
+void twoCoords::Scene::exit() {
+
+}
+
+twoCoords::SceneNode *twoCoords::Scene::rootNode() const {
+  return _rootNode;
+}
+
+
