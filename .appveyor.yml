@@ -25,8 +25,9 @@ before_build:
   - cd C:\projects\two-coords
   - ps: (Get-Content .gitmodules).replace('git@github.com:', 'https://github.com/') | Set-Content .gitmodules
   - git submodule update --init
+
   - cd C:\projects\two-coords\thirdparty\glew\
-  - C:\MinGW\msys\1.0\bin\bash -c "mingw32-make.exe -C auto"
+  - bash -c "mingw32-make.exe -C auto"
 
 build_script:
   - mkdir build
