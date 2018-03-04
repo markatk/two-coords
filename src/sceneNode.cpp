@@ -29,8 +29,6 @@
 
 #include "sceneNode.h"
 
-#include "program.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 
 twoCoords::SceneNode::SceneNode(glm::vec2 position) {
@@ -106,7 +104,7 @@ void twoCoords::SceneNode::setHidden(bool hidden) {
   _hidden = hidden;
 }
 
-bool twoCoords::SceneNode::hidden() const {
+bool twoCoords::SceneNode::isHidden() const {
   return _hidden;
 }
 
@@ -120,7 +118,7 @@ void twoCoords::SceneNode::remove(twoCoords::SceneNode *child) {
   while (it != _children.end()) {
     if (*it == child) {
       it = _children.erase(it);
-      _child->_parent = nullptr;
+      child->_parent = nullptr;
     } else {
       it++;
     }
