@@ -91,7 +91,7 @@ twoCoords::Window::~Window() {
 }
 
 void twoCoords::Window::update() {
-  if (_sceneManager->isEmpty()) {
+  if (_sceneManager->isEmpty() == false) {
     _sceneManager->currentScene()->update();
   }
 
