@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: tests/init.cpp
- * Created: 10.02.2018
+ * File: include/resource.h
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,16 +27,32 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
-#include <spdlog/spdlog.h>
+#pragma once
 
-#include "twoCoords.h"
+#include <string>
 
-TEST_CASE("Test engine initialization", "[Two-Coords]") {
-  spdlog::set_level(spdlog::level::info);
+namespace twoCoords {
+  class Resource {
+  protected:
+    std::string _filePath;
+    bool _loaded;
 
-  REQUIRE(twoCoords::initialize() == true);
+  public:
+    Resource(std::string filePath) {
+      _filePath = filePath;
+      _loaded = false;
+    }
 
-  twoCoords::deinitialize();
+    virtual ~Resource() {}
+
+    virtual bool load() = 0;
+
+    std::string filePath() const {
+      return _filePath;
+    }
+
+    bool isLoaded() const {
+      return _loaded;
+    }
+  };
 }

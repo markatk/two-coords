@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: tests/init.cpp
- * Created: 10.02.2018
+ * File: include/texture.h
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,16 +27,36 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
-#include <spdlog/spdlog.h>
+#pragma once
 
-#include "twoCoords.h"
+#include "resource.h"
 
-TEST_CASE("Test engine initialization", "[Two-Coords]") {
-  spdlog::set_level(spdlog::level::info);
+#include <GL/glew.h>
 
-  REQUIRE(twoCoords::initialize() == true);
+namespace twoCoords {
+  class Bitmap;
 
-  twoCoords::deinitialize();
+  class Texture : public Resource {
+  private:
+    GLuint _object;
+    GLfloat _width;
+    GLfloat _height;
+
+  public:
+    Texture(std::string filePath);
+    virtual ~Texture();
+
+    bool load() override;
+
+    GLuint object() const;
+    GLfloat width() const;
+    GLfloat height() const;
+
+  private:
+    static GLenum bitmapFormatToTextureFormat(unsigned int channels);
+
+    // disable copying
+    Texture(const Texture &);
+    const Texture &operator=(const Texture &);
+  };
 }
