@@ -8,13 +8,14 @@ jobs:
   include:
     - stage: Compile
       before_install:
+        - sudo apt-get -qq update
+        - sudo apt-get install -y xorg-dev
+
         - git clone https://github.com/glfw/glfw && mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install
         - git clone https://github.com/nigels-com/glew.git && cd build && cmake ./cmake && make -j4 && sudo make install
 
         - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
         - git submodule update --init --recursive
-        - sudo apt-get -qq update
-        - sudo apt-get install -y xorg-dev
       script: 
         - mkdir build && cd build
         - cmake ..
