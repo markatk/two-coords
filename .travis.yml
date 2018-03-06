@@ -11,7 +11,7 @@ jobs:
         - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
         - git submodule update --init --recursive
         - sudo apt-get -qq update
-        - sudo apt-get install -y xorg-dev
+        - sudo apt-get install -y xorg-dev libglfw3-dev libglew-dev
       script: 
         - mkdir build && cd build
         - cmake ..
