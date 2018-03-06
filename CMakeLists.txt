@@ -24,6 +24,7 @@ include_directories(thirdparty/spdlog/include)
 include_directories(thirdparty/glew/include)
 include_directories(thirdparty/glm)
 include_directories(thirdparty/stb)
+include_directories(thirdparty/tinydir)
 
 link_directories(${CMAKE_BINARY_DIR}/lib)
 

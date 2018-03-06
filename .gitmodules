@@ -16,3 +16,6 @@
 [submodule "thirdparty/stb"]
 	path = thirdparty/stb
 	url = git@github.com:nothings/stb.git
+[submodule "thirdparty/tinydir"]
+	path = thirdparty/tinydir
+	url = git@github.com:cxong/tinydir.git

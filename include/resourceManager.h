@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: tests/init.cpp
- * Created: 10.02.2018
+ * File: include/resourceManager.h
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,16 +27,37 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
-#include <spdlog/spdlog.h>
+#pragma once
 
-#include "twoCoords.h"
+#include <vector>
+#include <string>
+#include <memory>
 
-TEST_CASE("Test engine initialization", "[Two-Coords]") {
-  spdlog::set_level(spdlog::level::err);
+namespace twoCoords {
+  class Resource;
+  class Texture;
 
-  REQUIRE(twoCoords::initialize() == true);
+  class ResourceManager {
+  private:
+    std::vector<std::shared_ptr<Resource>> _resources;
 
-  twoCoords::deinitialize();
+    std::vector<std::string> _textureExtensionFilter;
+
+  public:
+    ResourceManager();
+    virtual ~ResourceManager();
+
+    bool addFile(std::string filePath);
+    void addDirectory(std::string directoryPath, bool recursive = false);
+
+    bool preloadResources() const;
+
+    std::shared_ptr<Texture> texture(std::string name);
+
+  private:
+    bool fileMatchesExtensionFilter(std::string extension) const;
+    bool fileMatchesTextureExtensionFilter(std::string extension) const;
+
+    std::string filename(std::string filePath) const;
+  };
 }
