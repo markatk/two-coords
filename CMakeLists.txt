@@ -16,12 +16,15 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "enable glfw tests")
 
 # Include libraries
 find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(GLEW REQUIRED)
 
 include_directories(include)
 
 include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(${GLEW_INCLUDE_DIRS})
+include_directories(${GLFW3_INCLUDE_DIRS})
 include_directories(thirdparty/spdlog/include)
-include_directories(thirdparty/glew/include)
 include_directories(thirdparty/glm)
 include_directories(thirdparty/stb)
 include_directories(thirdparty/tinydir)
@@ -36,9 +39,6 @@ execute_process(WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/thirdparty/glew" COMMAND 
 
 # Include subdirectories
 enable_testing()
-
-add_subdirectory(thirdparty/glfw)
-add_subdirectory(thirdparty/glew/build/cmake)
 
 add_subdirectory(src)
 add_subdirectory(tests)
