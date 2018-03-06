@@ -29,14 +29,16 @@
 
 #pragma once
 
+#include <memory>
+
 namespace twoCoords {
   class SceneNode;
   class Window;
 
   class Scene {
   private:
-    SceneNode *_rootNode;
-    Window *_window;
+    std::shared_ptr<SceneNode> _rootNode;
+    std::shared_ptr<Window> _window;
 
   public:
     Scene();
@@ -46,6 +48,6 @@ namespace twoCoords {
     virtual void enter();
     virtual void exit();
 
-    SceneNode *rootNode() const;
+    std::shared_ptr<SceneNode> rootNode() const;
   };
 }

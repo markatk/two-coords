@@ -32,18 +32,18 @@
 #include "scene.h"
 #include "window.h"
 
-twoCoords::SceneManager::SceneManager(twoCoords::Window *window) {
-  _window = window;
+twoCoords::SceneManager::SceneManager() {
+
 }
 
 twoCoords::SceneManager::~SceneManager() {
 
 }
 
-void twoCoords::SceneManager::pushScene(twoCoords::Scene *scene) {
+void twoCoords::SceneManager::pushScene(std::shared_ptr<twoCoords::Scene> scene) {
   // unload last scene
   if (isEmpty() == false) {
-    twoCoords::Scene *lastScene = _scenes.back();
+    auto lastScene = _scenes.back();
     lastScene->exit();
   }
 
@@ -52,20 +52,20 @@ void twoCoords::SceneManager::pushScene(twoCoords::Scene *scene) {
   scene->enter();
 }
 
-twoCoords::Scene *twoCoords::SceneManager::popScene() {
+std::shared_ptr<twoCoords::Scene> twoCoords::SceneManager::popScene() {
   // get current scene
   if (isEmpty()) {
     return nullptr;
   }
 
-  twoCoords::Scene *scene = _scenes.back();
+  auto scene = _scenes.back();
   _scenes.pop_back();
   scene->exit();
 
   return scene;
 }
 
-twoCoords::Scene *twoCoords::SceneManager::currentScene() const {
+std::shared_ptr<twoCoords::Scene> twoCoords::SceneManager::currentScene() const {
   if (isEmpty()) {
     return nullptr;
   }
@@ -79,8 +79,4 @@ bool twoCoords::SceneManager::isEmpty() const {
 
 int twoCoords::SceneManager::count() const {
   return _scenes.size();
-}
-
-twoCoords::Window *twoCoords::SceneManager::window() const {
-  return _window;
 }

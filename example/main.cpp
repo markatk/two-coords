@@ -30,8 +30,9 @@
 #include "twoCoords.h"
 
 #include <spdlog/spdlog.h>
+#include <memory>
 
-void callback(twoCoords::Window *window, int width, int height) {
+void callback(std::shared_ptr<twoCoords::Window> window, int width, int height) {
   spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
 }
 
@@ -43,10 +44,10 @@ int main() {
   }
 
   // create window
-  twoCoords::Window *window;
+  std::shared_ptr<twoCoords::Window> window;
 
   try {
-    window = new twoCoords::Window(640, 480, "Two-Coords Example");
+    window = std::make_shared<twoCoords::Window>(640, 480, "Two-Coords Example");
     window->setScreenUnits(800, 600);
     window->setSizeCallback(callback);
   } catch (std::exception &e) {
@@ -60,7 +61,5 @@ int main() {
   }
 
   // cleanup
-  delete window;
-
   twoCoords::deinitialize();
 }

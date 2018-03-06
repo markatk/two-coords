@@ -45,11 +45,11 @@ twoCoords::SceneNode::~SceneNode() {
 
 }
 
-void twoCoords::SceneNode::render(twoCoords::Program *program) {
+void twoCoords::SceneNode::render(std::shared_ptr<twoCoords::Program> program) {
 
 }
 
-twoCoords::SceneNode *twoCoords::SceneNode::parent() const {
+std::shared_ptr<twoCoords::SceneNode> twoCoords::SceneNode::parent() const {
   return _parent;
 }
 
@@ -108,12 +108,12 @@ bool twoCoords::SceneNode::isHidden() const {
   return _hidden;
 }
 
-void twoCoords::SceneNode::add(twoCoords::SceneNode *child) {
+void twoCoords::SceneNode::add(std::shared_ptr<twoCoords::SceneNode> child) {
   _children.push_back(child);
-  child->_parent = this;
+  child->_parent = shared_from_this();
 }
 
-void twoCoords::SceneNode::remove(twoCoords::SceneNode *child) {
+void twoCoords::SceneNode::remove(std::shared_ptr<twoCoords::SceneNode> child) {
   auto it = _children.begin();
   while (it != _children.end()) {
     if (*it == child) {
@@ -125,7 +125,7 @@ void twoCoords::SceneNode::remove(twoCoords::SceneNode *child) {
   }
 }
 
-const std::vector<twoCoords::SceneNode *> &twoCoords::SceneNode::children() const {
+const std::vector<std::shared_ptr<twoCoords::SceneNode>> &twoCoords::SceneNode::children() const {
   return _children;
 }
 

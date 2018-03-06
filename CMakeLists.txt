@@ -23,6 +23,7 @@ include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(thirdparty/spdlog/include)
 include_directories(thirdparty/glew/include)
 include_directories(thirdparty/glm)
+include_directories(thirdparty/stb)
 
 link_directories(${CMAKE_BINARY_DIR}/lib)
 

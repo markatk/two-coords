@@ -39,7 +39,7 @@
 twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor *monitor) {
   _window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
   if (_window == NULL) {
-    throw std::runtime_error("glfwCreateWindow failed");
+    throw std::string("glfwCreateWindow failed");
   }
 
   // setup window
@@ -51,7 +51,7 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
 
   // init glew
   if (glewInit() != GLEW_OK) {
-    throw std::runtime_error("glewInit failed");
+    throw std::string("glewInit failed");
   }
 
   auto console = spdlog::get("console");
@@ -82,8 +82,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
 
   // create objects
-  _sceneManager = new twoCoords::SceneManager(this);
-  _renderer = new twoCoords::Renderer(this);
+  _sceneManager = std::make_shared<SceneManager>();
+  _renderer = std::make_shared<Renderer>();
 }
 
 twoCoords::Window::~Window() {
@@ -160,41 +160,41 @@ void twoCoords::Window::setIconifyCallback(windowIconifyCallback_t callback) {
   _iconifyCallback = callback;
 }
 
-twoCoords::Renderer *twoCoords::Window::renderer() const {
+std::shared_ptr<twoCoords::Renderer> twoCoords::Window::renderer() const {
   return _renderer;
 }
 
 void twoCoords::Window::windowSizeCallback(GLFWwindow *window, int width, int height) {
-  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+  auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_sizeCallback) {
-		userPointer->_sizeCallback(userPointer, width, height);
+		userPointer->_sizeCallback(userPointer->shared_from_this(), width, height);
 	}
 }
 
 void twoCoords::Window::windowCloseCallback(GLFWwindow *window) {
-  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+  auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_closeCallback) {
-		userPointer->_closeCallback(userPointer);
+		userPointer->_closeCallback(userPointer->shared_from_this());
 	}
 }
 
 void twoCoords::Window::windowRefreshCallback(GLFWwindow *window) {
-  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+  auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_refreshCallback) {
-		userPointer->_refreshCallback(userPointer);
+		userPointer->_refreshCallback(userPointer->shared_from_this());
 	}
 }
 
 void twoCoords::Window::windowFocusCallback(GLFWwindow *window, int focused) {
-  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+  auto userPointer= (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_focusCallback) {
-		userPointer->_focusCallback(userPointer, focused);
+		userPointer->_focusCallback(userPointer->shared_from_this(), focused);
 	}
 }
 
 void twoCoords::Window::windowIconifyCallback(GLFWwindow *window, int iconified) {
-  Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+  auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_iconifyCallback) {
-		userPointer->_iconifyCallback(userPointer, iconified);
+		userPointer->_iconifyCallback(userPointer->shared_from_this(), iconified);
 	}
 }

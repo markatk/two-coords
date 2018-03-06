@@ -28,29 +28,25 @@
  */
 
 #include <catch.hpp>
+#include <memory>
+#include <iostream>
 
 #include "twoCoords.h"
 
 TEST_CASE("Engine window", "[Two-Coords]") {
   REQUIRE(twoCoords::initialize() == true);
-  twoCoords::Window *window = nullptr;
+  std::shared_ptr<twoCoords::Window> window;
 
   SECTION("create a window") {
-    window = new twoCoords::Window(640, 480, "Test window");
-
+    REQUIRE_NOTHROW(window = std::make_shared<twoCoords::Window>(640, 480, "Test window"));
     REQUIRE(window != nullptr);
-
-    delete window;
   }
 
   SECTION("check window size") {
-    window = new twoCoords::Window(800, 600, "Test window");
-
+    REQUIRE_NOTHROW(window = std::make_shared<twoCoords::Window>(800, 600, "Test window"));
     REQUIRE(window != nullptr);
     REQUIRE(window->width() == 800);
     REQUIRE(window->height() == 600);
-
-    delete window;
   }
 
   twoCoords::deinitialize();

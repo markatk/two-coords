@@ -34,12 +34,12 @@
 #include "renderer.h"
 
 twoCoords::Scene::Scene() {
-  _rootNode = new SceneNode();
+  _rootNode = std::make_shared<SceneNode>();
   _window = nullptr;
 }
 
 twoCoords::Scene::~Scene() {
-  delete _rootNode;
+  
 }
 
 void twoCoords::Scene::update() {
@@ -54,7 +54,7 @@ void twoCoords::Scene::exit() {
 
 }
 
-twoCoords::SceneNode *twoCoords::Scene::rootNode() const {
+std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
   return _rootNode;
 }
 

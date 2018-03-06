@@ -68,7 +68,7 @@ twoCoords::Shader::Shader(const std::string &code, GLenum type) {
   }
 
   // create reference counter
-  _referenceCount = new unsigned;
+  _referenceCount = std::make_shared<unsigned>();
   *_referenceCount = 1;
 }
 
@@ -116,7 +116,6 @@ void twoCoords::Shader::release() {
     glDeleteShader(_object);
     _object = 0;
 
-    delete _referenceCount;
-    _referenceCount = NULL;
+    _referenceCount = nullptr;
   }
 }

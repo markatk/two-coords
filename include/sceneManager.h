@@ -30,6 +30,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 namespace twoCoords {
   class Scene;
@@ -37,20 +38,17 @@ namespace twoCoords {
 
   class SceneManager {
   private:
-    Window *_window;
-    std::vector<Scene *> _scenes;
+    std::vector<std::shared_ptr<Scene>> _scenes;
 
   public:
-    SceneManager(Window *window);
+    SceneManager();
     virtual ~SceneManager();
 
-    void pushScene(Scene *scene);
-    Scene *popScene();
-    Scene *currentScene() const;
+    void pushScene(std::shared_ptr<Scene> scene);
+    std::shared_ptr<Scene> popScene();
+    std::shared_ptr<Scene> currentScene() const;
 
     bool isEmpty() const;
     int count() const;
-
-    Window *window() const;
   };
 }

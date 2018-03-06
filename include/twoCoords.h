@@ -47,6 +47,7 @@
 #include "sceneManager.h"
 #include "scene.h"
 #include "sceneNode.h"
+#include "bitmap.h"
 
 namespace twoCoords {
   TWOCOORDS_API bool initialize();

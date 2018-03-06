@@ -31,11 +31,13 @@
 
 #include <vector>
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace twoCoords {
   class Program;
+  class SceneNode;
 
-  class SceneNode {
+  class SceneNode : public std::enable_shared_from_this<SceneNode> {
   protected:
     glm::vec2 _size;
 
@@ -46,16 +48,16 @@ namespace twoCoords {
     float _rotation;
     bool _hidden;
 
-    SceneNode *_parent;
-    std::vector<SceneNode *> _children;
+    std::shared_ptr<SceneNode> _parent;
+    std::vector<std::shared_ptr<SceneNode>> _children;
 
   public:
     SceneNode(glm::vec2 position = glm::vec2(0.0));
     virtual ~SceneNode();
 
-    virtual void render(Program *program);
+    virtual void render(std::shared_ptr<Program> program);
 
-    SceneNode *parent() const;
+    std::shared_ptr<SceneNode> parent() const;
 
     void setPosition(glm::vec2 position);
     void setPosition(float x, float y);
@@ -75,9 +77,9 @@ namespace twoCoords {
     void setHidden(bool hidden);
     bool isHidden() const;
 
-    void add(twoCoords::SceneNode *child);
-    void remove(twoCoords::SceneNode *child);
-    const std::vector<twoCoords::SceneNode *> &children() const;
+    void add(std::shared_ptr<twoCoords::SceneNode> child);
+    void remove(std::shared_ptr<twoCoords::SceneNode> child);
+    const std::vector<std::shared_ptr<twoCoords::SceneNode>> &children() const;
     bool hasChildren() const;
 
     glm::vec2 worldPosition() const;

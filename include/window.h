@@ -32,24 +32,25 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <memory>
 
 namespace twoCoords {
   class Window;
   class Renderer;
   class SceneManager;
 
-  typedef void (*windowSizeCallback_t)(Window *window, int width, int height);
-  typedef void (*windowCloseCallback_t)(Window *window);
-  typedef void (*windowRefreshCallback_t)(Window *window);
-  typedef void (*windowFocusCallback_t)(Window *window, int focused);
-  typedef void (*windowIconifyCallback_t)(Window *window, int iconified);
+  typedef void (*windowSizeCallback_t)(std::shared_ptr<Window> window, int width, int height);
+  typedef void (*windowCloseCallback_t)(std::shared_ptr<Window> window);
+  typedef void (*windowRefreshCallback_t)(std::shared_ptr<Window> window);
+  typedef void (*windowFocusCallback_t)(std::shared_ptr<Window> window, int focused);
+  typedef void (*windowIconifyCallback_t)(std::shared_ptr<Window> window, int iconified);
 
-  class Window {
+  class Window : public std::enable_shared_from_this<Window> {
   private:
     GLFWwindow *_window;
 
-    Renderer *_renderer;
-    SceneManager *_sceneManager;
+    std::shared_ptr<Renderer> _renderer;
+    std::shared_ptr<SceneManager> _sceneManager;
 
     double _lastUpdateTime;
     int _renderedFrames;
@@ -80,8 +81,8 @@ namespace twoCoords {
     void setFocusCallback(windowFocusCallback_t callbackl);
     void setIconifyCallback(windowIconifyCallback_t callback);
 
-    Renderer *renderer() const;
-    SceneManager *sceneManager() const;
+    std::shared_ptr<Renderer> renderer() const;
+    std::shared_ptr<SceneManager> sceneManager() const;
 
   private:
     static void windowSizeCallback(GLFWwindow *window, int width, int height);

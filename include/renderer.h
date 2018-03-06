@@ -29,20 +29,21 @@
 
 #pragma once
 
+#include <memory>
+
 namespace twoCoords {
   class Window;
   class ShaderProgram;
 
   class Renderer {
   private:
-    ShaderProgram *_spriteProgram;
-    Window *_window;
+    std::shared_ptr<ShaderProgram> _spriteProgram;
 
     int _screenUnitsX;
     int _screenUnitsY;
 
   public:
-    Renderer(Window *window);
+    Renderer();
     virtual ~Renderer();
 
     void setScreenUnits(int x, int y);
@@ -51,8 +52,7 @@ namespace twoCoords {
 
     void update();
 
-    Window *window() const;
-    ShaderProgram *shaderProgram() const;
+    std::shared_ptr<ShaderProgram> shaderProgram() const;
 
   private:
     void renderEmptyScene() const;

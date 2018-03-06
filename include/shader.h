@@ -31,12 +31,13 @@
 
 #include <string>
 #include <GL/glew.h>
+#include <memory>
 
 namespace twoCoords {
   class Shader {
   private:
     GLuint _object;
-    unsigned *_referenceCount;
+    std::shared_ptr<unsigned> _referenceCount;
 
   public:
     Shader(const std::string &code, GLenum type);
