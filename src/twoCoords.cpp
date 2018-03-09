@@ -33,7 +33,7 @@
 #include <GLFW/glfw3.h>
 
 static void errorCallback(int error, const char *description) {
-  spdlog::get("console")->error(description);
+  spdlog::get("console")->error(std::to_string(error) + ": " + description);
 }
 
 bool twoCoords::initialize() {

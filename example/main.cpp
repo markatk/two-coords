@@ -29,6 +29,8 @@
 
 #include "twoCoords.h"
 
+#include "exampleScene.h"
+
 #include <spdlog/spdlog.h>
 #include <memory>
 
@@ -47,17 +49,26 @@ int main() {
   std::shared_ptr<twoCoords::Window> window;
 
   try {
-    window = std::make_shared<twoCoords::Window>(640, 480, "Two-Coords Example");
-    window->setScreenUnits(800, 600);
-    window->setSizeCallback(callback);
+    window = std::make_shared<twoCoords::Window>(800, 600, "Two-Coords Example");
   } catch (std::exception &e) {
     spdlog::get("console")->error(e.what());
     return EXIT_FAILURE;
   }
 
+  window->setScreenUnits(800, 600);
+  window->setSizeCallback(callback);
+
+  auto exampleScene = std::make_shared<ExampleScene>();
+  window->sceneManager()->pushScene(exampleScene);
+
   // main loop
   while (window->isOpen()) {
-    window->update();
+    try {
+      window->update();
+    } catch (std::exception &e) {
+      spdlog::get("console")->error(e.what());
+      window->close();
+    }
   }
 
   // cleanup

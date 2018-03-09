@@ -45,7 +45,7 @@ twoCoords::SceneNode::~SceneNode() {
 
 }
 
-void twoCoords::SceneNode::render(std::shared_ptr<twoCoords::Program> program) {
+void twoCoords::SceneNode::render(std::shared_ptr<twoCoords::ShaderProgram> program) {
 
 }
 

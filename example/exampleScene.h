@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: src/scene.cpp
- * Created: 13.02.2018
+ * File: example/exampleScene.cpp
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,37 +27,19 @@
  * SOFTWARE.
  */
 
-#include "scene.h"
+#pragma once
 
-#include "sceneNode.h"
-#include "window.h"
-#include "resourceManager.h"
+#include "twoCoords.h"
 
-twoCoords::Scene::Scene() {
-  _rootNode = std::make_shared<SceneNode>();
-  _resourceManager = std::make_shared<ResourceManager>();
-}
+class ExampleScene : public twoCoords::Scene {
+private:
+  std::shared_ptr<twoCoords::SceneObject> _player;
 
-twoCoords::Scene::~Scene() {
-  
-}
+public:
+  ExampleScene();
+  virtual ~ExampleScene();
 
-void twoCoords::Scene::update() {
+  void update();
 
-}
-
-void twoCoords::Scene::enter() {
-
-}
-
-void twoCoords::Scene::exit() {
-
-}
-
-std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
-  return _rootNode;
-}
-
-std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() const {
-  return _resourceManager;
-}
+  void key_callback(int key, int scancode, int action, int mods);
+};

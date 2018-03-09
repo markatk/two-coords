@@ -96,7 +96,7 @@ void twoCoords::Window::update() {
   }
 
   // render next frame
-  _renderer->update();
+  _renderer->update(_sceneManager->currentScene());
 
   // calculate the FPS
   double currentTime = glfwGetTime();
@@ -158,6 +158,10 @@ void twoCoords::Window::setFocusCallback(windowFocusCallback_t callback) {
 
 void twoCoords::Window::setIconifyCallback(windowIconifyCallback_t callback) {
   _iconifyCallback = callback;
+}
+
+std::shared_ptr<twoCoords::SceneManager> twoCoords::Window::sceneManager() const {
+  return _sceneManager;
 }
 
 std::shared_ptr<twoCoords::Renderer> twoCoords::Window::renderer() const {

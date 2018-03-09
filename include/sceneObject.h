@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: src/scene.cpp
- * Created: 13.02.2018
+ * File: include/sceneObject.h
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,37 +27,37 @@
  * SOFTWARE.
  */
 
-#include "scene.h"
+#pragma once
 
 #include "sceneNode.h"
-#include "window.h"
-#include "resourceManager.h"
 
-twoCoords::Scene::Scene() {
-  _rootNode = std::make_shared<SceneNode>();
-  _resourceManager = std::make_shared<ResourceManager>();
-}
+#include <GL/glew.h>
+#include <memory>
 
-twoCoords::Scene::~Scene() {
-  
-}
+namespace twoCoords {
+  class Texture;
 
-void twoCoords::Scene::update() {
+  class SceneObject : public SceneNode {
+  private:
+    std::weak_ptr<Texture> _texture;
 
-}
+    static GLuint _sVAO;
+    static GLuint _sVBO;
 
-void twoCoords::Scene::enter() {
+  public:
+    SceneObject(std::shared_ptr<Texture> texture, glm::vec2 position = glm::vec2(0));
+    virtual ~SceneObject();
 
-}
+    virtual void render(std::shared_ptr<ShaderProgram> program);
 
-void twoCoords::Scene::exit() {
+    glm::vec2 size() const;
 
-}
+    void setTexture(std::shared_ptr<Texture> texture);
+    std::shared_ptr<Texture> texture() const;
 
-std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
-  return _rootNode;
-}
+    bool inside(glm::vec2 point) const;
 
-std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() const {
-  return _resourceManager;
+  private:
+    void loadRectangle(std::shared_ptr<ShaderProgram> program) const;
+  };
 }

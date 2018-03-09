@@ -30,10 +30,13 @@
 #pragma once
 
 #include <memory>
+#include <list>
 
 namespace twoCoords {
   class Window;
   class ShaderProgram;
+  class Scene;
+  class SceneNode;
 
   class Renderer {
   private:
@@ -41,6 +44,8 @@ namespace twoCoords {
 
     int _screenUnitsX;
     int _screenUnitsY;
+
+    std::list<SceneNode *> _spriteNodes;
 
   public:
     Renderer();
@@ -50,11 +55,12 @@ namespace twoCoords {
     int screenUnitsX() const;
     int screenUnitsY() const;
 
-    void update();
+    void update(std::shared_ptr<Scene> scene);
 
     std::shared_ptr<ShaderProgram> shaderProgram() const;
 
   private:
     void renderEmptyScene() const;
+    void addNode(std::shared_ptr<SceneNode> node);
   };
 }

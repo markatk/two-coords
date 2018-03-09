@@ -129,7 +129,7 @@ GLint twoCoords::ShaderProgram::uniform(const GLchar *name) const {
 }
 
 void twoCoords::ShaderProgram::setUniform(const GLchar *name, const glm::mat4 &matrix, GLboolean transpose) {
-  if (isInUse()) {
+  if (isInUse() == false) {
     throw std::runtime_error("Program is not in use while setting uniform");
   }
 

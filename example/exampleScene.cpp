@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: src/scene.cpp
- * Created: 13.02.2018
+ * File: example/exampleScene.cpp
+ * Created: 06.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,37 +27,32 @@
  * SOFTWARE.
  */
 
-#include "scene.h"
+#include "exampleScene.h"
 
-#include "sceneNode.h"
-#include "window.h"
-#include "resourceManager.h"
+ExampleScene::ExampleScene() : twoCoords::Scene() {
+  resourceManager()->addDirectory("assets", true);
 
-twoCoords::Scene::Scene() {
-  _rootNode = std::make_shared<SceneNode>();
-  _resourceManager = std::make_shared<ResourceManager>();
+  // create player
+  _player = std::make_shared<twoCoords::SceneObject>(resourceManager()->texture("prototype_player.tga"), glm::vec2(200, 200));
+  _player->setLayer(2);
+  rootNode()->add(_player);
 }
 
-twoCoords::Scene::~Scene() {
-  
-}
-
-void twoCoords::Scene::update() {
+ExampleScene::~ExampleScene() {
 
 }
 
-void twoCoords::Scene::enter() {
+void ExampleScene::update() {
 
+
+	// update engine
+	twoCoords::Scene::update();
 }
 
-void twoCoords::Scene::exit() {
-
-}
-
-std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
-  return _rootNode;
-}
-
-std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() const {
-  return _resourceManager;
+void ExampleScene::key_callback(int key, int scancode, int action, int mods) {
+	if (action == GLFW_PRESS) {
+		if (key == GLFW_KEY_ESCAPE) {
+			// window()->close();
+		}
+	}
 }

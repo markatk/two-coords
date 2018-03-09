@@ -34,7 +34,7 @@
 #include <memory>
 
 namespace twoCoords {
-  class Program;
+  class ShaderProgram;
   class SceneNode;
 
   class SceneNode : public std::enable_shared_from_this<SceneNode> {
@@ -55,7 +55,7 @@ namespace twoCoords {
     SceneNode(glm::vec2 position = glm::vec2(0.0));
     virtual ~SceneNode();
 
-    virtual void render(std::shared_ptr<Program> program);
+    virtual void render(std::shared_ptr<ShaderProgram> program);
 
     std::shared_ptr<SceneNode> parent() const;
 

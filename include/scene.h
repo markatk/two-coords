@@ -34,11 +34,13 @@
 namespace twoCoords {
   class SceneNode;
   class Window;
+  class ResourceManager;
 
   class Scene {
   private:
     std::shared_ptr<SceneNode> _rootNode;
-    std::shared_ptr<Window> _window;
+    std::shared_ptr<ResourceManager> _resourceManager;
+    std::weak_ptr<Window> _window;
 
   public:
     Scene();
@@ -49,5 +51,6 @@ namespace twoCoords {
     virtual void exit();
 
     std::shared_ptr<SceneNode> rootNode() const;
+    std::shared_ptr<ResourceManager> resourceManager() const;
   };
 }
