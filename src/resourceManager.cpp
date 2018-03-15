@@ -138,6 +138,7 @@ std::shared_ptr<twoCoords::Texture> twoCoords::ResourceManager::texture(std::str
     return std::dynamic_pointer_cast<Texture>(*it);
   }
 
+  spdlog::get("console")->warn("Texture not found for filename " + name);
   return nullptr;
 }
 
