@@ -42,16 +42,12 @@ int main() {
   // initialize
   if (twoCoords::initialize() == false) {
     spdlog::get("console")->error("Unable to initialize Two-Coords");
-    return EXIT_SUCCESS;
+    return EXIT_FAILURE;
   }
 
   // create window
-  std::shared_ptr<twoCoords::Window> window;
-
-  try {
-    window = std::make_shared<twoCoords::Window>(800, 600, "Two-Coords Example");
-  } catch (std::exception &e) {
-    spdlog::get("console")->error(e.what());
+  auto window = std::make_shared<twoCoords::Window>();
+  if (window->create(800, 600, "Two-Coords Example") == false) {
     return EXIT_FAILURE;
   }
 

@@ -36,10 +36,21 @@
 #include <stdexcept>
 #include <spdlog/spdlog.h>
 
-twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor *monitor) {
+twoCoords::Window::Window() {
+  _window = nullptr;
+  _sceneManager = nullptr;
+  _renderer = nullptr;
+}
+
+twoCoords::Window::~Window() {
+  glfwDestroyWindow(_window);
+}
+
+bool twoCoords::Window::create(int width, int height, std::string title, GLFWmonitor *monitor) {
   _window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
   if (_window == NULL) {
-    throw std::string("glfwCreateWindow failed");
+    spdlog::get("console")->error("glfwCreateWindow failed");
+    return false;
   }
 
   // setup window
@@ -51,7 +62,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
 
   // init glew
   if (glewInit() != GLEW_OK) {
-    throw std::string("glewInit failed");
+    spdlog::get("console")->error("glewInit failed");
+    return false;
   }
 
   auto console = spdlog::get("console");
@@ -61,7 +73,8 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   console->info(std::string("Renderer: ") + (const char *)glGetString(GL_RENDERER));
 
   if (GLEW_VERSION_4_1 == false) {
-    throw std::runtime_error("OpenGL 4.1 not available");
+    spdlog::get("console")->error("OpenGL 4.1 not available");
+    return false;
   }
 
   _lastUpdateTime = glfwGetTime();
@@ -81,13 +94,16 @@ twoCoords::Window::Window(int width, int height, std::string title, GLFWmonitor 
   glfwSetWindowFocusCallback(_window, windowFocusCallback);
   glfwSetWindowIconifyCallback(_window, windowIconifyCallback);
 
-  // create objects
-  _sceneManager = std::make_shared<SceneManager>();
-  _renderer = std::make_shared<Renderer>();
-}
+  glfwSetKeyCallback(_window, key_callback);
+  glfwSetMouseButtonCallback(_window, mouseButton_callback);
+  glfwSetCursorPosCallback(_window, cursorPosition_callback);
+  glfwSetScrollCallback(_window, scroll_callback);
 
-twoCoords::Window::~Window() {
-  glfwDestroyWindow(_window);
+  // create objects
+  _sceneManager = std::make_shared<SceneManager>(shared_from_this());
+  _renderer = std::make_shared<Renderer>();
+
+  return true;
 }
 
 void twoCoords::Window::update() {
@@ -168,6 +184,10 @@ std::shared_ptr<twoCoords::Renderer> twoCoords::Window::renderer() const {
   return _renderer;
 }
 
+GLFWwindow *twoCoords::Window::windowHandle() const {
+  return _window;
+}
+
 void twoCoords::Window::windowSizeCallback(GLFWwindow *window, int width, int height) {
   auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_sizeCallback) {
@@ -200,5 +220,33 @@ void twoCoords::Window::windowIconifyCallback(GLFWwindow *window, int iconified)
   auto userPointer = (Window *)glfwGetWindowUserPointer(window);
 	if (userPointer->_iconifyCallback) {
 		userPointer->_iconifyCallback(userPointer->shared_from_this(), iconified);
+	}
+}
+
+void twoCoords::Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+	Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->sceneManager()->isEmpty() == false) {
+		userPointer->sceneManager()->currentScene()->key_callback(key, scancode, action, mods);
+	}
+}
+
+void twoCoords::Window::mouseButton_callback(GLFWwindow *window, int button, int action, int mods) {
+	Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->sceneManager()->isEmpty() == false) {
+		userPointer->sceneManager()->currentScene()->mouseButton_callback(button, action, mods);
+	}
+}
+
+void twoCoords::Window::cursorPosition_callback(GLFWwindow *window, double x, double y) {
+	Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->sceneManager()->isEmpty() == false) {
+		userPointer->sceneManager()->currentScene()->cursorPosition_callback(x, y);
+	}
+}
+
+void twoCoords::Window::scroll_callback(GLFWwindow *window, double x, double y) {
+	Window *userPointer = (Window *)glfwGetWindowUserPointer(window);
+	if (userPointer->sceneManager()->isEmpty() == false) {
+		userPointer->sceneManager()->currentScene()->scroll_callback(x, y);
 	}
 }

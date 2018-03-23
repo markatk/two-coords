@@ -30,6 +30,7 @@
 #pragma once
 
 #include <memory>
+#include <glm/glm.hpp>
 
 namespace twoCoords {
   class SceneNode;
@@ -42,15 +43,35 @@ namespace twoCoords {
     std::shared_ptr<ResourceManager> _resourceManager;
     std::weak_ptr<Window> _window;
 
+    glm::vec3 _backgroundColor;
+
   public:
-    Scene();
+    Scene(glm::vec3 backgroundColor = glm::vec3(0.0f));
     virtual ~Scene();
 
     virtual void update();
     virtual void enter();
     virtual void exit();
 
+    void setBackgroundColor(glm::vec3 color);
+    void setBackgroundColor(float red, float green, float blue);
+    glm::vec3 backgroundColor() const;
+
+    int key(int key) const;
+    int mouseButton(int button) const;
+
+    void setCursorPosition(glm::vec2 position);
+    glm::vec2 cursorPosition() const;
+
+    virtual void key_callback(int key, int scancode, int action, int mods);
+    virtual void mouseButton_callback(int button, int action, int mods);
+    virtual void cursorPosition_callback(double x, double y);
+    virtual void scroll_callback(double x, double y);
+
     std::shared_ptr<SceneNode> rootNode() const;
     std::shared_ptr<ResourceManager> resourceManager() const;
+
+    void setWindow(std::shared_ptr<Window> window);
+    std::shared_ptr<Window> window() const;
   };
 }

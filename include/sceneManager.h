@@ -39,9 +39,10 @@ namespace twoCoords {
   class SceneManager {
   private:
     std::vector<std::shared_ptr<Scene>> _scenes;
+    std::weak_ptr<Window> _window;
 
   public:
-    SceneManager();
+    SceneManager(std::shared_ptr<Window> window);
     virtual ~SceneManager();
 
     void pushScene(std::shared_ptr<Scene> scene);
@@ -50,5 +51,7 @@ namespace twoCoords {
 
     bool isEmpty() const;
     int count() const;
+
+    std::shared_ptr<Window> window() const;
   };
 }

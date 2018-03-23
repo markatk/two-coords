@@ -41,5 +41,5 @@ public:
 
   void update();
 
-  void key_callback(int key, int scancode, int action, int mods);
+  void key_callback(int key, int scancode, int action, int mods) override;
 };

@@ -85,7 +85,7 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
   }
 
   // clear buffer
-  glClearColor(0.2, 0.2, 0.2, 1.0);
+  glClearColor(scene->backgroundColor().x, scene->backgroundColor().y, scene->backgroundColor().z, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // calculate camera projection

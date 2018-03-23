@@ -32,8 +32,8 @@
 #include "scene.h"
 #include "window.h"
 
-twoCoords::SceneManager::SceneManager() {
-
+twoCoords::SceneManager::SceneManager(std::shared_ptr<Window> window) {
+  _window = window;
 }
 
 twoCoords::SceneManager::~SceneManager() {
@@ -49,6 +49,7 @@ void twoCoords::SceneManager::pushScene(std::shared_ptr<twoCoords::Scene> scene)
 
   // load new scene
   _scenes.push_back(scene);
+  scene->setWindow(window());
   scene->enter();
 }
 
@@ -61,6 +62,7 @@ std::shared_ptr<twoCoords::Scene> twoCoords::SceneManager::popScene() {
   auto scene = _scenes.back();
   _scenes.pop_back();
   scene->exit();
+  scene->setWindow(nullptr);
 
   return scene;
 }
@@ -79,4 +81,8 @@ bool twoCoords::SceneManager::isEmpty() const {
 
 int twoCoords::SceneManager::count() const {
   return _scenes.size();
+}
+
+std::shared_ptr<twoCoords::Window> twoCoords::SceneManager::window() const {
+  return _window.lock();
 }

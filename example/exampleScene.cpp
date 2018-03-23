@@ -29,7 +29,7 @@
 
 #include "exampleScene.h"
 
-ExampleScene::ExampleScene() : twoCoords::Scene() {
+ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
   resourceManager()->addDirectory("assets", true);
 
   // create player
@@ -43,7 +43,31 @@ ExampleScene::~ExampleScene() {
 }
 
 void ExampleScene::update() {
+	// move player
+	glm::vec2 pos = _player->position();
+	float speed = 50.0f / 1000.0f;
 
+	if (key(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+		speed *= 2;
+	}
+
+	if (key(GLFW_KEY_W) == GLFW_PRESS) {
+		pos.y -= speed;
+	}
+
+	if (key(GLFW_KEY_S) == GLFW_PRESS) {
+		pos.y += speed;
+	}
+
+	if (key(GLFW_KEY_A) == GLFW_PRESS) {
+		pos.x -= speed;
+	}
+
+	if (key(GLFW_KEY_D) == GLFW_PRESS) {
+		pos.x += speed;
+	}
+
+	_player->setPosition(pos);
 
 	// update engine
 	twoCoords::Scene::update();
@@ -52,7 +76,7 @@ void ExampleScene::update() {
 void ExampleScene::key_callback(int key, int scancode, int action, int mods) {
 	if (action == GLFW_PRESS) {
 		if (key == GLFW_KEY_ESCAPE) {
-			// window()->close();
+			window()->close();
 		}
 	}
 }

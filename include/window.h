@@ -63,8 +63,10 @@ namespace twoCoords {
     windowIconifyCallback_t _iconifyCallback;
 
   public:
-    Window(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
+    Window();
     virtual ~Window();
+
+    bool create(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
 
     void update();
     void close();
@@ -84,12 +86,19 @@ namespace twoCoords {
     std::shared_ptr<Renderer> renderer() const;
     std::shared_ptr<SceneManager> sceneManager() const;
 
+    GLFWwindow *windowHandle() const;
+
   private:
     static void windowSizeCallback(GLFWwindow *window, int width, int height);
     static void windowCloseCallback(GLFWwindow *window);
     static void windowRefreshCallback(GLFWwindow *window);
     static void windowFocusCallback(GLFWwindow *window, int focused);
     static void windowIconifyCallback(GLFWwindow *window, int iconified);
+
+    static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static void mouseButton_callback(GLFWwindow *window, int button, int action, int mods);
+    static void cursorPosition_callback(GLFWwindow *window, double x, double y);
+    static void scroll_callback(GLFWwindow *window, double x, double y);
 
     // disable copying
     Window(const Window &);

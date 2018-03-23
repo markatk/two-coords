@@ -38,12 +38,14 @@ TEST_CASE("Engine window", "[Two-Coords]") {
   std::shared_ptr<twoCoords::Window> window;
 
   SECTION("create a window") {
-    REQUIRE_NOTHROW(window = std::make_shared<twoCoords::Window>(640, 480, "Test window"));
+    window = std::make_shared<twoCoords::Window>();
+    REQUIRE(window->create(640, 480, "Test window"));
     REQUIRE(window != nullptr);
   }
 
   SECTION("check window size") {
-    REQUIRE_NOTHROW(window = std::make_shared<twoCoords::Window>(800, 600, "Test window"));
+    window = std::make_shared<twoCoords::Window>();
+    REQUIRE(window->create(800, 600, "Test window"));
     REQUIRE(window != nullptr);
     REQUIRE(window->width() == 800);
     REQUIRE(window->height() == 600);
