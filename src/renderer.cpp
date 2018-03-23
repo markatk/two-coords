@@ -35,6 +35,7 @@
 #include "scene.h"
 #include "sceneNode.h"
 #include "sceneObject.h"
+#include "camera.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -89,7 +90,7 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // calculate camera projection
-  glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_screenUnitsX), static_cast<GLfloat>(_screenUnitsY), 0.0f, -100.0f, 0.1f);
+  glm::mat4 projection = glm::ortho(scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsX) + scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsY) + scene->camera()->position().y, scene->camera()->position().y, -100.0f, 0.1f);
 
   // clear render list
   _spriteNodes.clear();

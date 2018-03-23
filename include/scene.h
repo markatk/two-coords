@@ -36,11 +36,14 @@ namespace twoCoords {
   class SceneNode;
   class Window;
   class ResourceManager;
+  class Camera;
 
   class Scene {
   private:
     std::shared_ptr<SceneNode> _rootNode;
     std::shared_ptr<ResourceManager> _resourceManager;
+    std::shared_ptr<Camera> _camera;
+
     std::weak_ptr<Window> _window;
 
     glm::vec3 _backgroundColor;
@@ -70,6 +73,7 @@ namespace twoCoords {
 
     std::shared_ptr<SceneNode> rootNode() const;
     std::shared_ptr<ResourceManager> resourceManager() const;
+    std::shared_ptr<Camera> camera() const;
 
     void setWindow(std::shared_ptr<Window> window);
     std::shared_ptr<Window> window() const;

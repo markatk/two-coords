@@ -68,6 +68,7 @@ void ExampleScene::update() {
 	}
 
 	_player->setPosition(pos);
+	camera()->setPosition(pos - glm::vec2(400, 300));
 
 	// update engine
 	twoCoords::Scene::update();

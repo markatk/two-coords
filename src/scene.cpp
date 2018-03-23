@@ -32,11 +32,13 @@
 #include "sceneNode.h"
 #include "window.h"
 #include "resourceManager.h"
+#include "camera.h"
 
 twoCoords::Scene::Scene(glm::vec3 backgroundColor) {
   _backgroundColor = backgroundColor;
   _rootNode = std::make_shared<SceneNode>();
   _resourceManager = std::make_shared<ResourceManager>();
+  _camera = std::make_shared<Camera>();
 }
 
 twoCoords::Scene::~Scene() {
@@ -109,6 +111,10 @@ std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
 
 std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() const {
   return _resourceManager;
+}
+
+std::shared_ptr<twoCoords::Camera> twoCoords::Scene::camera() const {
+  return _camera;
 }
 
 void twoCoords::Scene::setWindow(std::shared_ptr<Window> window) {

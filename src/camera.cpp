@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/camera.cpp
+ * Created: 23.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,33 +27,22 @@
  * SOFTWARE.
  */
 
-#pragma once
-
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
-#include "bitmap.h"
-#include "texture.h"
-#include "sceneObject.h"
-#include "resourceManager.h"
 #include "camera.h"
 
-namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+#include <AL/al.h>
+
+twoCoords::Camera::Camera() {
+    _position = glm::vec2(0);
+}
+
+twoCoords::Camera::~Camera() {
+
+}
+
+void twoCoords::Camera::setPosition(glm::vec2 position) {
+    _position = position;
+}
+
+glm::vec2 twoCoords::Camera::position() const {
+    return _position;
 }
