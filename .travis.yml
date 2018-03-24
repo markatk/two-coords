@@ -13,6 +13,8 @@ jobs:
 
         - git clone https://github.com/glfw/glfw && mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install && cd .. && rm -rf build
         - git clone https://github.com/nigels-com/glew.git && cd glew && make -C auto && cd build && cmake ./cmake && make -j4 && sudo make install && cd ../..
+        - git clone https://github.com/kcat/openal-soft.git && cd openal-soft/build && cmake .. && make && sudo make install && cd ../..
+        - git clone https://github.com/vancegroup/freealut.git && cd freealut && mkdir build && cd build && cmake .. && make && sudo make install && cd ../..
 
         - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
         - git submodule update --init --recursive
