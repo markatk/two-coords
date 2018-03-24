@@ -38,6 +38,7 @@ namespace twoCoords {
     class Window;
     class ResourceManager;
     class Camera;
+    class SceneButton;
 
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
@@ -71,6 +72,7 @@ namespace twoCoords {
         virtual void mouseButton_callback(int button, int action, int mods);
         virtual void cursorPosition_callback(double x, double y);
         virtual void scroll_callback(double x, double y);
+        virtual void button_callback(std::shared_ptr<SceneButton> button, int action);
 
         std::shared_ptr<SceneNode> rootNode() const;
         std::shared_ptr<ResourceManager> resourceManager() const;

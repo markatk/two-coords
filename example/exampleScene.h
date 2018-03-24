@@ -35,6 +35,7 @@ class ExampleScene : public twoCoords::Scene {
 private:
     std::shared_ptr<twoCoords::SceneObject> _player;
     std::shared_ptr<twoCoords::SceneSound> _sound;
+    std::shared_ptr<twoCoords::SceneButton> _button;
 
 public:
     ExampleScene();
@@ -43,4 +44,5 @@ public:
     void update();
 
     void key_callback(int key, int scancode, int action, int mods) override;
+    void button_callback(std::shared_ptr<twoCoords::SceneButton> button, int action) override;
 };

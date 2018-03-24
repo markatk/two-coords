@@ -126,6 +126,10 @@ void twoCoords::Scene::scroll_callback(double x, double y) {
     
 }
 
+void twoCoords::Scene::button_callback(std::shared_ptr<SceneButton> button, int action) {
+    
+}
+
 std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
     return _rootNode;
 }

@@ -29,6 +29,8 @@
 
 #include "exampleScene.h"
 
+#include <spdlog/spdlog.h>
+
 ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
     resourceManager()->addDirectory("assets", true);
 
@@ -39,7 +41,10 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 
     _sound = std::make_shared<twoCoords::SceneSound>(resourceManager()->soundBuffer("helloworld.wav"));
     _sound->setLooping(true);
-    _sound->play();
+    // _sound->play();
+
+	_button = std::make_shared<twoCoords::SceneButton>(resourceManager()->texture("prototype_button.tga"), resourceManager()->texture("prototype_button.tga"), 123);
+	rootNode()->add(_button);
 }
 
 ExampleScene::~ExampleScene() {
@@ -84,4 +89,8 @@ void ExampleScene::key_callback(int key, int scancode, int action, int mods) {
 			window()->close();
 		}
 	}
+}
+
+void ExampleScene::button_callback(std::shared_ptr<twoCoords::SceneButton> button, int action) {
+	spdlog::get("console")->info("Button " + std::to_string(button->identifier()) + " action " + std::to_string(action));
 }

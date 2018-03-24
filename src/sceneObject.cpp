@@ -79,7 +79,8 @@ std::shared_ptr<twoCoords::Texture> twoCoords::SceneObject::texture() const {
 }
 
 bool twoCoords::SceneObject::inside(glm::vec2 point) const {
-    return point.x >= position().x - _size.x * 0.5 && point.x < position().x + _size.x * 0.5 && point.y >= position().y - _size.y * 0.5 && point.y < position().y + _size.y * 0.5;
+    auto position = worldPosition();
+    return point.x >= position.x - _size.x * 0.5 && point.x < position.x + _size.x * 0.5 && point.y >= position.y - _size.y * 0.5 && point.y < position.y + _size.y * 0.5;
 }
 
 void twoCoords::SceneObject::loadRectangle(std::shared_ptr<ShaderProgram> program) const {

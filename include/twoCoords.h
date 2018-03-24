@@ -55,6 +55,7 @@
 #include "soundBuffer.h"
 #include "sceneSound.h"
 #include "sceneGUIObject.h"
+#include "sceneButton.h"
 
 namespace twoCoords {
     TWOCOORDS_API bool initialize();

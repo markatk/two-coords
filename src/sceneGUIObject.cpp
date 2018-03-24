@@ -30,6 +30,7 @@
 #include "sceneGUIObject.h"
 
 #include "texture.h"
+#include "camera.h"
 
 #include <GLFW/glfw3.h>
 
@@ -89,7 +90,7 @@ void twoCoords::SceneGUIObject::exited(std::shared_ptr<Scene> scene) {
 }
 
 void twoCoords::SceneGUIObject::updateGUI(std::shared_ptr<Scene> scene) {
-    if (inside(scene->cursorPosition())) {
+    if (inside(scene->cursorPosition() + scene->camera()->position())) {
         // check mouse over
         if (_hovered == false) {
             _hovered = true;
