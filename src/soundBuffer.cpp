@@ -37,7 +37,9 @@ twoCoords::SoundBuffer::SoundBuffer(std::string filePath) : twoCoords::Resource(
 }
 
 twoCoords::SoundBuffer::~SoundBuffer() {
-
+    if (_buffer != 0) {
+        alDeleteBuffers(1, &_buffer);
+    }
 }
 
 bool twoCoords::SoundBuffer::load() {

@@ -35,6 +35,7 @@
 
 #include <stdexcept>
 #include <spdlog/spdlog.h>
+#include <AL/al.h>
 
 twoCoords::Window::Window() {
   _window = nullptr;

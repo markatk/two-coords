@@ -33,9 +33,13 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
   resourceManager()->addDirectory("assets", true);
 
   // create player
-  _player = std::make_shared<twoCoords::SceneObject>(resourceManager()->texture("prototype_player.tga"), glm::vec2(200, 200));
+  _player = std::make_shared<twoCoords::SceneObject>(resourceManager()->texture("prototype_player.tga"), glm::vec2(400, 300));
   _player->setLayer(2);
   rootNode()->add(_player);
+
+  _sound = std::make_shared<twoCoords::SceneSound>(resourceManager()->soundBuffer("helloworld.wav"));
+  _sound->setLooping(true);
+  _sound->play();
 }
 
 ExampleScene::~ExampleScene() {

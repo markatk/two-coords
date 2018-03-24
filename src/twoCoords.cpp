@@ -31,6 +31,7 @@
 
 #include <spdlog/spdlog.h>
 #include <GLFW/glfw3.h>
+#include <AL/alut.h>
 
 static void errorCallback(int error, const char *description) {
   spdlog::get("console")->error(std::to_string(error) + ": " + description);
@@ -47,6 +48,7 @@ bool twoCoords::initialize() {
   
   // setup glfw
   if (glfwInit() == false) {
+    console->error("Unable to initialize glfw");
     return false;
   }
 
@@ -57,6 +59,12 @@ bool twoCoords::initialize() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+  // initialize openal
+  if (alutInit(0, 0) == false) {
+    console->error("Unable to initialize alut");
+    return false;
+  }
+
   console->info("Two-Coords started");
 
   return true;
@@ -66,6 +74,7 @@ void twoCoords::deinitialize() {
   auto console = spdlog::get("console");
   console->info("Two-Coords stopping...");
 
+  alutExit();
   glfwTerminate();
 
   console->info("Two-Coords stopped");

@@ -34,6 +34,7 @@
 class ExampleScene : public twoCoords::Scene {
 private:
   std::shared_ptr<twoCoords::SceneObject> _player;
+  std::shared_ptr<twoCoords::SceneSound> _sound;
 
 public:
   ExampleScene();

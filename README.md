@@ -13,6 +13,7 @@ This is a rewrite of an old 2D game engine. The project's main inspiration is to
 ## Features
 
 This features are planned for the first stable release *(random order)*:
+
 - [ ] Varius texture support (tga, dds, png etc.)
 - [ ] Resource bundling
 - [ ] Game scene management

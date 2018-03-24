@@ -29,6 +29,8 @@
 
 #include "camera.h"
 
+#include <AL/al.h>
+
 twoCoords::Camera::Camera() {
     _position = glm::vec2(0);
 }
@@ -39,6 +41,8 @@ twoCoords::Camera::~Camera() {
 
 void twoCoords::Camera::setPosition(glm::vec2 position) {
     _position = position;
+
+    alListener3f(AL_POSITION, position.x, position.y, 0);
 }
 
 glm::vec2 twoCoords::Camera::position() const {

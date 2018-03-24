@@ -86,6 +86,9 @@ namespace twoCoords {
     glm::vec2 worldScale() const;
     glm::mat4 model() const;
 
+  protected:
+    virtual void refresh();
+
   private:
 		glm::mat4 modelForChild() const;
   };
