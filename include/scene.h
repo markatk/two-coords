@@ -39,6 +39,7 @@ namespace twoCoords {
     class ResourceManager;
     class Camera;
     class SceneButton;
+    class SceneManager;
 
     class Scene : public std::enable_shared_from_this<Scene> {
     private:
@@ -57,6 +58,7 @@ namespace twoCoords {
         virtual void update();
         virtual void enter();
         virtual void exit();
+        bool isActive() const;
 
         void setBackgroundColor(glm::vec3 color);
         void setBackgroundColor(float red, float green, float blue);
@@ -77,11 +79,11 @@ namespace twoCoords {
         std::shared_ptr<SceneNode> rootNode() const;
         std::shared_ptr<ResourceManager> resourceManager() const;
         std::shared_ptr<Camera> camera() const;
-
-        void setWindow(std::shared_ptr<Window> window);
         std::shared_ptr<Window> window() const;
     
     private:
         void updateNode(std::shared_ptr<SceneNode> node);
+
+        friend SceneManager;
     };
 }

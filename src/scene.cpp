@@ -33,6 +33,7 @@
 #include "window.h"
 #include "resourceManager.h"
 #include "camera.h"
+#include "sceneManager.h"
 #include "sceneGUIObject.h"
 
 twoCoords::Scene::Scene(glm::vec3 backgroundColor) {
@@ -56,6 +57,15 @@ void twoCoords::Scene::enter() {
 
 void twoCoords::Scene::exit() {
 
+}
+
+bool twoCoords::Scene::isActive() const {
+    auto window = _window.lock();
+    if (window == nullptr) {
+        return false;
+    }
+
+    return window->sceneManager()->currentScene() == shared_from_this();
 }
 
 void twoCoords::Scene::setBackgroundColor(glm::vec3 color) {
@@ -140,10 +150,6 @@ std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() 
 
 std::shared_ptr<twoCoords::Camera> twoCoords::Scene::camera() const {
     return _camera;
-}
-
-void twoCoords::Scene::setWindow(std::shared_ptr<Window> window) {
-    _window = window;
 }
 
 std::shared_ptr<twoCoords::Window> twoCoords::Scene::window() const {

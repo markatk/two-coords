@@ -41,7 +41,8 @@ public:
     ExampleScene();
     virtual ~ExampleScene();
 
-    void update();
+    void update() override;
+    void enter() override;
 
     void key_callback(int key, int scancode, int action, int mods) override;
     void button_callback(std::shared_ptr<twoCoords::SceneButton> button, int action) override;

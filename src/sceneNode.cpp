@@ -39,6 +39,7 @@ twoCoords::SceneNode::SceneNode(glm::vec2 position) {
     _size = glm::vec2(0.0f);
     _hidden = false;
     _parent = nullptr;
+    _active = false;
 }
 
 twoCoords::SceneNode::~SceneNode() {
@@ -128,6 +129,7 @@ void twoCoords::SceneNode::add(std::shared_ptr<twoCoords::SceneNode> child) {
     _children.push_back(child);
     child->_parent = shared_from_this();
 
+    child->setActive(_active);
     child->refresh();
 }
 
@@ -138,6 +140,7 @@ void twoCoords::SceneNode::remove(std::shared_ptr<twoCoords::SceneNode> child) {
             it = _children.erase(it);
             child->_parent = nullptr;
 
+            child->_active = false;
             child->refresh();
         } else {
             it++;
@@ -181,6 +184,10 @@ glm::mat4 twoCoords::SceneNode::model() const {
     return model;
 }
 
+bool twoCoords::SceneNode::isActive() const {
+    return _active;
+}
+
 void twoCoords::SceneNode::refresh() {
 
 }
@@ -195,4 +202,12 @@ glm::mat4 twoCoords::SceneNode::modelForChild() const {
     }
 
     return model;
+}
+
+void twoCoords::SceneNode::setActive(bool active) {
+    _active = active;
+
+    for (auto it = _children.begin(); it != _children.end(); it++) {
+        (*it)->setActive(active);
+    }
 }

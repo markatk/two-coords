@@ -36,6 +36,7 @@
 namespace twoCoords {
     class ShaderProgram;
     class SceneNode;
+    class SceneManager;
 
     class SceneNode : public std::enable_shared_from_this<SceneNode> {
     protected:
@@ -47,6 +48,7 @@ namespace twoCoords {
         unsigned int _layer;
         float _rotation;
         bool _hidden;
+        bool _active;
 
         std::shared_ptr<SceneNode> _parent;
         std::vector<std::shared_ptr<SceneNode>> _children;
@@ -86,10 +88,16 @@ namespace twoCoords {
         glm::vec2 worldScale() const;
         glm::mat4 model() const;
 
+        bool isActive() const;
+
     protected:
         virtual void refresh();
 
     private:
 		glm::mat4 modelForChild() const;
+
+        void setActive(bool active);
+
+        friend SceneManager;
     };
 }

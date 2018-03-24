@@ -47,6 +47,10 @@ twoCoords::SceneSound::~SceneSound() {
 }
 
 void twoCoords::SceneSound::play() {
+    if (isActive() == false) {
+        return;
+    }
+
     alSourcePlay(_source);
 }
 
@@ -93,6 +97,13 @@ ALuint twoCoords::SceneSound::source() const {
 }
 
 void twoCoords::SceneSound::refresh() {
+    if (isActive() == false) {
+        if (isPlaying()) {
+            pause();
+        }
+        return;
+    }
+
     auto position = worldPosition();
     alSource3f(_source, AL_POSITION, position.x, position.y, 0);
 }
