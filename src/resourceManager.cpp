@@ -31,6 +31,7 @@
 
 #include "resource.h"
 #include "texture.h"
+#include "soundBuffer.h"
 
 #include <spdlog/spdlog.h>
 #include <tinydir.h>
@@ -39,6 +40,8 @@ twoCoords::ResourceManager::ResourceManager() {
   _textureExtensionFilter.push_back(".tga");
   _textureExtensionFilter.push_back(".bmp");
   _textureExtensionFilter.push_back(".png");
+
+  _soundExtensionFilter.push_back(".wav");
 }
 
 twoCoords::ResourceManager::~ResourceManager() {
@@ -67,8 +70,10 @@ bool twoCoords::ResourceManager::addFile(std::string filePath) {
   // create new resource
   std::shared_ptr<Resource> resource = nullptr;
 
-  if (fileMatchesTextureExtensionFilter(extension)) {
+  if (fileMatchesExtensionFilter(extension, _textureExtensionFilter)) {
     resource = std::make_shared<Texture>(filePath);
+  } else if (fileMatchesExtensionFilter(extension, _soundExtensionFilter)) {
+    resource = std::make_shared<SoundBuffer>(filePath);
   }
 
   if (resource == nullptr) {
@@ -142,12 +147,31 @@ std::shared_ptr<twoCoords::Texture> twoCoords::ResourceManager::texture(std::str
   return nullptr;
 }
 
-bool twoCoords::ResourceManager::fileMatchesExtensionFilter(std::string extension) const {
-  return fileMatchesTextureExtensionFilter(extension);
+std::shared_ptr<twoCoords::SoundBuffer> twoCoords::ResourceManager::soundBuffer(std::string name) {
+  for (auto it = _resources.begin(); it != _resources.end(); it++) {
+    if (filename((*it)->filePath()) != name) {
+      continue;
+    }
+
+    if ((*it)->isLoaded() == false) {
+      if ((*it)->load() == false) {
+        return nullptr;
+      }
+    }
+
+    return std::dynamic_pointer_cast<SoundBuffer>(*it);
+  }
+
+  spdlog::get("console")->warn("SoundBuffer not found for filename " + name);
+  return nullptr;
 }
 
-bool twoCoords::ResourceManager::fileMatchesTextureExtensionFilter(std::string extension) const {
-  for (auto it = _textureExtensionFilter.begin(); it != _textureExtensionFilter.end(); it++) {
+bool twoCoords::ResourceManager::fileMatchesExtensionFilter(std::string extension) const {
+  return fileMatchesExtensionFilter(extension, _textureExtensionFilter) || fileMatchesExtensionFilter(extension, _soundExtensionFilter);
+}
+
+bool twoCoords::ResourceManager::fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const {
+  for (auto it = filter.begin(); it != filter.end(); it++) {
     if (*it == extension) {
       return true;
     }

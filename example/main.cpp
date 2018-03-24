@@ -38,7 +38,7 @@ void callback(std::shared_ptr<twoCoords::Window> window, int width, int height) 
   spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
 }
 
-int main() {
+int main(int argc, char **argv) {
   // initialize
   if (twoCoords::initialize() == false) {
     spdlog::get("console")->error("Unable to initialize Two-Coords");
@@ -55,7 +55,7 @@ int main() {
   window->setSizeCallback(callback);
 
   auto exampleScene = std::make_shared<ExampleScene>();
-  window->sceneManager()->pushScene(exampleScene);
+  window->sceneManager()->pushScene(std::static_pointer_cast<twoCoords::Scene>(exampleScene));
 
   // main loop
   while (window->isOpen()) {

@@ -52,6 +52,7 @@
 #include "sceneObject.h"
 #include "resourceManager.h"
 #include "camera.h"
+#include "soundBuffer.h"
 
 namespace twoCoords {
   TWOCOORDS_API bool initialize();

@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/resourceManager.h
- * Created: 06.03.2018
+ * File: include/soundBuffer.cpp
+ * Created: 23.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -27,40 +27,34 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "soundBuffer.h"
 
-#include <vector>
-#include <string>
-#include <memory>
+#include <spdlog/spdlog.h>
+#include <AL/alut.h>
 
-namespace twoCoords {
-  class Resource;
-  class Texture;
-  class SoundBuffer;
+twoCoords::SoundBuffer::SoundBuffer(std::string filePath) : twoCoords::Resource(filePath), _buffer(0) {
 
-  class ResourceManager {
-  private:
-    std::vector<std::shared_ptr<Resource>> _resources;
+}
 
-    std::vector<std::string> _textureExtensionFilter;
-    std::vector<std::string> _soundExtensionFilter;
+twoCoords::SoundBuffer::~SoundBuffer() {
 
-  public:
-    ResourceManager();
-    virtual ~ResourceManager();
+}
 
-    bool addFile(std::string filePath);
-    void addDirectory(std::string directoryPath, bool recursive = false);
+bool twoCoords::SoundBuffer::load() {
+    if (isLoaded()) {
+        return true;
+    }
 
-    bool preloadResources() const;
+    _buffer = alutCreateBufferFromFile(_filePath.c_str());
+    if (alutGetError() != ALUT_ERROR_NO_ERROR) {
+        spdlog::get("console")->error("Unable to load sound file" + _filePath + ": " + std::to_string(alutGetError()));
+        return false;
+    }
 
-    std::shared_ptr<Texture> texture(std::string name);
-    std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
+    _loaded = true;
+    return true;
+}
 
-  private:
-    bool fileMatchesExtensionFilter(std::string extension) const;
-    bool fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const;
-
-    std::string filename(std::string filePath) const;
-  };
+ALuint twoCoords::SoundBuffer::buffer() const {
+    return _buffer;
 }

@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/resourceManager.h
- * Created: 06.03.2018
+ * File: include/soundBuffer.h
+ * Created: 23.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,38 +29,21 @@
 
 #pragma once
 
-#include <vector>
-#include <string>
-#include <memory>
+#include "resource.h"
+
+#include <AL/al.h>
 
 namespace twoCoords {
-  class Resource;
-  class Texture;
-  class SoundBuffer;
+    class SoundBuffer: public Resource {
+    private:
+        ALuint _buffer;
 
-  class ResourceManager {
-  private:
-    std::vector<std::shared_ptr<Resource>> _resources;
+    public:
+        SoundBuffer(std::string filePath);
+        virtual ~SoundBuffer();
 
-    std::vector<std::string> _textureExtensionFilter;
-    std::vector<std::string> _soundExtensionFilter;
+        bool load() override;
 
-  public:
-    ResourceManager();
-    virtual ~ResourceManager();
-
-    bool addFile(std::string filePath);
-    void addDirectory(std::string directoryPath, bool recursive = false);
-
-    bool preloadResources() const;
-
-    std::shared_ptr<Texture> texture(std::string name);
-    std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
-
-  private:
-    bool fileMatchesExtensionFilter(std::string extension) const;
-    bool fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const;
-
-    std::string filename(std::string filePath) const;
-  };
+        ALuint buffer() const;
+    };
 }
