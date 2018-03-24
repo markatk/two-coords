@@ -35,36 +35,36 @@
 #include <glm/gtc/type_ptr.hpp>
 
 twoCoords::ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) {
-  if (shaders.size() < 1) {
-    throw std::runtime_error("No shaders were provided to create the shader program");
-  }
+    if (shaders.size() < 1) {
+        throw std::runtime_error("No shaders were provided to create the shader program");
+    }
 
-  // create program
-  _object = glCreateProgram();
-  if (_object == 0) {
-    throw std::runtime_error("glCreateProgram failed");
-  }
+    // create program
+    _object = glCreateProgram();
+    if (_object == 0) {
+        throw std::runtime_error("glCreateProgram failed");
+    }
 
-  // attach all shaders
-  for (unsigned int i = 0; i < shaders.size(); i++) {
-    glAttachShader(_object, shaders[i].object());
-  }
+    // attach all shaders
+    for (unsigned int i = 0; i < shaders.size(); i++) {
+        glAttachShader(_object, shaders[i].object());
+    }
 
-  glLinkProgram(_object);
+    glLinkProgram(_object);
 
-  // detach all shaders after linking
-  for (unsigned int i = 0; i < shaders.size(); i++) {
-    glDetachShader(_object, shaders[i].object());
-  }
+    // detach all shaders after linking
+    for (unsigned int i = 0; i < shaders.size(); i++) {
+        glDetachShader(_object, shaders[i].object());
+    }
 
-  // check if linking succeeded
-  GLint status;
-  glGetProgramiv(_object, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE) {
-    // generate error message
-    std::string msg("Program linking failure:\n");
+    // check if linking succeeded
+    GLint status;
+    glGetProgramiv(_object, GL_LINK_STATUS, &status);
+    if (status == GL_FALSE) {
+        // generate error message
+        std::string msg("Program linking failure:\n");
 
-    GLint infoLogLength;
+        GLint infoLogLength;
 		glGetProgramiv(_object, GL_INFO_LOG_LENGTH, &infoLogLength);
 		char *strInfoLog = new char[infoLogLength + 1];
 		glGetProgramInfoLog(_object, infoLogLength, NULL, strInfoLog);
@@ -76,74 +76,74 @@ twoCoords::ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) {
 		_object = 0;
 
 		throw std::runtime_error(msg);
-  }
+    }
 }
 
 twoCoords::ShaderProgram::~ShaderProgram() {
-  if (_object != 0) {
-    glDeleteProgram(_object);
-  }
+    if (_object != 0) {
+        glDeleteProgram(_object);
+    }
 }
 
 void twoCoords::ShaderProgram::use() const {
-  glUseProgram(_object);
+    glUseProgram(_object);
 }
 
 void twoCoords::ShaderProgram::stopUsing() const {
-  if (isInUse()) {
-    glUseProgram(0);
-  }
+    if (isInUse()) {
+        glUseProgram(0);
+    }
 }
 
 bool twoCoords::ShaderProgram::isInUse() const {
-  GLint currentProgram = 0;
-  glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-  return (currentProgram == (GLint)_object);
+    GLint currentProgram = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+    return (currentProgram == (GLint)_object);
 }
 
 GLint twoCoords::ShaderProgram::attrib(const GLchar *name) const {
-  if (name == NULL) {
-    throw std::runtime_error("Attribute name is NULL");
-  }
+    if (name == NULL) {
+        throw std::runtime_error("Attribute name is NULL");
+    }
 
-  // get attribute
-  GLint attrib = glGetAttribLocation(_object, name);
-  if (attrib == -1) {
-    throw std::runtime_error(std::string("Program attribute not found: ") + name);
-  }
+    // get attribute
+    GLint attrib = glGetAttribLocation(_object, name);
+    if (attrib == -1) {
+        throw std::runtime_error(std::string("Program attribute not found: ") + name);
+    }
 
-  return attrib;
+    return attrib;
 }
 
 GLint twoCoords::ShaderProgram::uniform(const GLchar *name) const {
-  if (name == NULL) {
-    throw std::runtime_error("Uniform name is NULL");
-  }
+    if (name == NULL) {
+        throw std::runtime_error("Uniform name is NULL");
+    }
 
-  GLint uniform = glGetUniformLocation(_object, name);
-  if (uniform == -1) {
-    throw std::runtime_error(std::string("Program uniform not found: ") + name);
-  }
+    GLint uniform = glGetUniformLocation(_object, name);
+    if (uniform == -1) {
+        throw std::runtime_error(std::string("Program uniform not found: ") + name);
+    }
 
-  return uniform;
+    return uniform;
 }
 
 void twoCoords::ShaderProgram::setUniform(const GLchar *name, const glm::mat4 &matrix, GLboolean transpose) {
-  if (isInUse() == false) {
-    throw std::runtime_error("Program is not in use while setting uniform");
-  }
+    if (isInUse() == false) {
+        throw std::runtime_error("Program is not in use while setting uniform");
+    }
 
-  glUniformMatrix4fv(uniform(name), 1, transpose, glm::value_ptr(matrix));
+    glUniformMatrix4fv(uniform(name), 1, transpose, glm::value_ptr(matrix));
 }
 
 void twoCoords::ShaderProgram::setUniform(const GLchar *name, const GLuint value) {
-  if (isInUse() == false) {
-    throw std::runtime_error("Program is not in use while setting uniform");
-  }
+    if (isInUse() == false) {
+        throw std::runtime_error("Program is not in use while setting uniform");
+    }
 
-  glUniform1i(uniform(name), value);
+    glUniform1i(uniform(name), value);
 }
 
 GLuint twoCoords::ShaderProgram::object() const {
-  return _object;
+    return _object;
 }

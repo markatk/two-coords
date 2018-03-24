@@ -35,73 +35,73 @@
 #include <memory>
 
 namespace twoCoords {
-  class Window;
-  class Renderer;
-  class SceneManager;
+    class Window;
+    class Renderer;
+    class SceneManager;
 
-  typedef void (*windowSizeCallback_t)(std::shared_ptr<Window> window, int width, int height);
-  typedef void (*windowCloseCallback_t)(std::shared_ptr<Window> window);
-  typedef void (*windowRefreshCallback_t)(std::shared_ptr<Window> window);
-  typedef void (*windowFocusCallback_t)(std::shared_ptr<Window> window, int focused);
-  typedef void (*windowIconifyCallback_t)(std::shared_ptr<Window> window, int iconified);
+    typedef void (*windowSizeCallback_t)(std::shared_ptr<Window> window, int width, int height);
+    typedef void (*windowCloseCallback_t)(std::shared_ptr<Window> window);
+    typedef void (*windowRefreshCallback_t)(std::shared_ptr<Window> window);
+    typedef void (*windowFocusCallback_t)(std::shared_ptr<Window> window, int focused);
+    typedef void (*windowIconifyCallback_t)(std::shared_ptr<Window> window, int iconified);
 
-  class Window : public std::enable_shared_from_this<Window> {
-  private:
-    GLFWwindow *_window;
+    class Window : public std::enable_shared_from_this<Window> {
+    private:
+        GLFWwindow *_window;
 
-    std::shared_ptr<Renderer> _renderer;
-    std::shared_ptr<SceneManager> _sceneManager;
+        std::shared_ptr<Renderer> _renderer;
+        std::shared_ptr<SceneManager> _sceneManager;
 
-    double _lastUpdateTime;
-    int _renderedFrames;
-    int _lastFramesPerSecond;
+        double _lastUpdateTime;
+        int _renderedFrames;
+        int _lastFramesPerSecond;
 
-    windowSizeCallback_t _sizeCallback;
-    windowCloseCallback_t _closeCallback;
-    windowRefreshCallback_t _refreshCallback;
-    windowFocusCallback_t _focusCallback;
-    windowIconifyCallback_t _iconifyCallback;
+        windowSizeCallback_t _sizeCallback;
+        windowCloseCallback_t _closeCallback;
+        windowRefreshCallback_t _refreshCallback;
+        windowFocusCallback_t _focusCallback;
+        windowIconifyCallback_t _iconifyCallback;
 
-  public:
-    Window();
-    virtual ~Window();
+    public:
+        Window();
+        virtual ~Window();
 
-    bool create(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
+        bool create(int width, int height, std::string title, GLFWmonitor *monitor = NULL);
 
-    void update();
-    void close();
-    bool isOpen() const;
+        void update();
+        void close();
+        bool isOpen() const;
 
-    int width() const;
-    int height() const;
+        int width() const;
+        int height() const;
 
-    void setScreenUnits(int x, int y);
+        void setScreenUnits(int x, int y);
 
-    void setSizeCallback(windowSizeCallback_t callback);
-    void setCloseCallback(windowCloseCallback_t callback);
-    void setRefreshCallback(windowRefreshCallback_t callback);
-    void setFocusCallback(windowFocusCallback_t callbackl);
-    void setIconifyCallback(windowIconifyCallback_t callback);
+        void setSizeCallback(windowSizeCallback_t callback);
+        void setCloseCallback(windowCloseCallback_t callback);
+        void setRefreshCallback(windowRefreshCallback_t callback);
+        void setFocusCallback(windowFocusCallback_t callbackl);
+        void setIconifyCallback(windowIconifyCallback_t callback);
 
-    std::shared_ptr<Renderer> renderer() const;
-    std::shared_ptr<SceneManager> sceneManager() const;
+        std::shared_ptr<Renderer> renderer() const;
+        std::shared_ptr<SceneManager> sceneManager() const;
 
-    GLFWwindow *windowHandle() const;
+        GLFWwindow *windowHandle() const;
 
-  private:
-    static void windowSizeCallback(GLFWwindow *window, int width, int height);
-    static void windowCloseCallback(GLFWwindow *window);
-    static void windowRefreshCallback(GLFWwindow *window);
-    static void windowFocusCallback(GLFWwindow *window, int focused);
-    static void windowIconifyCallback(GLFWwindow *window, int iconified);
+    private:
+        static void windowSizeCallback(GLFWwindow *window, int width, int height);
+        static void windowCloseCallback(GLFWwindow *window);
+        static void windowRefreshCallback(GLFWwindow *window);
+        static void windowFocusCallback(GLFWwindow *window, int focused);
+        static void windowIconifyCallback(GLFWwindow *window, int iconified);
 
-    static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-    static void mouseButton_callback(GLFWwindow *window, int button, int action, int mods);
-    static void cursorPosition_callback(GLFWwindow *window, double x, double y);
-    static void scroll_callback(GLFWwindow *window, double x, double y);
+        static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+        static void mouseButton_callback(GLFWwindow *window, int button, int action, int mods);
+        static void cursorPosition_callback(GLFWwindow *window, double x, double y);
+        static void scroll_callback(GLFWwindow *window, double x, double y);
 
-    // disable copying
-    Window(const Window &);
-    const Window &operator=(const Window &);
-  };
+        // disable copying
+        Window(const Window &);
+        const Window &operator=(const Window &);
+    };
 }

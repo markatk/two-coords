@@ -34,52 +34,52 @@
 #include <list>
 
 namespace twoCoords {
-  class SceneNode;
-  class Window;
-  class ResourceManager;
-  class Camera;
+    class SceneNode;
+    class Window;
+    class ResourceManager;
+    class Camera;
 
-  class Scene : public std::enable_shared_from_this<Scene> {
-  private:
-    std::shared_ptr<SceneNode> _rootNode;
-    std::shared_ptr<ResourceManager> _resourceManager;
-    std::shared_ptr<Camera> _camera;
+    class Scene : public std::enable_shared_from_this<Scene> {
+    private:
+        std::shared_ptr<SceneNode> _rootNode;
+        std::shared_ptr<ResourceManager> _resourceManager;
+        std::shared_ptr<Camera> _camera;
 
-    std::weak_ptr<Window> _window;
+        std::weak_ptr<Window> _window;
 
-    glm::vec3 _backgroundColor;
+        glm::vec3 _backgroundColor;
 
-  public:
-    Scene(glm::vec3 backgroundColor = glm::vec3(0.0f));
-    virtual ~Scene();
+    public:
+        Scene(glm::vec3 backgroundColor = glm::vec3(0.0f));
+        virtual ~Scene();
 
-    virtual void update();
-    virtual void enter();
-    virtual void exit();
+        virtual void update();
+        virtual void enter();
+        virtual void exit();
 
-    void setBackgroundColor(glm::vec3 color);
-    void setBackgroundColor(float red, float green, float blue);
-    glm::vec3 backgroundColor() const;
+        void setBackgroundColor(glm::vec3 color);
+        void setBackgroundColor(float red, float green, float blue);
+        glm::vec3 backgroundColor() const;
 
-    int key(int key) const;
-    int mouseButton(int button) const;
+        int key(int key) const;
+        int mouseButton(int button) const;
 
-    void setCursorPosition(glm::vec2 position);
-    glm::vec2 cursorPosition() const;
+        void setCursorPosition(glm::vec2 position);
+        glm::vec2 cursorPosition() const;
 
-    virtual void key_callback(int key, int scancode, int action, int mods);
-    virtual void mouseButton_callback(int button, int action, int mods);
-    virtual void cursorPosition_callback(double x, double y);
-    virtual void scroll_callback(double x, double y);
+        virtual void key_callback(int key, int scancode, int action, int mods);
+        virtual void mouseButton_callback(int button, int action, int mods);
+        virtual void cursorPosition_callback(double x, double y);
+        virtual void scroll_callback(double x, double y);
 
-    std::shared_ptr<SceneNode> rootNode() const;
-    std::shared_ptr<ResourceManager> resourceManager() const;
-    std::shared_ptr<Camera> camera() const;
+        std::shared_ptr<SceneNode> rootNode() const;
+        std::shared_ptr<ResourceManager> resourceManager() const;
+        std::shared_ptr<Camera> camera() const;
 
-    void setWindow(std::shared_ptr<Window> window);
-    std::shared_ptr<Window> window() const;
-  
-  private:
-    void updateNode(std::shared_ptr<SceneNode> node);
-  };
+        void setWindow(std::shared_ptr<Window> window);
+        std::shared_ptr<Window> window() const;
+    
+    private:
+        void updateNode(std::shared_ptr<SceneNode> node);
+    };
 }

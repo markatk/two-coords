@@ -35,29 +35,29 @@
 #include <memory>
 
 namespace twoCoords {
-  class Texture;
+    class Texture;
 
-  class SceneObject : public SceneNode {
-  private:
-    std::weak_ptr<Texture> _texture;
+    class SceneObject : public SceneNode {
+    private:
+        std::weak_ptr<Texture> _texture;
 
-    static GLuint _sVAO;
-    static GLuint _sVBO;
+        static GLuint _sVAO;
+        static GLuint _sVBO;
 
-  public:
-    SceneObject(std::shared_ptr<Texture> texture, glm::vec2 position = glm::vec2(0));
-    virtual ~SceneObject();
+    public:
+        SceneObject(std::shared_ptr<Texture> texture, glm::vec2 position = glm::vec2(0));
+        virtual ~SceneObject();
 
-    virtual void render(std::shared_ptr<ShaderProgram> program);
+        virtual void render(std::shared_ptr<ShaderProgram> program);
 
-    glm::vec2 size() const;
+        glm::vec2 size() const;
 
-    void setTexture(std::shared_ptr<Texture> texture);
-    std::shared_ptr<Texture> texture() const;
+        void setTexture(std::shared_ptr<Texture> texture);
+        std::shared_ptr<Texture> texture() const;
 
-    bool inside(glm::vec2 point) const;
+        bool inside(glm::vec2 point) const;
 
-  private:
-    void loadRectangle(std::shared_ptr<ShaderProgram> program) const;
-  };
+    private:
+        void loadRectangle(std::shared_ptr<ShaderProgram> program) const;
+    };
 }

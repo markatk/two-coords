@@ -34,62 +34,62 @@
 #include <memory>
 
 namespace twoCoords {
-  class ShaderProgram;
-  class SceneNode;
+    class ShaderProgram;
+    class SceneNode;
 
-  class SceneNode : public std::enable_shared_from_this<SceneNode> {
-  protected:
-    glm::vec2 _size;
+    class SceneNode : public std::enable_shared_from_this<SceneNode> {
+    protected:
+        glm::vec2 _size;
 
-  private:
-    glm::vec2 _position;
-    glm::vec2 _scale;
-    unsigned int _layer;
-    float _rotation;
-    bool _hidden;
+    private:
+        glm::vec2 _position;
+        glm::vec2 _scale;
+        unsigned int _layer;
+        float _rotation;
+        bool _hidden;
 
-    std::shared_ptr<SceneNode> _parent;
-    std::vector<std::shared_ptr<SceneNode>> _children;
+        std::shared_ptr<SceneNode> _parent;
+        std::vector<std::shared_ptr<SceneNode>> _children;
 
-  public:
-    SceneNode(glm::vec2 position = glm::vec2(0.0));
-    virtual ~SceneNode();
+    public:
+        SceneNode(glm::vec2 position = glm::vec2(0.0));
+        virtual ~SceneNode();
 
-    virtual void render(std::shared_ptr<ShaderProgram> program);
+        virtual void render(std::shared_ptr<ShaderProgram> program);
 
-    std::shared_ptr<SceneNode> parent() const;
+        std::shared_ptr<SceneNode> parent() const;
 
-    void setPosition(glm::vec2 position);
-    void setPosition(float x, float y);
-    glm::vec2 position() const;
+        void setPosition(glm::vec2 position);
+        void setPosition(float x, float y);
+        glm::vec2 position() const;
 
-    void setLayer(unsigned int layer);
-    unsigned int layer() const;
+        void setLayer(unsigned int layer);
+        unsigned int layer() const;
 
-    void setScale(glm::vec2 scale);
-    void setScale(float x, float y);
-    void setScale(float scale);
-    glm::vec2 scale() const;
+        void setScale(glm::vec2 scale);
+        void setScale(float x, float y);
+        void setScale(float scale);
+        glm::vec2 scale() const;
 
-    void setRotation(float rotation);
-    float rotation() const;
+        void setRotation(float rotation);
+        float rotation() const;
 
-    void setHidden(bool hidden);
-    bool isHidden() const;
+        void setHidden(bool hidden);
+        bool isHidden() const;
 
-    void add(std::shared_ptr<twoCoords::SceneNode> child);
-    void remove(std::shared_ptr<twoCoords::SceneNode> child);
-    const std::vector<std::shared_ptr<twoCoords::SceneNode>> &children() const;
-    bool hasChildren() const;
+        void add(std::shared_ptr<twoCoords::SceneNode> child);
+        void remove(std::shared_ptr<twoCoords::SceneNode> child);
+        const std::vector<std::shared_ptr<twoCoords::SceneNode>> &children() const;
+        bool hasChildren() const;
 
-    glm::vec2 worldPosition() const;
-    glm::vec2 worldScale() const;
-    glm::mat4 model() const;
+        glm::vec2 worldPosition() const;
+        glm::vec2 worldScale() const;
+        glm::mat4 model() const;
 
-  protected:
-    virtual void refresh();
+    protected:
+        virtual void refresh();
 
-  private:
+    private:
 		glm::mat4 modelForChild() const;
-  };
+    };
 }

@@ -34,22 +34,22 @@
 #include <memory>
 
 namespace twoCoords {
-  class Shader {
-  private:
-    GLuint _object;
-    std::shared_ptr<unsigned> _referenceCount;
+    class Shader {
+    private:
+        GLuint _object;
+        std::shared_ptr<unsigned> _referenceCount;
 
-  public:
-    Shader(const std::string &code, GLenum type);
-    Shader(const Shader &other);
-    virtual ~Shader();
+    public:
+        Shader(const std::string &code, GLenum type);
+        Shader(const Shader &other);
+        virtual ~Shader();
 
-    GLuint object() const;
+        GLuint object() const;
 
-    Shader &operator=(const Shader &object);
+        Shader &operator=(const Shader &object);
 
-  private:
-    void retain();
-    void release();
-  };
+    private:
+        void retain();
+        void release();
+    };
 }

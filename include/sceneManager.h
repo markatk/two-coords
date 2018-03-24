@@ -33,25 +33,25 @@
 #include <memory>
 
 namespace twoCoords {
-  class Scene;
-  class Window;
+    class Scene;
+    class Window;
 
-  class SceneManager {
-  private:
-    std::vector<std::shared_ptr<Scene>> _scenes;
-    std::weak_ptr<Window> _window;
+    class SceneManager {
+    private:
+        std::vector<std::shared_ptr<Scene>> _scenes;
+        std::weak_ptr<Window> _window;
 
-  public:
-    SceneManager(std::shared_ptr<Window> window);
-    virtual ~SceneManager();
+    public:
+        SceneManager(std::shared_ptr<Window> window);
+        virtual ~SceneManager();
 
-    void pushScene(std::shared_ptr<Scene> scene);
-    std::shared_ptr<Scene> popScene();
-    std::shared_ptr<Scene> currentScene() const;
+        void pushScene(std::shared_ptr<Scene> scene);
+        std::shared_ptr<Scene> popScene();
+        std::shared_ptr<Scene> currentScene() const;
 
-    bool isEmpty() const;
-    int count() const;
+        bool isEmpty() const;
+        int count() const;
 
-    std::shared_ptr<Window> window() const;
-  };
+        std::shared_ptr<Window> window() const;
+    };
 }

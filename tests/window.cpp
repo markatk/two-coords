@@ -34,22 +34,22 @@
 #include "twoCoords.h"
 
 TEST_CASE("Engine window", "[Two-Coords]") {
-  REQUIRE(twoCoords::initialize() == true);
-  std::shared_ptr<twoCoords::Window> window;
+    REQUIRE(twoCoords::initialize() == true);
+    std::shared_ptr<twoCoords::Window> window;
 
-  SECTION("create a window") {
-    window = std::make_shared<twoCoords::Window>();
-    REQUIRE(window->create(640, 480, "Test window"));
-    REQUIRE(window != nullptr);
-  }
+    SECTION("create a window") {
+        window = std::make_shared<twoCoords::Window>();
+        REQUIRE(window->create(640, 480, "Test window"));
+        REQUIRE(window != nullptr);
+    }
 
-  SECTION("check window size") {
-    window = std::make_shared<twoCoords::Window>();
-    REQUIRE(window->create(800, 600, "Test window"));
-    REQUIRE(window != nullptr);
-    REQUIRE(window->width() == 800);
-    REQUIRE(window->height() == 600);
-  }
+    SECTION("check window size") {
+        window = std::make_shared<twoCoords::Window>();
+        REQUIRE(window->create(800, 600, "Test window"));
+        REQUIRE(window != nullptr);
+        REQUIRE(window->width() == 800);
+        REQUIRE(window->height() == 600);
+    }
 
-  twoCoords::deinitialize();
+    twoCoords::deinitialize();
 }

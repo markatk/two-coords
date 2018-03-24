@@ -35,38 +35,38 @@
 #include <memory>
 
 void callback(std::shared_ptr<twoCoords::Window> window, int width, int height) {
-  spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
+    spdlog::get("console")->info("Window changed " + std::to_string(width) + " " + std::to_string(height));
 }
 
 int main(int argc, char **argv) {
-  // initialize
-  if (twoCoords::initialize() == false) {
-    spdlog::get("console")->error("Unable to initialize Two-Coords");
-    return EXIT_FAILURE;
-  }
-
-  // create window
-  auto window = std::make_shared<twoCoords::Window>();
-  if (window->create(800, 600, "Two-Coords Example") == false) {
-    return EXIT_FAILURE;
-  }
-
-  window->setScreenUnits(800, 600);
-  window->setSizeCallback(callback);
-
-  auto exampleScene = std::make_shared<ExampleScene>();
-  window->sceneManager()->pushScene(std::static_pointer_cast<twoCoords::Scene>(exampleScene));
-
-  // main loop
-  while (window->isOpen()) {
-    try {
-      window->update();
-    } catch (std::exception &e) {
-      spdlog::get("console")->error(e.what());
-      window->close();
+    // initialize
+    if (twoCoords::initialize() == false) {
+        spdlog::get("console")->error("Unable to initialize Two-Coords");
+        return EXIT_FAILURE;
     }
-  }
 
-  // cleanup
-  twoCoords::deinitialize();
+    // create window
+    auto window = std::make_shared<twoCoords::Window>();
+    if (window->create(800, 600, "Two-Coords Example") == false) {
+        return EXIT_FAILURE;
+    }
+
+    window->setScreenUnits(800, 600);
+    window->setSizeCallback(callback);
+
+    auto exampleScene = std::make_shared<ExampleScene>();
+    window->sceneManager()->pushScene(std::static_pointer_cast<twoCoords::Scene>(exampleScene));
+
+    // main loop
+    while (window->isOpen()) {
+        try {
+            window->update();
+        } catch (std::exception &e) {
+            spdlog::get("console")->error(e.what());
+            window->close();
+        }
+    }
+
+    // cleanup
+    twoCoords::deinitialize();
 }

@@ -33,14 +33,14 @@
 
 class ExampleScene : public twoCoords::Scene {
 private:
-  std::shared_ptr<twoCoords::SceneObject> _player;
-  std::shared_ptr<twoCoords::SceneSound> _sound;
+    std::shared_ptr<twoCoords::SceneObject> _player;
+    std::shared_ptr<twoCoords::SceneSound> _sound;
 
 public:
-  ExampleScene();
-  virtual ~ExampleScene();
+    ExampleScene();
+    virtual ~ExampleScene();
 
-  void update();
+    void update();
 
-  void key_callback(int key, int scancode, int action, int mods) override;
+    void key_callback(int key, int scancode, int action, int mods) override;
 };

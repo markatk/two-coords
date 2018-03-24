@@ -36,18 +36,18 @@
 #include "sceneGUIObject.h"
 
 twoCoords::Scene::Scene(glm::vec3 backgroundColor) {
-  _backgroundColor = backgroundColor;
-  _rootNode = std::make_shared<SceneNode>();
-  _resourceManager = std::make_shared<ResourceManager>();
-  _camera = std::make_shared<Camera>();
+    _backgroundColor = backgroundColor;
+    _rootNode = std::make_shared<SceneNode>();
+    _resourceManager = std::make_shared<ResourceManager>();
+    _camera = std::make_shared<Camera>();
 }
 
 twoCoords::Scene::~Scene() {
-  
+    
 }
 
 void twoCoords::Scene::update() {
-  updateNode(_rootNode);
+    updateNode(_rootNode);
 }
 
 void twoCoords::Scene::enter() {
@@ -59,55 +59,55 @@ void twoCoords::Scene::exit() {
 }
 
 void twoCoords::Scene::setBackgroundColor(glm::vec3 color) {
-  _backgroundColor = color;
+    _backgroundColor = color;
 }
 
 void twoCoords::Scene::setBackgroundColor(float red, float green, float blue) {
-  _backgroundColor.x = red;
-  _backgroundColor.y = green;
-  _backgroundColor.z = blue;
+    _backgroundColor.x = red;
+    _backgroundColor.y = green;
+    _backgroundColor.z = blue;
 }
 
 glm::vec3 twoCoords::Scene::backgroundColor() const {
-  return _backgroundColor;
+    return _backgroundColor;
 }
 
 int twoCoords::Scene::key(int key) const {
-  auto window = _window.lock();
-  if (window == nullptr) {
-    return -1;
-  }
+    auto window = _window.lock();
+    if (window == nullptr) {
+        return -1;
+    }
 
-  return glfwGetKey(window->windowHandle(), key);
+    return glfwGetKey(window->windowHandle(), key);
 }
 
 int twoCoords::Scene::mouseButton(int button) const {
-  auto window = _window.lock();
-  if (window == nullptr) {
-    return -1;
-  }
+    auto window = _window.lock();
+    if (window == nullptr) {
+        return -1;
+    }
 
-  return glfwGetMouseButton(window->windowHandle(), button);
+    return glfwGetMouseButton(window->windowHandle(), button);
 }
 
 void twoCoords::Scene::setCursorPosition(glm::vec2 position) {
-  auto window = _window.lock();
-  if (window == nullptr) {
-    return;
-  }
+    auto window = _window.lock();
+    if (window == nullptr) {
+        return;
+    }
 
-  glfwSetCursorPos(window->windowHandle(), position.x, position.y);
+    glfwSetCursorPos(window->windowHandle(), position.x, position.y);
 }
 
 glm::vec2 twoCoords::Scene::cursorPosition() const {
-  auto window = _window.lock();
-  if (window == nullptr) {
-    return glm::vec2(-1, -1);
-  }
+    auto window = _window.lock();
+    if (window == nullptr) {
+        return glm::vec2(-1, -1);
+    }
 
-  double x, y;
-  glfwGetCursorPos(window->windowHandle(), &x, &y);
-  return glm::vec2(x, y);
+    double x, y;
+    glfwGetCursorPos(window->windowHandle(), &x, &y);
+    return glm::vec2(x, y);
 }
 
 void twoCoords::Scene::key_callback(int key, int scancode, int action, int mods) {
@@ -123,36 +123,36 @@ void twoCoords::Scene::cursorPosition_callback(double x, double y) {
 }
 
 void twoCoords::Scene::scroll_callback(double x, double y) {
-  
+    
 }
 
 std::shared_ptr<twoCoords::SceneNode> twoCoords::Scene::rootNode() const {
-  return _rootNode;
+    return _rootNode;
 }
 
 std::shared_ptr<twoCoords::ResourceManager> twoCoords::Scene::resourceManager() const {
-  return _resourceManager;
+    return _resourceManager;
 }
 
 std::shared_ptr<twoCoords::Camera> twoCoords::Scene::camera() const {
-  return _camera;
+    return _camera;
 }
 
 void twoCoords::Scene::setWindow(std::shared_ptr<Window> window) {
-  _window = window;
+    _window = window;
 }
 
 std::shared_ptr<twoCoords::Window> twoCoords::Scene::window() const {
-  return _window.lock();
+    return _window.lock();
 }
 
 void twoCoords::Scene::updateNode(std::shared_ptr<SceneNode> node) {
-  auto guiNode = std::dynamic_pointer_cast<SceneGUIObject>(node);
-  if (guiNode != nullptr) {
-    guiNode->updateGUI(shared_from_this());
-  }
+    auto guiNode = std::dynamic_pointer_cast<SceneGUIObject>(node);
+    if (guiNode != nullptr) {
+        guiNode->updateGUI(shared_from_this());
+    }
 
-  for (auto it = node->children().begin(); it != node->children().end(); it++) {
-    updateNode(*it);
-  }
+    for (auto it = node->children().begin(); it != node->children().end(); it++) {
+        updateNode(*it);
+    }
 }

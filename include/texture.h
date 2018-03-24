@@ -34,29 +34,29 @@
 #include <GL/glew.h>
 
 namespace twoCoords {
-  class Bitmap;
+    class Bitmap;
 
-  class Texture : public Resource {
-  private:
-    GLuint _object;
-    GLfloat _width;
-    GLfloat _height;
+    class Texture : public Resource {
+    private:
+        GLuint _object;
+        GLfloat _width;
+        GLfloat _height;
 
-  public:
-    Texture(std::string filePath);
-    virtual ~Texture();
+    public:
+        Texture(std::string filePath);
+        virtual ~Texture();
 
-    bool load() override;
+        bool load() override;
 
-    GLuint object() const;
-    GLfloat width() const;
-    GLfloat height() const;
+        GLuint object() const;
+        GLfloat width() const;
+        GLfloat height() const;
 
-  private:
-    static GLenum bitmapFormatToTextureFormat(unsigned int channels);
+    private:
+        static GLenum bitmapFormatToTextureFormat(unsigned int channels);
 
-    // disable copying
-    Texture(const Texture &);
-    const Texture &operator=(const Texture &);
-  };
+        // disable copying
+        Texture(const Texture &);
+        const Texture &operator=(const Texture &);
+    };
 }

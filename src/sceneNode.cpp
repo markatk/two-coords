@@ -32,13 +32,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 twoCoords::SceneNode::SceneNode(glm::vec2 position) {
-  _position = position;
-  _scale = glm::vec2(1.0f);
-  _layer = 0;
-  _rotation = 0.0f;
-  _size = glm::vec2(0.0f);
-  _hidden = false;
-  _parent = nullptr;
+    _position = position;
+    _scale = glm::vec2(1.0f);
+    _layer = 0;
+    _rotation = 0.0f;
+    _size = glm::vec2(0.0f);
+    _hidden = false;
+    _parent = nullptr;
 }
 
 twoCoords::SceneNode::~SceneNode() {
@@ -50,135 +50,135 @@ void twoCoords::SceneNode::render(std::shared_ptr<twoCoords::ShaderProgram> prog
 }
 
 std::shared_ptr<twoCoords::SceneNode> twoCoords::SceneNode::parent() const {
-  return _parent;
+    return _parent;
 }
 
 void twoCoords::SceneNode::setPosition(glm::vec2 position) {
-  _position = position;
+    _position = position;
 
-  refresh();
+    refresh();
 }
 
 void twoCoords::SceneNode::setPosition(float x, float y) {
-  _position.x = x;
-  _position.y = y;
+    _position.x = x;
+    _position.y = y;
 
-  refresh();
+    refresh();
 }
 
 glm::vec2 twoCoords::SceneNode::position() const {
-  return _position;
+    return _position;
 }
 
 void twoCoords::SceneNode::setLayer(unsigned int layer) {
-  _layer = layer;
+    _layer = layer;
 
-  refresh();
+    refresh();
 }
 
 unsigned int twoCoords::SceneNode::layer() const {
-  return _layer;
+    return _layer;
 }
 
 void twoCoords::SceneNode::setScale(glm::vec2 scale) {
-  _scale = scale;
+    _scale = scale;
 
-  refresh();
+    refresh();
 }
 
 void twoCoords::SceneNode::setScale(float x, float y) {
-  _scale.x = x;
-  _scale.y = y;
+    _scale.x = x;
+    _scale.y = y;
 
-  refresh();
+    refresh();
 }
 
 void twoCoords::SceneNode::setScale(float scale) {
-  _scale.x = scale;
-  _scale.y = scale;
+    _scale.x = scale;
+    _scale.y = scale;
 
-  refresh();
+    refresh();
 }
 
 glm::vec2 twoCoords::SceneNode::scale() const {
-  return _scale;
+    return _scale;
 }
 
 void twoCoords::SceneNode::setRotation(float rotation) {
-  _rotation = rotation;
+    _rotation = rotation;
 
-  refresh();
+    refresh();
 }
 
 float twoCoords::SceneNode::rotation() const {
-  return _rotation;
+    return _rotation;
 }
 
 void twoCoords::SceneNode::setHidden(bool hidden) {
-  _hidden = hidden;
+    _hidden = hidden;
 
-  refresh();
+    refresh();
 }
 
 bool twoCoords::SceneNode::isHidden() const {
-  return _hidden;
+    return _hidden;
 }
 
 void twoCoords::SceneNode::add(std::shared_ptr<twoCoords::SceneNode> child) {
-  _children.push_back(child);
-  child->_parent = shared_from_this();
+    _children.push_back(child);
+    child->_parent = shared_from_this();
 
-  child->refresh();
+    child->refresh();
 }
 
 void twoCoords::SceneNode::remove(std::shared_ptr<twoCoords::SceneNode> child) {
-  auto it = _children.begin();
-  while (it != _children.end()) {
-    if (*it == child) {
-      it = _children.erase(it);
-      child->_parent = nullptr;
+    auto it = _children.begin();
+    while (it != _children.end()) {
+        if (*it == child) {
+            it = _children.erase(it);
+            child->_parent = nullptr;
 
-      child->refresh();
-    } else {
-      it++;
+            child->refresh();
+        } else {
+            it++;
+        }
     }
-  }
 }
 
 const std::vector<std::shared_ptr<twoCoords::SceneNode>> &twoCoords::SceneNode::children() const {
-  return _children;
+    return _children;
 }
 
 bool twoCoords::SceneNode::hasChildren() const {
-  return (_children.empty() == false);
+    return (_children.empty() == false);
 }
 
 glm::vec2 twoCoords::SceneNode::worldPosition() const {
-  glm::vec2 position = _position;
+    glm::vec2 position = _position;
 
-  if (_parent != nullptr) {
-    position += _parent->worldPosition();
-  }
+    if (_parent != nullptr) {
+        position += _parent->worldPosition();
+    }
 
-  return position;
+    return position;
 }
 
 glm::vec2 twoCoords::SceneNode::worldScale() const {
-  glm::vec2 scale = _scale;
+    glm::vec2 scale = _scale;
 
-  if (_parent != nullptr) {
-    scale += _parent->worldScale();
-  }
+    if (_parent != nullptr) {
+        scale += _parent->worldScale();
+    }
 
-  return scale;
+    return scale;
 }
 
 glm::mat4 twoCoords::SceneNode::model() const {
-  glm::mat4 model = modelForChild();
-  model = glm::translate(model, glm::vec3(0.0f, 0.0f, _layer));
-  model = glm::scale(model, glm::vec3(_size, 1.0f));
+    glm::mat4 model = modelForChild();
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, _layer));
+    model = glm::scale(model, glm::vec3(_size, 1.0f));
 
-  return model;
+    return model;
 }
 
 void twoCoords::SceneNode::refresh() {
@@ -186,13 +186,13 @@ void twoCoords::SceneNode::refresh() {
 }
 
 glm::mat4 twoCoords::SceneNode::modelForChild() const {
-  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
-  model = glm::rotate(model, _rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-  model = glm::scale(model, glm::vec3(_scale, 1.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(_position, 0.0f));
+    model = glm::rotate(model, _rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(_scale, 1.0f));
 
-  if (_parent != nullptr) {
-    model = _parent->modelForChild() * model;
-  }
+    if (_parent != nullptr) {
+        model = _parent->modelForChild() * model;
+    }
 
-  return model;
+    return model;
 }

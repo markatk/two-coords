@@ -34,9 +34,9 @@
 #include "twoCoords.h"
 
 TEST_CASE("Test engine initialization", "[Two-Coords]") {
-  spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::err);
 
-  REQUIRE(twoCoords::initialize() == true);
+    REQUIRE(twoCoords::initialize() == true);
 
-  twoCoords::deinitialize();
+    twoCoords::deinitialize();
 }

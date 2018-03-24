@@ -32,27 +32,27 @@
 #include <string>
 
 namespace twoCoords {
-  class Resource {
-  protected:
-    std::string _filePath;
-    bool _loaded;
+    class Resource {
+    protected:
+        std::string _filePath;
+        bool _loaded;
 
-  public:
-    Resource(std::string filePath) {
-      _filePath = filePath;
-      _loaded = false;
-    }
+    public:
+        Resource(std::string filePath) {
+            _filePath = filePath;
+            _loaded = false;
+        }
 
-    virtual ~Resource() {}
+        virtual ~Resource() {}
 
-    virtual bool load() = 0;
+        virtual bool load() = 0;
 
-    std::string filePath() const {
-      return _filePath;
-    }
+        std::string filePath() const {
+            return _filePath;
+        }
 
-    bool isLoaded() const {
-      return _loaded;
-    }
-  };
+        bool isLoaded() const {
+            return _loaded;
+        }
+    };
 }

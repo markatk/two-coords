@@ -44,22 +44,22 @@
 bool compareLayerLower(const twoCoords::SceneNode *first, const twoCoords::SceneNode *second);
 
 twoCoords::Renderer::Renderer() {
-  _screenUnitsX = 1;
-  _screenUnitsY = 1;
+    _screenUnitsX = 1;
+    _screenUnitsY = 1;
 
-  // create new program with sprite shaders
-  std::vector<Shader> shaders;
-  shaders.push_back(Shader(SPRITE_VERTEX_SHADER, GL_VERTEX_SHADER));
-  shaders.push_back(Shader(SPRITE_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
+    // create new program with sprite shaders
+    std::vector<Shader> shaders;
+    shaders.push_back(Shader(SPRITE_VERTEX_SHADER, GL_VERTEX_SHADER));
+    shaders.push_back(Shader(SPRITE_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
 
-  _spriteProgram = std::make_shared<ShaderProgram>(shaders);
+    _spriteProgram = std::make_shared<ShaderProgram>(shaders);
 
-  // set open gl properties
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
+    // set open gl properties
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 twoCoords::Renderer::~Renderer() {
@@ -67,78 +67,78 @@ twoCoords::Renderer::~Renderer() {
 }
 
 void twoCoords::Renderer::setScreenUnits(int x, int y) {
-  _screenUnitsX = x;
-  _screenUnitsY = y;
+    _screenUnitsX = x;
+    _screenUnitsY = y;
 }
 
 int twoCoords::Renderer::screenUnitsX() const {
-  return _screenUnitsX;
+    return _screenUnitsX;
 }
 
 int twoCoords::Renderer::screenUnitsY() const {
-  return _screenUnitsY;
+    return _screenUnitsY;
 }
 
 void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
-  if (scene == nullptr) {
-    renderEmptyScene();
-    return;
-  }
-
-  // clear buffer
-  glClearColor(scene->backgroundColor().x, scene->backgroundColor().y, scene->backgroundColor().z, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // calculate camera projection
-  glm::mat4 projection = glm::ortho(scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsX) + scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsY) + scene->camera()->position().y, scene->camera()->position().y, -100.0f, 0.1f);
-
-  // clear render list
-  _spriteNodes.clear();
-
-  addNode(scene->rootNode());
-
-  // sort lists by layer from low to high
-  _spriteNodes.sort(compareLayerLower);
-
-  // render sprite nodes with projection
-  _spriteProgram->use();
-  _spriteProgram->setUniform("projection", projection);
-
-  for (auto it = _spriteNodes.begin(); it != _spriteNodes.end(); it++) {
-    if ((*it)->isHidden()) {
-      continue;
+    if (scene == nullptr) {
+        renderEmptyScene();
+        return;
     }
 
-    _spriteProgram->setUniform("model", (*it)->model());
-    (*it)->render(_spriteProgram);
-  }
+    // clear buffer
+    glClearColor(scene->backgroundColor().x, scene->backgroundColor().y, scene->backgroundColor().z, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // release shader
-  _spriteProgram->stopUsing();
+    // calculate camera projection
+    glm::mat4 projection = glm::ortho(scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsX) + scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsY) + scene->camera()->position().y, scene->camera()->position().y, -100.0f, 0.1f);
+
+    // clear render list
+    _spriteNodes.clear();
+
+    addNode(scene->rootNode());
+
+    // sort lists by layer from low to high
+    _spriteNodes.sort(compareLayerLower);
+
+    // render sprite nodes with projection
+    _spriteProgram->use();
+    _spriteProgram->setUniform("projection", projection);
+
+    for (auto it = _spriteNodes.begin(); it != _spriteNodes.end(); it++) {
+        if ((*it)->isHidden()) {
+            continue;
+        }
+
+        _spriteProgram->setUniform("model", (*it)->model());
+        (*it)->render(_spriteProgram);
+    }
+
+    // release shader
+    _spriteProgram->stopUsing();
 }
 
 std::shared_ptr<twoCoords::ShaderProgram> twoCoords::Renderer::shaderProgram() const {
-  return _spriteProgram;
+    return _spriteProgram;
 }
 
 void twoCoords::Renderer::renderEmptyScene() const {
-  // only clear buffer and fill with black color
-  glClearColor(0.0, 0.0, 0.0, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // only clear buffer and fill with black color
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void twoCoords::Renderer::addNode(std::shared_ptr<SceneNode> node) {
-  // add node itself
-  if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
-    _spriteNodes.push_back(node.get());
-  }
+    // add node itself
+    if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
+        _spriteNodes.push_back(node.get());
+    }
 
-  // add children
-  for (auto it = node->children().begin(); it != node->children().end(); it++) {
-    addNode(*it);
-  }
+    // add children
+    for (auto it = node->children().begin(); it != node->children().end(); it++) {
+        addNode(*it);
+    }
 }
 
 bool compareLayerLower(const twoCoords::SceneNode *first, const twoCoords::SceneNode *second) {
-  return first->layer() < second->layer();
+    return first->layer() < second->layer();
 }

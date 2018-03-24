@@ -33,89 +33,89 @@
 #include <cassert>
 
 twoCoords::Shader::Shader(const std::string &code, GLenum type) {
-  // create shader object
-  _object = glCreateShader(type);
-  if (_object == 0) {
-    throw std::runtime_error("glCreateShader failed");
-  }
+    // create shader object
+    _object = glCreateShader(type);
+    if (_object == 0) {
+        throw std::runtime_error("glCreateShader failed");
+    }
 
-  // set source code
-  const char *shaderCode = code.c_str();
-  glShaderSource(_object, 1, (const GLchar **)&shaderCode, NULL);
+    // set source code
+    const char *shaderCode = code.c_str();
+    glShaderSource(_object, 1, (const GLchar **)&shaderCode, NULL);
 
-  // compile shader
-  glCompileShader(_object);
+    // compile shader
+    glCompileShader(_object);
 
-  // check if everything is play
-  GLint status;
-  glGetShaderiv(_object, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE) {
-    // generate error message
-    std::string msg("Compile failure in shader:\n");
+    // check if everything is play
+    GLint status;
+    glGetShaderiv(_object, GL_COMPILE_STATUS, &status);
+    if (status == GL_FALSE) {
+        // generate error message
+        std::string msg("Compile failure in shader:\n");
 
-    GLint infoLogLength;
-    glGetShaderiv(_object, GL_INFO_LOG_LENGTH, &infoLogLength);
-    char *strInfoLog = new char[infoLogLength + 1];
-    glGetShaderInfoLog(_object, infoLogLength, NULL, strInfoLog);
-    msg += strInfoLog;
-    delete[] strInfoLog;
+        GLint infoLogLength;
+        glGetShaderiv(_object, GL_INFO_LOG_LENGTH, &infoLogLength);
+        char *strInfoLog = new char[infoLogLength + 1];
+        glGetShaderInfoLog(_object, infoLogLength, NULL, strInfoLog);
+        msg += strInfoLog;
+        delete[] strInfoLog;
 
-    // delete shader
-    glDeleteShader(_object);
-    _object = 0;
+        // delete shader
+        glDeleteShader(_object);
+        _object = 0;
 
-    throw std::runtime_error(msg);
-  }
+        throw std::runtime_error(msg);
+    }
 
-  // create reference counter
-  _referenceCount = std::make_shared<unsigned>();
-  *_referenceCount = 1;
+    // create reference counter
+    _referenceCount = std::make_shared<unsigned>();
+    *_referenceCount = 1;
 }
 
 twoCoords::Shader::Shader(const Shader &other) {
-  _object = other._object;
-  _referenceCount = other._referenceCount;
+    _object = other._object;
+    _referenceCount = other._referenceCount;
 
-  retain();
+    retain();
 }
 
 twoCoords::Shader::~Shader() {
-  if (_referenceCount) {
-    release();
-  }
+    if (_referenceCount) {
+        release();
+    }
 }
 
 GLuint twoCoords::Shader::object() const {
-  return _object;
+    return _object;
 }
 
 twoCoords::Shader &twoCoords::Shader::operator=(const Shader &other) {
-  // release old object
-  release();
+    // release old object
+    release();
 
-  _object = other._object;
-  _referenceCount = other._referenceCount;
+    _object = other._object;
+    _referenceCount = other._referenceCount;
 
-  // retain new object
-  retain();
+    // retain new object
+    retain();
 
-  return *this;
+    return *this;
 }
 
 void twoCoords::Shader::retain() {
-  assert(_referenceCount);
-  *_referenceCount += 1;
+    assert(_referenceCount);
+    *_referenceCount += 1;
 }
 
 void twoCoords::Shader::release() {
-  assert(_referenceCount && *_referenceCount > 0);
-  *_referenceCount -= 1;
+    assert(_referenceCount && *_referenceCount > 0);
+    *_referenceCount -= 1;
 
-  // check if the object should be destroyed
-  if (*_referenceCount <= 0) {
-    glDeleteShader(_object);
-    _object = 0;
+    // check if the object should be destroyed
+    if (*_referenceCount <= 0) {
+        glDeleteShader(_object);
+        _object = 0;
 
-    _referenceCount = nullptr;
-  }
+        _referenceCount = nullptr;
+    }
 }

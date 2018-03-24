@@ -57,6 +57,6 @@
 #include "sceneGUIObject.h"
 
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+    TWOCOORDS_API bool initialize();
+    TWOCOORDS_API void deinitialize();
 }

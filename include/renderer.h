@@ -33,34 +33,34 @@
 #include <list>
 
 namespace twoCoords {
-  class Window;
-  class ShaderProgram;
-  class Scene;
-  class SceneNode;
+    class Window;
+    class ShaderProgram;
+    class Scene;
+    class SceneNode;
 
-  class Renderer {
-  private:
-    std::shared_ptr<ShaderProgram> _spriteProgram;
+    class Renderer {
+    private:
+        std::shared_ptr<ShaderProgram> _spriteProgram;
 
-    int _screenUnitsX;
-    int _screenUnitsY;
+        int _screenUnitsX;
+        int _screenUnitsY;
 
-    std::list<SceneNode *> _spriteNodes;
+        std::list<SceneNode *> _spriteNodes;
 
-  public:
-    Renderer();
-    virtual ~Renderer();
+    public:
+        Renderer();
+        virtual ~Renderer();
 
-    void setScreenUnits(int x, int y);
-    int screenUnitsX() const;
-    int screenUnitsY() const;
+        void setScreenUnits(int x, int y);
+        int screenUnitsX() const;
+        int screenUnitsY() const;
 
-    void update(std::shared_ptr<Scene> scene);
+        void update(std::shared_ptr<Scene> scene);
 
-    std::shared_ptr<ShaderProgram> shaderProgram() const;
+        std::shared_ptr<ShaderProgram> shaderProgram() const;
 
-  private:
-    void renderEmptyScene() const;
-    void addNode(std::shared_ptr<SceneNode> node);
-  };
+    private:
+        void renderEmptyScene() const;
+        void addNode(std::shared_ptr<SceneNode> node);
+    };
 }

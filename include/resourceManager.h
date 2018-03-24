@@ -34,33 +34,33 @@
 #include <memory>
 
 namespace twoCoords {
-  class Resource;
-  class Texture;
-  class SoundBuffer;
+    class Resource;
+    class Texture;
+    class SoundBuffer;
 
-  class ResourceManager {
-  private:
-    std::vector<std::shared_ptr<Resource>> _resources;
+    class ResourceManager {
+    private:
+        std::vector<std::shared_ptr<Resource>> _resources;
 
-    std::vector<std::string> _textureExtensionFilter;
-    std::vector<std::string> _soundExtensionFilter;
+        std::vector<std::string> _textureExtensionFilter;
+        std::vector<std::string> _soundExtensionFilter;
 
-  public:
-    ResourceManager();
-    virtual ~ResourceManager();
+    public:
+        ResourceManager();
+        virtual ~ResourceManager();
 
-    bool addFile(std::string filePath);
-    void addDirectory(std::string directoryPath, bool recursive = false);
+        bool addFile(std::string filePath);
+        void addDirectory(std::string directoryPath, bool recursive = false);
 
-    bool preloadResources() const;
+        bool preloadResources() const;
 
-    std::shared_ptr<Texture> texture(std::string name);
-    std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
+        std::shared_ptr<Texture> texture(std::string name);
+        std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
 
-  private:
-    bool fileMatchesExtensionFilter(std::string extension) const;
-    bool fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const;
+    private:
+        bool fileMatchesExtensionFilter(std::string extension) const;
+        bool fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const;
 
-    std::string filename(std::string filePath) const;
-  };
+        std::string filename(std::string filePath) const;
+    };
 }

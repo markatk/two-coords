@@ -35,31 +35,31 @@
 #include <glm/glm.hpp>
 
 namespace twoCoords {
-  class Shader;
+    class Shader;
 
-  class ShaderProgram {
-  private:
-    GLuint _object;
+    class ShaderProgram {
+    private:
+        GLuint _object;
 
-  public:
-    ShaderProgram(const std::vector<Shader> &shaders);
-    virtual ~ShaderProgram();
+    public:
+        ShaderProgram(const std::vector<Shader> &shaders);
+        virtual ~ShaderProgram();
 
-    void use() const;
-    void stopUsing() const;
-    bool isInUse() const;
+        void use() const;
+        void stopUsing() const;
+        bool isInUse() const;
 
-    GLint attrib(const GLchar *name) const;
-    GLint uniform(const GLchar *name) const;
+        GLint attrib(const GLchar *name) const;
+        GLint uniform(const GLchar *name) const;
 
-    void setUniform(const GLchar *name, const glm::mat4 &matrix, GLboolean transpose = GL_FALSE);
-    void setUniform(const GLchar *name, const GLuint value);
+        void setUniform(const GLchar *name, const glm::mat4 &matrix, GLboolean transpose = GL_FALSE);
+        void setUniform(const GLchar *name, const GLuint value);
 
-    GLuint object() const;
+        GLuint object() const;
 
-  private:
-    // disable copying
-    ShaderProgram(const ShaderProgram &);
-    const ShaderProgram &operator=(const ShaderProgram &);
-  };
+    private:
+        // disable copying
+        ShaderProgram(const ShaderProgram &);
+        const ShaderProgram &operator=(const ShaderProgram &);
+    };
 }

@@ -34,48 +34,48 @@
 #include <AL/alut.h>
 
 static void errorCallback(int error, const char *description) {
-  spdlog::get("console")->error(std::to_string(error) + ": " + description);
+    spdlog::get("console")->error(std::to_string(error) + ": " + description);
 }
 
 bool twoCoords::initialize() {
-  // setup logger
-  auto console = spdlog::get("console");
-  if (console == NULL) {
-    console = spdlog::stdout_color_mt("console");
-  }
-  
-  console->info("Two-Coords starting...");
-  
-  // setup glfw
-  if (glfwInit() == false) {
-    console->error("Unable to initialize glfw");
-    return false;
-  }
+    // setup logger
+    auto console = spdlog::get("console");
+    if (console == NULL) {
+        console = spdlog::stdout_color_mt("console");
+    }
+    
+    console->info("Two-Coords starting...");
+    
+    // setup glfw
+    if (glfwInit() == false) {
+        console->error("Unable to initialize glfw");
+        return false;
+    }
 
-  glfwSetErrorCallback(errorCallback);
+    glfwSetErrorCallback(errorCallback);
 
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-  // initialize openal
-  if (alutInit(0, 0) == false) {
-    console->error("Unable to initialize alut");
-    return false;
-  }
+    // initialize openal
+    if (alutInit(0, 0) == false) {
+        console->error("Unable to initialize alut");
+        return false;
+    }
 
-  console->info("Two-Coords started");
+    console->info("Two-Coords started");
 
-  return true;
+    return true;
 }
 
 void twoCoords::deinitialize() {
-  auto console = spdlog::get("console");
-  console->info("Two-Coords stopping...");
+    auto console = spdlog::get("console");
+    console->info("Two-Coords stopping...");
 
-  alutExit();
-  glfwTerminate();
+    alutExit();
+    glfwTerminate();
 
-  console->info("Two-Coords stopped");
+    console->info("Two-Coords stopped");
 }

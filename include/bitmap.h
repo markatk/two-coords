@@ -33,31 +33,31 @@
 #include <memory>
 
 namespace twoCoords {
-  class Bitmap {
-  private:
-    unsigned int _width;
-    unsigned int _height;
-    unsigned int _channels;
-    unsigned char *_data;
+    class Bitmap {
+    private:
+        unsigned int _width;
+        unsigned int _height;
+        unsigned int _channels;
+        unsigned char *_data;
 
-    std::string _filePath;
+        std::string _filePath;
 
-  public:
-    Bitmap(unsigned int width, unsigned int height, unsigned int channels, unsigned char *data);
-    virtual ~Bitmap();
+    public:
+        Bitmap(unsigned int width, unsigned int height, unsigned int channels, unsigned char *data);
+        virtual ~Bitmap();
 
-    unsigned int width() const;
-    unsigned int height() const;
-    unsigned int channels() const;
-    unsigned char *data() const;
+        unsigned int width() const;
+        unsigned int height() const;
+        unsigned int channels() const;
+        unsigned char *data() const;
 
-    std::string filePath() const;
+        std::string filePath() const;
 
-    bool setData(unsigned int width, unsigned int height, unsigned int channels, unsigned char *data);
-    std::shared_ptr<Bitmap> rectFromBitmap(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const;
-    static std::shared_ptr<Bitmap> bitmapFromFile(std::string filePath);
+        bool setData(unsigned int width, unsigned int height, unsigned int channels, unsigned char *data);
+        std::shared_ptr<Bitmap> rectFromBitmap(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const;
+        static std::shared_ptr<Bitmap> bitmapFromFile(std::string filePath);
 
-  private:
-    unsigned int pixelOffset(unsigned int x, unsigned int y) const;
-  };
+    private:
+        unsigned int pixelOffset(unsigned int x, unsigned int y) const;
+    };
 }
