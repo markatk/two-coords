@@ -33,6 +33,7 @@
 #include "window.h"
 #include "resourceManager.h"
 #include "camera.h"
+#include "sceneGUIObject.h"
 
 twoCoords::Scene::Scene(glm::vec3 backgroundColor) {
   _backgroundColor = backgroundColor;
@@ -46,7 +47,7 @@ twoCoords::Scene::~Scene() {
 }
 
 void twoCoords::Scene::update() {
-
+  updateNode(_rootNode);
 }
 
 void twoCoords::Scene::enter() {
@@ -89,6 +90,26 @@ int twoCoords::Scene::mouseButton(int button) const {
   return glfwGetMouseButton(window->windowHandle(), button);
 }
 
+void twoCoords::Scene::setCursorPosition(glm::vec2 position) {
+  auto window = _window.lock();
+  if (window == nullptr) {
+    return;
+  }
+
+  glfwSetCursorPos(window->windowHandle(), position.x, position.y);
+}
+
+glm::vec2 twoCoords::Scene::cursorPosition() const {
+  auto window = _window.lock();
+  if (window == nullptr) {
+    return glm::vec2(-1, -1);
+  }
+
+  double x, y;
+  glfwGetCursorPos(window->windowHandle(), &x, &y);
+  return glm::vec2(x, y);
+}
+
 void twoCoords::Scene::key_callback(int key, int scancode, int action, int mods) {
 
 }
@@ -123,4 +144,15 @@ void twoCoords::Scene::setWindow(std::shared_ptr<Window> window) {
 
 std::shared_ptr<twoCoords::Window> twoCoords::Scene::window() const {
   return _window.lock();
+}
+
+void twoCoords::Scene::updateNode(std::shared_ptr<SceneNode> node) {
+  auto guiNode = std::dynamic_pointer_cast<SceneGUIObject>(node);
+  if (guiNode != nullptr) {
+    guiNode->updateGUI(shared_from_this());
+  }
+
+  for (auto it = node->children().begin(); it != node->children().end(); it++) {
+    updateNode(*it);
+  }
 }

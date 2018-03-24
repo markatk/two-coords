@@ -31,6 +31,7 @@
 
 #include <memory>
 #include <glm/glm.hpp>
+#include <list>
 
 namespace twoCoords {
   class SceneNode;
@@ -38,7 +39,7 @@ namespace twoCoords {
   class ResourceManager;
   class Camera;
 
-  class Scene {
+  class Scene : public std::enable_shared_from_this<Scene> {
   private:
     std::shared_ptr<SceneNode> _rootNode;
     std::shared_ptr<ResourceManager> _resourceManager;
@@ -77,5 +78,8 @@ namespace twoCoords {
 
     void setWindow(std::shared_ptr<Window> window);
     std::shared_ptr<Window> window() const;
+  
+  private:
+    void updateNode(std::shared_ptr<SceneNode> node);
   };
 }

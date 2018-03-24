@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/sceneGUIObject.h
+ * Created: 24.03.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,34 +29,40 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
-#include "bitmap.h"
-#include "texture.h"
 #include "sceneObject.h"
-#include "resourceManager.h"
-#include "camera.h"
-#include "soundBuffer.h"
-#include "sceneSound.h"
-#include "sceneGUIObject.h"
+
+#include "scene.h"
 
 namespace twoCoords {
-  TWOCOORDS_API bool initialize();
-  TWOCOORDS_API void deinitialize();
+    class SceneGUIObject : public SceneObject {
+    private:
+        bool _hovered;
+        bool _leftClicked;
+        bool _rightClicked;
+        int _identifier;
+
+    public:
+        SceneGUIObject(std::shared_ptr<Texture>, int identifier = 0, glm::vec2 position = glm::vec2(0));
+        virtual ~SceneGUIObject();
+
+        void setIdentifier(int identifier);
+        int identifier() const;
+
+        bool isLeftClicked() const;
+        bool isRightClicked() const;
+        bool isHovered() const;
+
+    protected:
+        virtual void leftClicked(std::shared_ptr<Scene> scene);
+        virtual void leftReleased(std::shared_ptr<Scene> scene);
+        virtual void rightClicked(std::shared_ptr<Scene> scene);
+        virtual void rightReleased(std::shared_ptr<Scene> scene);
+        virtual void entered(std::shared_ptr<Scene> scene);
+        virtual void exited(std::shared_ptr<Scene> scene);
+
+    private:
+        void updateGUI(std::shared_ptr<Scene> scene);
+
+        friend Scene;
+    };
 }
