@@ -1,6 +1,6 @@
 # Two-Coords
 
-[![Build Status](https://travis-ci.org/markatk/two-coords.svg?branch=master)](https://travis-ci.org/markatk/two-coords)
+[![Build Status](https://travis-ci.org/markatk/two-coords.svg?branch=develop)](https://travis-ci.org/markatk/two-coords)
 
 ## Description
 
@@ -16,10 +16,10 @@ This features are planned for the first stable release *(random order)*:
 
 - [ ] Varius texture support (tga, dds, png etc.)
 - [ ] Resource bundling
-- [ ] Game scene management
+- [X] Game scene management
 - [ ] Camera controls
 - [ ] (2D-)Sound with file support (wav, ogg, mp3?)
-- [ ] Tilemap support
+- [X] Tilemap support
 - [ ] Font rendering
 - [ ] Basic GUI support (Buttons, text input)
 - [ ] Input handling
