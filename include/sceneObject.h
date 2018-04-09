@@ -38,7 +38,7 @@ namespace twoCoords {
     class Texture;
 
     class SceneObject : public SceneNode {
-    private:
+    protected:
         std::weak_ptr<Texture> _texture;
 
         static GLuint _sVAO;
@@ -57,7 +57,7 @@ namespace twoCoords {
 
         bool inside(glm::vec2 point) const;
 
-    private:
+    protected:
         void loadRectangle(std::shared_ptr<ShaderProgram> program) const;
     };
 }

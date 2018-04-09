@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/textureMap.h
+ * Created: 08.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,37 +29,26 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
-#include "bitmap.h"
 #include "texture.h"
-#include "textureMap.h"
-#include "sceneObject.h"
-#include "sceneMap.h"
-#include "resourceManager.h"
-#include "camera.h"
-#include "soundBuffer.h"
-#include "sceneSound.h"
-#include "sceneGUIObject.h"
-#include "sceneButton.h"
 
 namespace twoCoords {
-    TWOCOORDS_API bool initialize();
-    TWOCOORDS_API void deinitialize();
+    class TextureMap : public Texture {
+    private:
+        GLfloat _tileWidth;
+        GLfloat _tileHeight;
+
+    public:
+        TextureMap(std::string filePath, GLfloat tileWidth, GLfloat tileHeight);
+        virtual ~TextureMap();
+
+        bool load() override;
+
+        GLfloat tileWidth() const;
+        GLfloat tileHeight() const;
+
+    private:
+        // disable coping
+        TextureMap(const TextureMap &);
+        const TextureMap &operator=(const TextureMap &);
+    };
 }

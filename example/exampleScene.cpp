@@ -41,10 +41,13 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 
     _sound = std::make_shared<twoCoords::SceneSound>(resourceManager()->soundBuffer("helloworld.wav"));
     _sound->setLooping(true);
-	rootNode()->add(_sound);
+	// rootNode()->add(_sound);
 
 	_button = std::make_shared<twoCoords::SceneButton>(resourceManager()->texture("prototype_button.tga"), resourceManager()->texture("prototype_button.tga"), 123);
 	rootNode()->add(_button);
+
+	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), glm::vec2(16), glm::vec2(256, 256));
+	rootNode()->add(_background);
 }
 
 ExampleScene::~ExampleScene() {

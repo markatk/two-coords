@@ -36,6 +36,7 @@
 namespace twoCoords {
     class Resource;
     class Texture;
+    class TextureMap;
     class SoundBuffer;
 
     class ResourceManager {
@@ -55,6 +56,7 @@ namespace twoCoords {
         bool preloadResources() const;
 
         std::shared_ptr<Texture> texture(std::string name);
+        std::shared_ptr<TextureMap> textureMap(std::string name, int tileWidth, int tileHeight);
         std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
 
     private:

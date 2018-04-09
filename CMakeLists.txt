@@ -14,6 +14,8 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "enable glfw documentation")
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "enable glfw examples")
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "enable glfw tests")
 
+set(OpenGL_GL_PREFERENCE GLVND)
+
 # Include libraries
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)

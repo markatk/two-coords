@@ -41,11 +41,13 @@ namespace twoCoords {
     class Renderer {
     private:
         std::shared_ptr<ShaderProgram> _spriteProgram;
+        std::shared_ptr<ShaderProgram> _spriteMapProgram;
 
         int _screenUnitsX;
         int _screenUnitsY;
 
         std::list<SceneNode *> _spriteNodes;
+        std::list<SceneNode *> _spriteMapNodes;
 
     public:
         Renderer();

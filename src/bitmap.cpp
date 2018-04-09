@@ -35,6 +35,8 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 
+#include <spdlog/spdlog.h>
+
 twoCoords::Bitmap::Bitmap(unsigned int width, unsigned int height, unsigned int channels, unsigned char *data) {
     _data = nullptr;
     _filePath = "";
@@ -96,9 +98,9 @@ std::shared_ptr<twoCoords::Bitmap> twoCoords::Bitmap::rectFromBitmap(unsigned in
 
     // copy rect into buffer
     unsigned char *rectData = (unsigned char *)malloc(width * height * _channels);
-    for (unsigned int i = 0; i < width; i++) {
+    for (unsigned int i = 0; i < height; i++) {
         for (unsigned int j = 0; j < width; j++) {
-            memcpy(rectData + (i * width + j) * _channels, _data + pixelOffset(x + i, y + i), _channels);
+            memcpy(rectData + (i * width + j) * _channels, _data + pixelOffset(x + j, y + i), _channels);
         }
     }
 
@@ -113,6 +115,7 @@ std::shared_ptr<twoCoords::Bitmap> twoCoords::Bitmap::bitmapFromFile(std::string
     int width, height, channels;
     auto data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
     if (data == NULL) {
+        spdlog::get("console")->warn("Unable to load bitmap: " + filePath);
         return nullptr;
     }
 

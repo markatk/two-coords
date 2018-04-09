@@ -37,7 +37,7 @@ namespace twoCoords {
     class Bitmap;
 
     class Texture : public Resource {
-    private:
+    protected:
         GLuint _object;
         GLfloat _width;
         GLfloat _height;
@@ -52,9 +52,10 @@ namespace twoCoords {
         GLfloat width() const;
         GLfloat height() const;
 
-    private:
+    protected:
         static GLenum bitmapFormatToTextureFormat(unsigned int channels);
 
+    private:
         // disable copying
         Texture(const Texture &);
         const Texture &operator=(const Texture &);

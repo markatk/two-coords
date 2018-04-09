@@ -31,10 +31,12 @@
 
 #include "shader.h"
 #include "spriteShader.h"
+#include "spriteMapShader.h"
 #include "shaderProgram.h"
 #include "scene.h"
 #include "sceneNode.h"
 #include "sceneObject.h"
+#include "sceneMap.h"
 #include "camera.h"
 
 #include <GL/glew.h>
@@ -53,6 +55,13 @@ twoCoords::Renderer::Renderer() {
     shaders.push_back(Shader(SPRITE_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
 
     _spriteProgram = std::make_shared<ShaderProgram>(shaders);
+
+    // create new program with sprite map shaders
+    shaders.clear();
+    shaders.push_back(Shader(SPRITE_MAP_VERTEX_SHADER, GL_VERTEX_SHADER));
+    shaders.push_back(Shader(SPRITE_MAP_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
+
+    _spriteMapProgram = std::make_shared<ShaderProgram>(shaders);
 
     // set open gl properties
     glEnable(GL_DEPTH_TEST);
@@ -94,11 +103,13 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
 
     // clear render list
     _spriteNodes.clear();
+    _spriteMapNodes.clear();
 
     addNode(scene->rootNode());
 
     // sort lists by layer from low to high
     _spriteNodes.sort(compareLayerLower);
+    _spriteMapNodes.sort(compareLayerLower);
 
     // render sprite nodes with projection
     _spriteProgram->use();
@@ -115,6 +126,21 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
 
     // release shader
     _spriteProgram->stopUsing();
+
+    // render map nodes
+    _spriteMapProgram->use();
+    _spriteMapProgram->setUniform("projection", projection);
+
+    for (auto it = _spriteMapNodes.begin(); it != _spriteMapNodes.end(); it++) {
+        if ((*it)->isHidden()) {
+            continue;
+        }
+
+        _spriteMapProgram->setUniform("model", (*it)->model());
+        (*it)->render(_spriteMapProgram);
+    }
+
+    _spriteMapProgram->stopUsing();
 }
 
 std::shared_ptr<twoCoords::ShaderProgram> twoCoords::Renderer::shaderProgram() const {
@@ -129,7 +155,9 @@ void twoCoords::Renderer::renderEmptyScene() const {
 
 void twoCoords::Renderer::addNode(std::shared_ptr<SceneNode> node) {
     // add node itself
-    if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
+    if (std::dynamic_pointer_cast<SceneMap>(node) != nullptr) {
+        _spriteMapNodes.push_back(node.get());
+    } else if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
         _spriteNodes.push_back(node.get());
     }
 

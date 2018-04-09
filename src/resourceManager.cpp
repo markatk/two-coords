@@ -31,6 +31,7 @@
 
 #include "resource.h"
 #include "texture.h"
+#include "textureMap.h"
 #include "soundBuffer.h"
 
 #include <spdlog/spdlog.h>
@@ -145,6 +146,51 @@ std::shared_ptr<twoCoords::Texture> twoCoords::ResourceManager::texture(std::str
 
     spdlog::get("console")->warn("Texture not found for filename " + name);
     return nullptr;
+}
+
+std::shared_ptr<twoCoords::TextureMap> twoCoords::ResourceManager::textureMap(std::string name, int tileWidth, int tileHeight) {
+    std::shared_ptr<Texture> texture = nullptr;
+
+    for (auto it = _resources.begin(); it != _resources.end(); it++) {
+        if (filename((*it)->filePath()) != name) {
+            continue;
+        }
+
+        auto textureMap = std::dynamic_pointer_cast<TextureMap>(*it);
+        if (textureMap == nullptr) {
+            texture = std::dynamic_pointer_cast<Texture>(*it);
+            continue;
+        }
+
+        if (textureMap->tileWidth() != tileWidth || textureMap->tileHeight() != tileHeight) {
+            // create copy with different tilesize
+            textureMap = std::make_shared<TextureMap>((*it)->filePath(), tileWidth, tileHeight);
+        }
+
+        if (textureMap->isLoaded() == false) {
+            if (textureMap->load() == false) {
+                spdlog::get("console")->warn("Unable to load texture map: " + (*it)->filePath());
+                return nullptr;
+            }
+        }
+
+        return textureMap;
+    }
+
+    // try creating new texture map from existing texture
+    if (texture == nullptr) {
+        spdlog::get("console")->warn("No texture found for texture map: " + name);
+        return nullptr;
+    }
+
+    auto textureMap = std::make_shared<TextureMap>(texture->filePath(), tileWidth, tileHeight);
+    if (textureMap->load() == false) {
+        spdlog::get("console")->warn("Unable to load texture map: " + texture->filePath());
+        return nullptr;
+    }
+
+    _resources.push_back(textureMap);
+    return textureMap;
 }
 
 std::shared_ptr<twoCoords::SoundBuffer> twoCoords::ResourceManager::soundBuffer(std::string name) {

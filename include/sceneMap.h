@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/twoCoords.h
- * Created: 10.02.2018
+ * File: include/sceneMap.h
+ * Created: 08.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,37 +29,28 @@
 
 #pragma once
 
-#ifdef _WIN32
-#ifdef TWOCOORDS_EXPORTS
-#define TWOCOORDS_API __declspec(dllexport)
-#else
-#define TWOCOORDS_API __declspec(dllimport)
-#endif
-#else
-#define TWOCOORDS_API
-#endif
-
-#include "version.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "shaderProgram.h"
-#include "sceneManager.h"
-#include "scene.h"
-#include "sceneNode.h"
-#include "bitmap.h"
-#include "texture.h"
-#include "textureMap.h"
 #include "sceneObject.h"
-#include "sceneMap.h"
-#include "resourceManager.h"
-#include "camera.h"
-#include "soundBuffer.h"
-#include "sceneSound.h"
-#include "sceneGUIObject.h"
-#include "sceneButton.h"
 
 namespace twoCoords {
-    TWOCOORDS_API bool initialize();
-    TWOCOORDS_API void deinitialize();
+    class TextureMap;
+
+    class SceneMap : public SceneObject {
+    protected:
+        std::weak_ptr<TextureMap> _textureMap;
+        glm::vec2 _tiles;
+
+    public:
+        SceneMap(std::shared_ptr<TextureMap> textureMap, glm::vec2 tiles, glm::vec2 position = glm::vec2(0));
+        virtual ~SceneMap();
+
+        virtual void render(std::shared_ptr<ShaderProgram> program);
+
+        void setTiles(glm::vec2 tiles);
+        glm::vec2 tiles() const;
+
+        void setTextureMap(std::shared_ptr<TextureMap> textureMap);
+        std::shared_ptr<TextureMap> textureMap() const;
+
+        bool inside(glm::vec2 point) const;
+    };
 }

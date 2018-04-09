@@ -125,7 +125,7 @@ void twoCoords::Window::update() {
         _renderedFrames = 0;
         _lastUpdateTime = currentTime;
 
-        // spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
+        spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
     }
 
     // update window itself
