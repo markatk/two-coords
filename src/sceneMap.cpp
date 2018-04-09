@@ -39,6 +39,9 @@
 
 twoCoords::SceneMap::SceneMap(std::shared_ptr<TextureMap> textureMap, std::shared_ptr<TileMap> tileMap, glm::vec2 position) : SceneObject(nullptr, position) {
     _size = glm::vec2(0);
+    _tileMapHash = 0;
+    _vao = 0;
+    _vbo = 0;
 
     setTileMap(tileMap);
     setTextureMap(textureMap);
@@ -54,33 +57,30 @@ void twoCoords::SceneMap::render(std::shared_ptr<ShaderProgram> program) {
         return;
     }
 
-    if (_sVAO == 0 || _sVBO == 0) {
-        loadRectangle(program);
+    if (_tileMapHash != _tileMap->hash()) {
+        _tileMapHash = _tileMap->hash();
+
+        updateRectangleMap();
     }
 
-    // prepare rendering tiles
+    program->setUniform("model", model());
+
+    // connect attributes
+    glBindVertexArray(_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+    glEnableVertexAttribArray(program->attrib("vert"));
+    glVertexAttribPointer(program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), NULL);
+
+    glEnableVertexAttribArray(program->attrib("vertTexCoord"));
+	glVertexAttribPointer(program->attrib("vertTexCoord"), 3, GL_FLOAT, GL_TRUE, 6 * sizeof(GLfloat), (const GLvoid *)(3 * sizeof(GLfloat)));
+
+    // bind texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, textureMap->object());
     program->setUniform("tex", 0);
 
-    glBindVertexArray(_sVAO);
-
-    auto mapModel = glm::scale(model(), glm::vec3(1.f/_tileMap->width(), 1.f/_tileMap->height(), 1.f));
-    mapModel = glm::translate(mapModel, glm::vec3(-_tileMap->width() / 2.f, -_tileMap->height() / 2.f, 0.f));
-
-    // draw tiles
-    for (int y = 0; y < _tileMap->height(); y++) {
-        for (int x = 0; x < _tileMap->width(); x++) {
-            // create tile model
-            auto tileModel = glm::translate(mapModel, glm::vec3(x, y, 0.f));
-            program->setUniform("model", tileModel);
-
-            // draw tile
-            program->setUniform("layer", _tileMap->get(x, y));
-
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-        }
-    }
+    glDrawArrays(GL_TRIANGLES, 0, 6 * _tileMap->width() * _tileMap->height());
 }
 
 void twoCoords::SceneMap::setTileMap(std::shared_ptr<TileMap> tileMap) {
@@ -118,4 +118,49 @@ void twoCoords::SceneMap::calculateSize() {
     } else {
         _size = glm::vec2(0);
     }
+}
+
+void twoCoords::SceneMap::updateRectangleMap() {
+    // make and bind VAO and VBO
+    if (_vao == 0) {
+        glGenVertexArrays(1, &_vao);
+    }
+
+    glBindVertexArray(_vao);
+
+    if (_vbo == 0) {
+        glGenBuffers(1, &_vbo);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+    // add rectangles
+    const int TILE_SIZE = 6 * 6;
+    int tiles = _tileMap->width() * _tileMap->height();
+    GLfloat stepX = 1.f/ _tileMap->width();
+    GLfloat stepY = 1.f/ _tileMap->height();
+
+    GLfloat *vertexData = new GLfloat[TILE_SIZE * tiles];
+
+    for (int y = 0; y < _tileMap->width(); y++) {
+        for (int x = 0; x < _tileMap->height(); x++) {
+            GLfloat tileVertexData[TILE_SIZE] = {
+                -0.5f + stepX * x, -0.5f + stepY * y, 0.f, 0.f, 0.f, (GLfloat)_tileMap->get(x, y),
+                -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y),
+                -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y),
+                -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y),
+                -0.5f + stepX * (x + 1), -0.5f + stepY * (y + 1), 0.f, 1.f, 1.f, (GLfloat)_tileMap->get(x, y),
+                -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y)
+            };
+
+            memcpy(&vertexData[(y * _tileMap->width() + x) * TILE_SIZE], tileVertexData, TILE_SIZE * sizeof(GLfloat));
+        }
+    }
+    glBufferData(GL_ARRAY_BUFFER, TILE_SIZE * tiles * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
+
+    delete [] vertexData;
+
+    // unbind the VBO and VAO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }

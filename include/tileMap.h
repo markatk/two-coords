@@ -29,12 +29,15 @@
 
 #pragma once
 
+#include <cstdio>
+
 namespace twoCoords {
     class TileMap {
     private:
         int _width;
         int _height;
         int **_values;
+        std::size_t _hash;
 
     public:
         TileMap(int width, int height, int fillValue = 0);
@@ -43,11 +46,14 @@ namespace twoCoords {
 
         int width() const;
         int height() const;
+        std::size_t hash() const;
 
         void set(int x, int y, int value);
         int get(int x, int y) const;
 
         void fill(int value);
+        void row(int row, int value);
+        void column(int column, int value);
 
         const TileMap &operator=(const TileMap &other);
 
@@ -55,5 +61,7 @@ namespace twoCoords {
         void createValues();
         void copyValues(const TileMap &other);
         void deleteValues();
+
+        void updateHash();
     };
 }

@@ -37,10 +37,10 @@ namespace twoCoords {
 		uniform mat4 model;
 
 		in vec3 vert;
-		in vec2 vertTexCoord;
+		in vec3 vertTexCoord;
 		in vec4 vertColor;
 
-		out vec2 fragTexCoord;
+		out vec3 fragTexCoord;
 		out vec4 fragColor;
 
 		void main() {
@@ -57,16 +57,15 @@ namespace twoCoords {
 		#version 150
 
 		uniform sampler2DArray tex;
-		uniform int layer;
 
-		in vec2 fragTexCoord;
+		in vec3 fragTexCoord;
 		in vec4 fragColor;
 
 		out vec4 finalColor;
 
 		void main() {
-			finalColor = texture(tex, vec3(fragTexCoord, layer));
-			//finalColor = vec4(1, 1, 1, 1) + texture(tex, vec3(fragTexCoord, layer)) * 0;
+			finalColor = texture(tex, fragTexCoord);
+			//finalColor = vec4(1, 1, 1, 1) + texture(tex, fragTexCoord) * 0;
 		}
 	)";
 }

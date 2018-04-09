@@ -58,6 +58,6 @@ namespace twoCoords {
         bool inside(glm::vec2 point) const;
 
     protected:
-        void loadRectangle(std::shared_ptr<ShaderProgram> program) const;
+        void loadRectangle() const;
     };
 }

@@ -39,6 +39,10 @@ namespace twoCoords {
     protected:
         std::weak_ptr<TextureMap> _textureMap;
         std::shared_ptr<TileMap> _tileMap;
+        std::size_t _tileMapHash;
+
+        GLuint _vao;
+        GLuint _vbo;
 
     public:
         SceneMap(std::shared_ptr<TextureMap> textureMap, std::shared_ptr<TileMap> tileMap, glm::vec2 position = glm::vec2(0));
@@ -56,5 +60,6 @@ namespace twoCoords {
 
     protected:
         void calculateSize();
+        void updateRectangleMap();
     };
 }

@@ -36,6 +36,8 @@ GLuint twoCoords::SceneObject::_sVAO = 0;
 GLuint twoCoords::SceneObject::_sVBO = 0;
 
 twoCoords::SceneObject::SceneObject(std::shared_ptr<Texture> texture, glm::vec2 position) : SceneNode(position) {
+    loadRectangle();
+
     setTexture(texture);
 }
 
@@ -51,17 +53,21 @@ void twoCoords::SceneObject::render(std::shared_ptr<ShaderProgram> program) {
 
     program->setUniform("model", model());
 
-    // load rectangle
-    if (_sVAO == 0 || _sVBO == 0) {
-        loadRectangle(program);
-    }
+    // connect attributes
+    glBindVertexArray(_sVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, _sVBO);
+
+    glEnableVertexAttribArray(program->attrib("vert"));
+    glVertexAttribPointer(program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), NULL);
+
+    glEnableVertexAttribArray(program->attrib("vertTexCoord"));
+	glVertexAttribPointer(program->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat), (const GLvoid *)(3 * sizeof(GLfloat)));
 
     // bind texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture->object());
     program->setUniform("tex", 0);
 
-    glBindVertexArray(_sVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
@@ -85,7 +91,7 @@ bool twoCoords::SceneObject::inside(glm::vec2 point) const {
     return point.x >= position.x - _size.x * 0.5 && point.x < position.x + _size.x * 0.5 && point.y >= position.y - _size.y * 0.5 && point.y < position.y + _size.y * 0.5;
 }
 
-void twoCoords::SceneObject::loadRectangle(std::shared_ptr<ShaderProgram> program) const {
+void twoCoords::SceneObject::loadRectangle() const {
     // make and bind VAO and VBO
     glGenVertexArrays(1, &_sVAO);
     glBindVertexArray(_sVAO);
@@ -104,13 +110,6 @@ void twoCoords::SceneObject::loadRectangle(std::shared_ptr<ShaderProgram> progra
     };
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-
-    // connect attributes
-    glEnableVertexAttribArray(program->attrib("vert"));
-    glVertexAttribPointer(program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), NULL);
-
-    glEnableVertexAttribArray(program->attrib("vertTexCoord"));
-	glVertexAttribPointer(program->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat), (const GLvoid *)(3 * sizeof(GLfloat)));
 
 	// unbind the VBO and VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
