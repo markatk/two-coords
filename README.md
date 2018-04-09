@@ -19,10 +19,14 @@ This features are planned for the first stable release *(random order)*:
 - [X] Game scene management
 - [ ] Camera controls
 - [ ] (2D-)Sound with file support (wav, ogg, mp3?)
-- [X] Tilemap support
+- [ ] Tilemap support
 - [ ] Font rendering
 - [ ] Basic GUI support (Buttons, text input)
 - [ ] Input handling
+- [ ] Documentation
+- [ ] Sample project
+- [ ] Animations
+- [ ] Basic particle system
 
 ## Authors
 
