@@ -30,6 +30,8 @@
 #pragma once
 
 #include <cstdio>
+#include <string>
+#include <memory>
 
 namespace twoCoords {
     class TileMap {
@@ -40,7 +42,7 @@ namespace twoCoords {
         std::size_t _hash;
 
     public:
-        TileMap(int width, int height, int fillValue = 0);
+        TileMap(int width, int height, int fillValue = -1);
         TileMap(const TileMap &other);
         virtual ~TileMap();
 
@@ -50,12 +52,15 @@ namespace twoCoords {
 
         void set(int x, int y, int value);
         int get(int x, int y) const;
+        void clear(int x, int y);
 
         void fill(int value);
         void row(int row, int value);
         void column(int column, int value);
+        void clearAll();
 
         const TileMap &operator=(const TileMap &other);
+        static std::shared_ptr<TileMap> tileMapFromFile(std::string filePath);
 
     private:
         void createValues();

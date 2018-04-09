@@ -141,9 +141,14 @@ void twoCoords::SceneMap::updateRectangleMap() {
     GLfloat stepY = 1.f/ _tileMap->height();
 
     GLfloat *vertexData = new GLfloat[TILE_SIZE * tiles];
+    memset(vertexData, 0, TILE_SIZE * tiles * sizeof(GLfloat));
 
     for (int y = 0; y < _tileMap->width(); y++) {
         for (int x = 0; x < _tileMap->height(); x++) {
+            if (_tileMap->get(x, y) == -1) {
+                continue;
+            }
+
             GLfloat tileVertexData[TILE_SIZE] = {
                 -0.5f + stepX * x, -0.5f + stepY * y, 0.f, 0.f, 0.f, (GLfloat)_tileMap->get(x, y),
                 -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y),

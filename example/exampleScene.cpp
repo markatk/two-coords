@@ -46,15 +46,17 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 	_button = std::make_shared<twoCoords::SceneButton>(resourceManager()->texture("prototype_button.tga"), resourceManager()->texture("prototype_button.tga"), 123);
 	rootNode()->add(_button);
 
-	auto tileMap = std::make_shared<twoCoords::TileMap>(64, 64, 9);
-	tileMap->row(0, 1);
-	tileMap->row(tileMap->height() - 1, 17);
-	tileMap->column(0, 8);
-	tileMap->column(tileMap->width() - 1, 10);
-	tileMap->set(0, 0, 0);
-	tileMap->set(tileMap->width() - 1, 0, 2);
-	tileMap->set(0, tileMap->height() - 1, 16);
-	tileMap->set(tileMap->width() - 1, tileMap->height() - 1, 18);
+	// auto tileMap = std::make_shared<twoCoords::TileMap>(64, 64, 9);
+	// tileMap->row(0, 1);
+	// tileMap->row(tileMap->height() - 1, 17);
+	// tileMap->column(0, 8);
+	// tileMap->column(tileMap->width() - 1, 10);
+	// tileMap->set(0, 0, 0);
+	// tileMap->set(tileMap->width() - 1, 0, 2);
+	// tileMap->set(0, tileMap->height() - 1, 16);
+	// tileMap->set(tileMap->width() - 1, tileMap->height() - 1, 18);
+
+	auto tileMap = twoCoords::TileMap::tileMapFromFile("assets/tiles.csv");
 
 	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), tileMap, glm::vec2(256, 256));
 	rootNode()->add(_background);

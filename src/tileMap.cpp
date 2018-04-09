@@ -30,6 +30,11 @@
 #include "tileMap.h"
 
 #include <functional>
+#include <vector>
+#include <sstream>
+#include <fstream>
+
+#include <spdlog/spdlog.h>
 
 twoCoords::TileMap::TileMap(int width, int height, int fillValue) {
     _width = width;
@@ -89,6 +94,10 @@ int twoCoords::TileMap::get(int x, int y) const {
     return _values[x][y];
 }
 
+void twoCoords::TileMap::clear(int x, int y) {
+    set(x, y, -1);
+}
+
 void twoCoords::TileMap::fill(int value) {
     for (int i = 0; i < _height; i++) {
         for (int j = 0; j < _width; j++) {
@@ -123,6 +132,10 @@ void twoCoords::TileMap::column(int column, int value) {
     updateHash();
 }
 
+void twoCoords::TileMap::clearAll() {
+    fill(-1);
+}
+
 const twoCoords::TileMap &twoCoords::TileMap::operator=(const TileMap &other) {
     _width = other._width;
     _height = other._height;
@@ -132,6 +145,65 @@ const twoCoords::TileMap &twoCoords::TileMap::operator=(const TileMap &other) {
     copyValues(other);
 
     return *this;
+}
+
+std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::string filePath) {
+    // read csv file
+    std::vector<std::vector<int>> data;
+    std::ifstream file(filePath);
+
+    while (file) {
+        std::string line;
+        if (!std::getline(file, line)) {
+            break;
+        }
+
+        if (line[0] == '#') {
+            continue;
+        }
+
+        std::istringstream lineStream(line);
+        std::vector<int> lineData;
+
+        while (lineStream) {
+            std::string value;
+            if (!std::getline(lineStream, value, ',')) {
+                break;
+            }
+
+            try {
+                lineData.push_back(std::stoi(value));
+            } catch (std::exception e) {
+                spdlog::get("console")->warn("Unable to parse tilemap value: " + std::string(e.what()));
+            }
+        }
+
+        data.push_back(lineData);
+    }
+
+    if (file.eof() == false) {
+        spdlog::get("console")->warn("Unable to read tilemap file: " + filePath);
+        return nullptr;
+    }
+
+    // create map
+    std::size_t height = 0;
+
+    for (auto it = data.begin(); it != data.end(); it++) {
+        if ((*it).size() > height) {
+            height = (*it).size();
+        }
+    }
+
+    auto tileMap = std::make_shared<TileMap>(data.size(), height);
+
+    for (std::size_t y = 0; y < data.size(); y++) {
+        for (std::size_t x = 0; x < data[y].size(); x++) {
+            tileMap->set(x, y, data[y][x]);
+        }
+    }
+
+    return tileMap;
 }
 
 void twoCoords::TileMap::createValues() {
