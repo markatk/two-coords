@@ -58,6 +58,7 @@
 #include "sceneSound.h"
 #include "sceneGUIObject.h"
 #include "sceneButton.h"
+#include "tileMap.h"
 
 namespace twoCoords {
     TWOCOORDS_API bool initialize();

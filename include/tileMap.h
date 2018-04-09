@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/sceneMap.h
- * Created: 08.04.2018
+ * File: include/tileMap.h
+ * Created: 09.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,32 +29,31 @@
 
 #pragma once
 
-#include "sceneObject.h"
-
 namespace twoCoords {
-    class TextureMap;
-    class TileMap;
-
-    class SceneMap : public SceneObject {
-    protected:
-        std::weak_ptr<TextureMap> _textureMap;
-        std::shared_ptr<TileMap> _tileMap;
+    class TileMap {
+    private:
+        int _width;
+        int _height;
+        int **_values;
 
     public:
-        SceneMap(std::shared_ptr<TextureMap> textureMap, std::shared_ptr<TileMap> tileMap, glm::vec2 position = glm::vec2(0));
-        virtual ~SceneMap();
+        TileMap(int width, int height, int fillValue = 0);
+        TileMap(const TileMap &other);
+        virtual ~TileMap();
 
-        virtual void render(std::shared_ptr<ShaderProgram> program);
+        int width() const;
+        int height() const;
 
-        void setTileMap(std::shared_ptr<TileMap> tileMap);
-        std::shared_ptr<TileMap> tileMap() const;
+        void set(int x, int y, int value);
+        int get(int x, int y) const;
 
-        void setTextureMap(std::shared_ptr<TextureMap> textureMap);
-        std::shared_ptr<TextureMap> textureMap() const;
+        void fill(int value);
 
-        bool inside(glm::vec2 point) const;
+        const TileMap &operator=(const TileMap &other);
 
-    protected:
-        void calculateSize();
+    private:
+        void createValues();
+        void copyValues(const TileMap &other);
+        void deleteValues();
     };
 }

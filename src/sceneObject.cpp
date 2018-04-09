@@ -49,6 +49,8 @@ void twoCoords::SceneObject::render(std::shared_ptr<ShaderProgram> program) {
         return;
     }
 
+    program->setUniform("model", model());
+
     // load rectangle
     if (_sVAO == 0 || _sVBO == 0) {
         loadRectangle(program);

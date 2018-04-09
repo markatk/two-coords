@@ -120,7 +120,6 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
             continue;
         }
 
-        _spriteProgram->setUniform("model", (*it)->model());
         (*it)->render(_spriteProgram);
     }
 
@@ -136,7 +135,6 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
             continue;
         }
 
-        _spriteMapProgram->setUniform("model", (*it)->model());
         (*it)->render(_spriteMapProgram);
     }
 

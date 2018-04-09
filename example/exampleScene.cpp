@@ -46,7 +46,14 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 	_button = std::make_shared<twoCoords::SceneButton>(resourceManager()->texture("prototype_button.tga"), resourceManager()->texture("prototype_button.tga"), 123);
 	rootNode()->add(_button);
 
-	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), glm::vec2(16), glm::vec2(256, 256));
+	auto tileMap = std::make_shared<twoCoords::TileMap>(8, 8);
+	for (int y = 0; y < tileMap->height(); y++) {
+		for (int x = 0; x < tileMap->width(); x++) {
+			tileMap->set(x, y, y * tileMap->width() + x);
+		}
+	}
+
+	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), tileMap, glm::vec2(256, 256));
 	rootNode()->add(_background);
 }
 

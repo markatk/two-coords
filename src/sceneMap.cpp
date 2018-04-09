@@ -31,13 +31,16 @@
 
 #include "shaderProgram.h"
 #include "textureMap.h"
+#include "tileMap.h"
 
 #include <spdlog/spdlog.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-twoCoords::SceneMap::SceneMap(std::shared_ptr<TextureMap> textureMap, glm::vec2 tiles, glm::vec2 position) : SceneObject(nullptr, position) {
-    _tiles = tiles;
+twoCoords::SceneMap::SceneMap(std::shared_ptr<TextureMap> textureMap, std::shared_ptr<TileMap> tileMap, glm::vec2 position) : SceneObject(nullptr, position) {
     _size = glm::vec2(0);
 
+    setTileMap(tileMap);
     setTextureMap(textureMap);
 }
 
@@ -51,39 +54,49 @@ void twoCoords::SceneMap::render(std::shared_ptr<ShaderProgram> program) {
         return;
     }
 
-    // load rectangle
     if (_sVAO == 0 || _sVBO == 0) {
         loadRectangle(program);
     }
 
-    // draw tiles
+    // prepare rendering tiles
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, textureMap->object());
     program->setUniform("tex", 0);
-    program->setUniform("layer", 0);
 
     glBindVertexArray(_sVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-}
 
-void twoCoords::SceneMap::setTiles(glm::vec2 tiles) {
-    _tiles = tiles;
-    
-    if (auto textureMap = _textureMap.lock()) {
-        _size = _tiles * glm::vec2(textureMap->tileWidth(), textureMap->tileHeight());
-    } else {
-        _size = glm::vec2(0);
+    auto mapModel = glm::scale(model(), glm::vec3(1.f/_tileMap->width(), 1.f/_tileMap->height(), 1.f));
+    mapModel = glm::translate(mapModel, glm::vec3(-_tileMap->width() / 2.f, -_tileMap->height() / 2.f, 0.f));
+
+    // draw tiles
+    for (int y = 0; y < _tileMap->height(); y++) {
+        for (int x = 0; x < _tileMap->width(); x++) {
+            // create tile model
+            auto tileModel = glm::translate(mapModel, glm::vec3(x, y, 0.f));
+            program->setUniform("model", tileModel);
+
+            // draw tile
+            program->setUniform("layer", _tileMap->get(x, y));
+
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
     }
 }
 
-glm::vec2 twoCoords::SceneMap::tiles() const {
-    return _tiles;
+void twoCoords::SceneMap::setTileMap(std::shared_ptr<TileMap> tileMap) {
+    _tileMap = tileMap;
+    
+    calculateSize();
+}
+
+std::shared_ptr<twoCoords::TileMap> twoCoords::SceneMap::tileMap() const {
+    return _tileMap;
 }
 
 void twoCoords::SceneMap::setTextureMap(std::shared_ptr<TextureMap> textureMap) {
     _textureMap = textureMap;
 
-    setTiles(_tiles);
+    calculateSize();
 }
 
 std::shared_ptr<twoCoords::TextureMap> twoCoords::SceneMap::textureMap() const {
@@ -92,4 +105,17 @@ std::shared_ptr<twoCoords::TextureMap> twoCoords::SceneMap::textureMap() const {
 
 bool twoCoords::SceneMap::inside(glm::vec2 point) const {
     return SceneObject::inside(point);
+}
+
+void twoCoords::SceneMap::calculateSize() {
+    if (_tileMap == nullptr) {
+        _size = glm::vec2(0);
+        return;
+    }
+
+    if (auto textureMap = _textureMap.lock()) {
+        _size = glm::vec2(_tileMap->width() * textureMap->tileWidth(), _tileMap->height() * textureMap->tileHeight());
+    } else {
+        _size = glm::vec2(0);
+    }
 }
