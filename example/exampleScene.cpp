@@ -70,10 +70,10 @@ void ExampleScene::enter() {
 	_sound->play();
 }
 
-void ExampleScene::update() {
+void ExampleScene::update(float delta) {
 	// move player
 	glm::vec2 pos = _player->position();
-	float speed = 50.0f / 1000.0f;
+	float speed = 200.0f * delta;
 
 	if (key(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
 		speed *= 2;
@@ -97,9 +97,6 @@ void ExampleScene::update() {
 
 	_player->setPosition(pos);
 	camera()->setPosition(pos - glm::vec2(400, 300));
-
-	// update engine
-	twoCoords::Scene::update();
 }
 
 void ExampleScene::key_callback(int key, int scancode, int action, int mods) {

@@ -42,7 +42,7 @@ public:
     ExampleScene();
     virtual ~ExampleScene();
 
-    void update() override;
+    void update(float delta) override;
     void enter() override;
 
     void key_callback(int key, int scancode, int action, int mods) override;

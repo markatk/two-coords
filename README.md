@@ -27,6 +27,7 @@ This features are planned for the first stable release *(random order)*:
 - [ ] Sample project
 - [ ] Animations
 - [ ] Basic particle system
+- [ ] Basic collision system (aabb, tile-based pixel perfect)
 
 ## Authors
 

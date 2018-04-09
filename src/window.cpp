@@ -79,6 +79,7 @@ bool twoCoords::Window::create(int width, int height, std::string title, GLFWmon
     }
 
     _lastUpdateTime = glfwGetTime();
+    _lastFramesPerSecondTime = glfwGetTime();
     _renderedFrames = 0;
     _lastFramesPerSecond = 0;
 
@@ -108,22 +109,27 @@ bool twoCoords::Window::create(int width, int height, std::string title, GLFWmon
 }
 
 void twoCoords::Window::update() {
+    // get delta time
+    double currentTime = glfwGetTime();
+    double deltaTime = currentTime - _lastUpdateTime;
+    _lastUpdateTime = currentTime;
+
     if (_sceneManager->isEmpty() == false) {
-        _sceneManager->currentScene()->update();
+        _sceneManager->currentScene()->update(deltaTime);
+        _sceneManager->currentScene()->updateNode(_sceneManager->currentScene()->rootNode());
     }
 
     // render next frame
     _renderer->update(_sceneManager->currentScene());
 
     // calculate the FPS
-    double currentTime = glfwGetTime();
     _renderedFrames++;
 
-    if (currentTime - _lastUpdateTime >= 1.0) {
+    if (currentTime - _lastFramesPerSecondTime >= 1.0) {
         // reset FPS counter
         _lastFramesPerSecond = _renderedFrames;
         _renderedFrames = 0;
-        _lastUpdateTime = currentTime;
+        _lastFramesPerSecondTime = currentTime;
 
         spdlog::get("console")->info("FPS: " + std::to_string(_lastFramesPerSecond));
     }

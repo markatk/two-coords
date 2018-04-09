@@ -55,7 +55,7 @@ namespace twoCoords {
         Scene(glm::vec3 backgroundColor = glm::vec3(0.0f));
         virtual ~Scene();
 
-        virtual void update();
+        virtual void update(float delta);
         virtual void enter();
         virtual void exit();
         bool isActive() const;
@@ -85,5 +85,6 @@ namespace twoCoords {
         void updateNode(std::shared_ptr<SceneNode> node);
 
         friend SceneManager;
+        friend Window;
     };
 }

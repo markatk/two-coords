@@ -53,6 +53,7 @@ namespace twoCoords {
         std::shared_ptr<SceneManager> _sceneManager;
 
         double _lastUpdateTime;
+        double _lastFramesPerSecondTime;
         int _renderedFrames;
         int _lastFramesPerSecond;
 

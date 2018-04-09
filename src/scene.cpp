@@ -47,8 +47,8 @@ twoCoords::Scene::~Scene() {
     
 }
 
-void twoCoords::Scene::update() {
-    updateNode(_rootNode);
+void twoCoords::Scene::update(float) {
+
 }
 
 void twoCoords::Scene::enter() {
