@@ -48,8 +48,9 @@ bool twoCoords::SoundBuffer::load() {
     }
 
     _buffer = alutCreateBufferFromFile(_filePath.c_str());
-    if (alutGetError() != ALUT_ERROR_NO_ERROR) {
-        spdlog::get("console")->error("Unable to load sound file" + _filePath + ": " + std::to_string(alutGetError()));
+    auto error = alutGetError();
+    if (error != ALUT_ERROR_NO_ERROR) {
+        spdlog::get("console")->error("Unable to load sound file " + _filePath + ": (" + std::to_string(error) + ") " + alutGetErrorString(error));
         return false;
     }
 

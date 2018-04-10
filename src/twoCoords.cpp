@@ -60,7 +60,7 @@ bool twoCoords::initialize() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // initialize openal
-    if (alutInit(0, 0) == false) {
+    if (alutInit(0, 0) == AL_FALSE) {
         console->error("Unable to initialize alut");
         return false;
     }
