@@ -35,7 +35,12 @@
 
 #include <stdexcept>
 #include <spdlog/spdlog.h>
+
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 twoCoords::Window::Window() {
     _window = nullptr;

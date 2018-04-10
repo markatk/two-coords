@@ -29,7 +29,11 @@
 
 #include "camera.h"
 
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 twoCoords::Camera::Camera() {
     _position = glm::vec2(0);

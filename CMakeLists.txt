@@ -34,7 +34,9 @@ include_directories(thirdparty/glm)
 include_directories(thirdparty/stb)
 include_directories(thirdparty/tinydir)
 
-link_directories(${CMAKE_BINARY_DIR}/lib)
+if (NOT APPLE)
+    link_directories(${CMAKE_BINARY_DIR}/lib)
+endif()
 
 # Generate files
 configure_file(include/version.h.in ${TwoCoords_BINARY_DIR}/version.h @ONLY)
@@ -43,8 +45,6 @@ include_directories("${TwoCoords_BINARY_DIR}")
 execute_process(WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/thirdparty/glew" COMMAND make -C auto)
 
 # Include subdirectories
-enable_testing()
-
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(example)
