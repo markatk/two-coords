@@ -32,6 +32,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <list>
+#include <string>
 
 namespace twoCoords {
     class SceneNode;
@@ -69,6 +70,15 @@ namespace twoCoords {
 
         void setCursorPosition(glm::vec2 position);
         glm::vec2 cursorPosition() const;
+
+        bool isJoystickConnected(int joystick) const;
+        const float *joystickAxes(int joystick, int *count) const;
+        int joystickNumberOfAxes(int joystick) const;
+        const float joystickAxis(int joystick, int axis) const;
+        const unsigned char *joystickButtons(int joystick, int *count) const;
+        int joystickNumberOfButtons(int joystick) const;
+        const unsigned char joystickButton(int joystick, int button) const;
+        std::string joystickName(int joystick) const;
 
         virtual void key_callback(int key, int scancode, int action, int mods);
         virtual void mouseButton_callback(int button, int action, int mods);

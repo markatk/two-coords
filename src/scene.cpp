@@ -120,8 +120,62 @@ glm::vec2 twoCoords::Scene::cursorPosition() const {
     return glm::vec2(x, y);
 }
 
-void twoCoords::Scene::key_callback(int key, int scancode, int action, int mods) {
+bool twoCoords::Scene::isJoystickConnected(int joystick) const {
+    return glfwJoystickPresent(joystick) == GL_TRUE;
+}
 
+const float *twoCoords::Scene::joystickAxes(int joystick, int *count) const {
+    return glfwGetJoystickAxes(joystick, count);
+}
+
+int twoCoords::Scene::joystickNumberOfAxes(int joystick) const {
+    int count;
+    glfwGetJoystickAxes(joystick, &count);
+    return count;
+}
+
+const float twoCoords::Scene::joystickAxis(int joystick, int axis) const {
+    // get axes
+    int count;
+    const float *axes = joystickAxes(joystick, &count);
+
+    // get axis
+    if (count < 0 || axis >= count) {
+        return 0;
+    }
+
+    return axes[axis];
+}
+
+const unsigned char *twoCoords::Scene::joystickButtons(int joystick, int *count) const {
+    return glfwGetJoystickButtons(joystick, count);
+}
+
+int twoCoords::Scene::joystickNumberOfButtons(int joystick) const {
+    int count;
+    glfwGetJoystickButtons(joystick, &count);
+    return count;
+}
+
+const unsigned char twoCoords::Scene::joystickButton(int joystick, int button) const {
+    // get buttons
+    int count;
+    const unsigned char *buttons = joystickButtons(joystick, &count);
+
+    // get button
+    if (button < 0 || button >= count) {
+        return GLFW_RELEASE;
+    }
+
+    return buttons[button];
+}
+
+std::string twoCoords::Scene::joystickName(int joystick) const {
+    return std::string(glfwGetJoystickName(joystick));
+}
+
+void twoCoords::Scene::key_callback(int key, int scancode, int action, int mods) {
+    
 }
 
 void twoCoords::Scene::mouseButton_callback(int button, int action, int mods) {

@@ -22,7 +22,7 @@ This features are planned for the first stable release *(random order)*:
 - [X] Tilemap support
 - [ ] Font rendering
 - [ ] Basic GUI support (Buttons, text input)
-- [ ] Input handling
+- [X] Input handling
 - [ ] Documentation
 - [ ] Sample project
 - [X] Animations
