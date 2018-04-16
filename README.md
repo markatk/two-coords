@@ -17,7 +17,7 @@ This features are planned for the first stable release *(random order)*:
 - [ ] Varius texture support (tga, dds, png etc.)
 - [ ] Resource bundling
 - [X] Game scene management
-- [ ] Camera controls
+- [X] Camera controls
 - [ ] (2D-)Sound with file support (wav, ogg, mp3?)
 - [X] Tilemap support
 - [ ] Font rendering
