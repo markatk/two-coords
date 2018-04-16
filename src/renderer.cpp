@@ -101,6 +101,7 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
 
     // calculate camera projection
     glm::mat4 projection = glm::ortho(scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsX) + scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsY) + scene->camera()->position().y, scene->camera()->position().y, -100.0f, 0.1f);
+    projection = glm::rotate(projection, scene->camera()->rotation(), glm::vec3(0.f, 0.f, 1.f));
 
     // clear render list
     _spriteNodes.clear();

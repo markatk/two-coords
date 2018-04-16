@@ -35,6 +35,7 @@ namespace twoCoords {
     class Camera {
     private:
         glm::vec2 _position;
+        float _rotation;
 
     public:
         Camera();
@@ -42,5 +43,8 @@ namespace twoCoords {
 
         void setPosition(glm::vec2 position);
         glm::vec2 position() const;
+
+        void setRotation(float rotation);
+        float rotation() const;
     };
 }

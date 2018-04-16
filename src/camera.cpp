@@ -37,6 +37,7 @@
 
 twoCoords::Camera::Camera() {
     _position = glm::vec2(0);
+    _rotation = 0.f;
 }
 
 twoCoords::Camera::~Camera() {
@@ -51,4 +52,12 @@ void twoCoords::Camera::setPosition(glm::vec2 position) {
 
 glm::vec2 twoCoords::Camera::position() const {
     return _position;
+}
+
+void twoCoords::Camera::setRotation(float rotation) {
+    _rotation = rotation;
+}
+
+float twoCoords::Camera::rotation() const {
+    return _rotation;
 }

@@ -106,6 +106,8 @@ void ExampleScene::update(float delta) {
 
 	_player->setPosition(pos);
 	camera()->setPosition(pos - glm::vec2(400, 300));
+
+	_animatedObject->setRotation(_animatedObject->rotation() + delta);
 }
 
 void ExampleScene::key_callback(int key, int scancode, int action, int mods) {
