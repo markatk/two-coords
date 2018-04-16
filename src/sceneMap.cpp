@@ -80,7 +80,7 @@ void twoCoords::SceneMap::render(std::shared_ptr<ShaderProgram> program) {
     glBindTexture(GL_TEXTURE_2D_ARRAY, textureMap->object());
     program->setUniform("tex", 0);
 
-    glDrawArrays(GL_TRIANGLES, 0, 6 * _tileMap->width() * _tileMap->height());
+    glDrawArrays(GL_TRIANGLES, 0, 6 * _tileMap->layers() * _tileMap->width() * _tileMap->height());
 }
 
 void twoCoords::SceneMap::setTileMap(std::shared_ptr<TileMap> tileMap) {
@@ -141,11 +141,10 @@ void twoCoords::SceneMap::updateRectangleMap() {
     GLfloat stepY = 1.f/ _tileMap->height();
 
     // render each layer
-    GLfloat *vertexData = new GLfloat[TILE_SIZE * tiles];
+    GLfloat *vertexData = new GLfloat[TILE_SIZE * tiles * _tileMap->layers()];
+    memset(vertexData, 0, TILE_SIZE * tiles * _tileMap->layers() * sizeof(GLfloat));
 
     for (int i = 0; i < _tileMap->layers(); i++) {
-        memset(vertexData, 0, TILE_SIZE * tiles * sizeof(GLfloat));
-
         for (int y = 0; y < _tileMap->width(); y++) {
             for (int x = 0; x < _tileMap->height(); x++) {
                 if (_tileMap->get(x, y, i) == -1) {
@@ -164,9 +163,9 @@ void twoCoords::SceneMap::updateRectangleMap() {
                 memcpy(&vertexData[(y * _tileMap->width() + x) * TILE_SIZE], tileVertexData, TILE_SIZE * sizeof(GLfloat));
             }
         }
-
-        glBufferData(GL_ARRAY_BUFFER, TILE_SIZE * tiles * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
     }
+
+    glBufferData(GL_ARRAY_BUFFER, TILE_SIZE * tiles * _tileMap->layers() * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
 
     delete [] vertexData;
 

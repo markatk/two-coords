@@ -174,18 +174,7 @@ void twoCoords::TileMap::clearLayer(int layer) {
     fillLayer(layer, -1);
 }
 
-const twoCoords::TileMap &twoCoords::TileMap::operator=(const TileMap &other) {
-    _width = other._width;
-    _height = other._height;
-
-    deleteValues();
-    createValues();
-    copyValues(other);
-
-    return *this;
-}
-
-std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::string filePath) {
+bool twoCoords::TileMap::layerFromFile(int layer, std::string filePath) {
     // read csv file
     std::vector<std::vector<int>> data;
     std::ifstream file(filePath);
@@ -221,7 +210,7 @@ std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::str
 
     if (file.eof() == false) {
         spdlog::get("console")->warn("Unable to read tilemap file: " + filePath);
-        return nullptr;
+        return false;
     }
 
     // create map
@@ -237,8 +226,28 @@ std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::str
 
     for (std::size_t y = 0; y < data.size(); y++) {
         for (std::size_t x = 0; x < data[y].size(); x++) {
-            tileMap->set(x, y, 0, data[y][x]);
+            _values[layer][x][y] = data[y][x];
         }
+    }
+
+    return true;
+}
+
+const twoCoords::TileMap &twoCoords::TileMap::operator=(const TileMap &other) {
+    _width = other._width;
+    _height = other._height;
+
+    deleteValues();
+    createValues();
+    copyValues(other);
+
+    return *this;
+}
+
+std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::string filePath, int width, int height) {
+    auto tileMap = std::make_shared<TileMap>(width, height);
+    if (tileMap->layerFromFile(0, filePath) == false) {
+        return nullptr;
     }
 
     return tileMap;

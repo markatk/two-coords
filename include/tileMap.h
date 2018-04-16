@@ -63,8 +63,10 @@ namespace twoCoords {
         void clearAll();
         void clearLayer(int layer);
 
+        bool layerFromFile(int layer, std::string filePath);
+
         const TileMap &operator=(const TileMap &other);
-        static std::shared_ptr<TileMap> tileMapFromFile(std::string filePath);
+        static std::shared_ptr<TileMap> tileMapFromFile(std::string filePath, int width, int height);
 
     private:
         void createValues();

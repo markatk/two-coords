@@ -56,7 +56,9 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 	// tileMap->set(0, tileMap->height() - 1, 16);
 	// tileMap->set(tileMap->width() - 1, tileMap->height() - 1, 18);
 
-	auto tileMap = twoCoords::TileMap::tileMapFromFile("assets/tiles.csv");
+	auto tileMap = std::make_shared<twoCoords::TileMap>(64, 64, 2);
+	tileMap->layerFromFile(0, "assets/tiles.csv");
+	tileMap->set(0, 0, 1, 3);
 
 	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), tileMap, glm::vec2(256, 256));
 	rootNode()->add(_background);
