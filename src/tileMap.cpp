@@ -36,9 +36,10 @@
 
 #include <spdlog/spdlog.h>
 
-twoCoords::TileMap::TileMap(int width, int height, int fillValue) {
+twoCoords::TileMap::TileMap(int width, int height, int layers, int fillValue) {
     _width = width;
     _height = height;
+    _layers = layers;
 
     createValues();
     fill(fillValue);
@@ -47,6 +48,7 @@ twoCoords::TileMap::TileMap(int width, int height, int fillValue) {
 twoCoords::TileMap::TileMap(const TileMap &other) {
     _width = other._width;
     _height = other._height;
+    _layers = other._layers;
 
     createValues();
     copyValues(other);
@@ -64,11 +66,15 @@ int twoCoords::TileMap::height() const {
     return _height;
 }
 
+int twoCoords::TileMap::layers() const {
+    return _layers;
+}
+
 std::size_t twoCoords::TileMap::hash() const {
     return _hash;
 }
 
-void twoCoords::TileMap::set(int x, int y, int value) {
+void twoCoords::TileMap::set(int x, int y, int layer, int value) {
     if (x < 0 || x >= _width) {
         throw new std::runtime_error("X value is not valid for tilemap");
     }
@@ -77,12 +83,16 @@ void twoCoords::TileMap::set(int x, int y, int value) {
         throw new std::runtime_error("Y value is not valid for tilemap");
     }
 
-    _values[x][y] = value;
+    if (layer < 0 || layer >= _layers) {
+        throw new std::runtime_error("Layer value is not valid for tilemap");
+    }
+
+    _values[layer][x][y] = value;
 
     updateHash();
 }
 
-int twoCoords::TileMap::get(int x, int y) const {
+int twoCoords::TileMap::get(int x, int y, int layer) const {
     if (x < 0 || x >= _width) {
         throw new std::runtime_error("X value is not valid for tilemap");
     }
@@ -91,42 +101,66 @@ int twoCoords::TileMap::get(int x, int y) const {
         throw new std::runtime_error("Y value is not valid for tilemap");
     }
 
-    return _values[x][y];
+    if (layer < 0 || layer >= _layers) {
+        throw new std::runtime_error("Layer value is not valid for tilemap");
+    }
+
+    return _values[layer][x][y];
 }
 
-void twoCoords::TileMap::clear(int x, int y) {
-    set(x, y, -1);
+void twoCoords::TileMap::clear(int x, int y, int layer) {
+    set(x, y, layer, -1);
 }
 
-void twoCoords::TileMap::fill(int value) {
+void twoCoords::TileMap::fillLayer(int layer, int value) {
     for (int i = 0; i < _height; i++) {
         for (int j = 0; j < _width; j++) {
-            _values[i][j] = value;
+            _values[layer][i][j] = value;
         }
     }
 
     updateHash();
 }
 
-void twoCoords::TileMap::row(int row, int value) {
-    if (row < 0 || row >= _height) {
-        throw new std::runtime_error("Row is not valid for tilemap");
-    }
-
-    for (int x = 0; x < _width; x++) {
-        _values[x][row] = value;
+void twoCoords::TileMap::fill(int value) {
+    for (int i = 0; i < _layers; i++) {
+        for (int j = 0; j < _width; j++) {
+            for (int k = 0; k < _height; k++) {
+                _values[i][j][k] = value;
+            }
+        }
     }
 
     updateHash();
 }
 
-void twoCoords::TileMap::column(int column, int value) {
+void twoCoords::TileMap::row(int row, int layer, int value) {
+    if (row < 0 || row >= _height) {
+        throw new std::runtime_error("Row is not valid for tilemap");
+    }
+
+    if (layer < 0 || layer >= _layers) {
+        throw new std::runtime_error("Layer value is not valid for tilemap");
+    }
+
+    for (int x = 0; x < _width; x++) {
+        _values[layer][x][row] = value;
+    }
+
+    updateHash();
+}
+
+void twoCoords::TileMap::column(int column, int layer, int value) {
     if (column < 0 || column >= _width) {
         throw new std::runtime_error("Column is not valid for tilemap");
     }
 
+    if (layer < 0 || layer >= _layers) {
+        throw new std::runtime_error("Layer value is not valid for tilemap");
+    }
+
     for (int y = 0; y < _height; y++) {
-        _values[column][y] = value;
+        _values[layer][column][y] = value;
     }
 
     updateHash();
@@ -134,6 +168,10 @@ void twoCoords::TileMap::column(int column, int value) {
 
 void twoCoords::TileMap::clearAll() {
     fill(-1);
+}
+
+void twoCoords::TileMap::clearLayer(int layer) {
+    fillLayer(layer, -1);
 }
 
 const twoCoords::TileMap &twoCoords::TileMap::operator=(const TileMap &other) {
@@ -199,7 +237,7 @@ std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::str
 
     for (std::size_t y = 0; y < data.size(); y++) {
         for (std::size_t x = 0; x < data[y].size(); x++) {
-            tileMap->set(x, y, data[y][x]);
+            tileMap->set(x, y, 0, data[y][x]);
         }
     }
 
@@ -207,17 +245,35 @@ std::shared_ptr<twoCoords::TileMap> twoCoords::TileMap::tileMapFromFile(std::str
 }
 
 void twoCoords::TileMap::createValues() {
-    _values = new int*[_width];
+    _values = new int**[_layers];
 
-    for (int i = 0; i < _width; i++) {
-        _values[i] = new int[_height];
+    for (int i = 0; i < _layers; i++) {
+        _values[i] = new int*[_width];
+
+        for (int j = 0; j < _width; j++) {
+            _values[i][j] = new int[_height];
+        }
     }
 }
 
 void twoCoords::TileMap::copyValues(const TileMap &other) {
-    for (int i = 0; i < _height; i++) {
-        for (int j = 0; j < _width; j++) {
-            _values[i][j] = other.get(i, j);
+    if (_width != other._width) {
+        throw new std::runtime_error("Width does not match other's width");
+    }
+
+    if (_height != other._height) {
+        throw new std::runtime_error("Height does not match other's height");
+    }
+
+    if (_layers != other._layers) {
+        throw new std::runtime_error("Layers count does not match other's layers count");
+    }
+
+    for (int i = 0; i < _layers; i++) {
+        for (int j = 0; j < _height; j++) {
+            for (int k = 0; k < _width; k++) {
+                _values[i][j][k] = other.get(j, k, i);
+            }
         }
     }
 
@@ -225,7 +281,11 @@ void twoCoords::TileMap::copyValues(const TileMap &other) {
 }
 
 void twoCoords::TileMap::deleteValues() {
-    for (int i = 0; i < _width; i++) {
+    for (int i = 0; i < _layers; i++) {
+        for (int j = 0; j < _width; j++) {
+            delete [] _values[i][j];
+        }
+
         delete [] _values[i];
     }
 
@@ -237,9 +297,11 @@ void twoCoords::TileMap::updateHash() {
 
     std::hash<int> hasher;
 
-    for (int i = 0; i < _height; i++) {
+    for (int i = 0; i < _layers; i++) {
         for (int j = 0; j < _width; j++) {
-            _hash ^= hasher(_values[i][j]) + 0x9a377bc2 + (_hash << 6) + (_hash >> 2);
+            for (int k = 0; k < _height; k++) {
+                _hash ^= hasher(_values[i][j][k]) + 0x9a377bc2 + (_hash << 6) + (_hash >> 2);
+            }
         }
     }
 }

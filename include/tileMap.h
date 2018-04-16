@@ -38,26 +38,30 @@ namespace twoCoords {
     private:
         int _width;
         int _height;
-        int **_values;
+        int _layers;
+        int ***_values;
         std::size_t _hash;
 
     public:
-        TileMap(int width, int height, int fillValue = -1);
+        TileMap(int width, int height, int layers = 1, int fillValue = -1);
         TileMap(const TileMap &other);
         virtual ~TileMap();
 
         int width() const;
         int height() const;
+        int layers() const;
         std::size_t hash() const;
 
-        void set(int x, int y, int value);
-        int get(int x, int y) const;
-        void clear(int x, int y);
+        void set(int x, int y, int layer, int value);
+        int get(int x, int y, int layer) const;
+        void clear(int x, int y, int layer);
 
+        void fillLayer(int layer, int value);
         void fill(int value);
-        void row(int row, int value);
-        void column(int column, int value);
+        void row(int row, int layer, int value);
+        void column(int column, int layer, int value);
         void clearAll();
+        void clearLayer(int layer);
 
         const TileMap &operator=(const TileMap &other);
         static std::shared_ptr<TileMap> tileMapFromFile(std::string filePath);

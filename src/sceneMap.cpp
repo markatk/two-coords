@@ -140,28 +140,33 @@ void twoCoords::SceneMap::updateRectangleMap() {
     GLfloat stepX = 1.f/ _tileMap->width();
     GLfloat stepY = 1.f/ _tileMap->height();
 
+    // render each layer
     GLfloat *vertexData = new GLfloat[TILE_SIZE * tiles];
-    memset(vertexData, 0, TILE_SIZE * tiles * sizeof(GLfloat));
 
-    for (int y = 0; y < _tileMap->width(); y++) {
-        for (int x = 0; x < _tileMap->height(); x++) {
-            if (_tileMap->get(x, y) == -1) {
-                continue;
+    for (int i = 0; i < _tileMap->layers(); i++) {
+        memset(vertexData, 0, TILE_SIZE * tiles * sizeof(GLfloat));
+
+        for (int y = 0; y < _tileMap->width(); y++) {
+            for (int x = 0; x < _tileMap->height(); x++) {
+                if (_tileMap->get(x, y, i) == -1) {
+                    continue;
+                }
+
+                GLfloat tileVertexData[TILE_SIZE] = {
+                    -0.5f + stepX * x, -0.5f + stepY * y, 0.f, 0.f, 0.f, (GLfloat)_tileMap->get(x, y, i),
+                    -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y, i),
+                    -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y, i),
+                    -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y, i),
+                    -0.5f + stepX * (x + 1), -0.5f + stepY * (y + 1), 0.f, 1.f, 1.f, (GLfloat)_tileMap->get(x, y, i),
+                    -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y, i)
+                };
+
+                memcpy(&vertexData[(y * _tileMap->width() + x) * TILE_SIZE], tileVertexData, TILE_SIZE * sizeof(GLfloat));
             }
-
-            GLfloat tileVertexData[TILE_SIZE] = {
-                -0.5f + stepX * x, -0.5f + stepY * y, 0.f, 0.f, 0.f, (GLfloat)_tileMap->get(x, y),
-                -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y),
-                -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y),
-                -0.5f + stepX * (x + 1), -0.5f + stepY * y, 0.f, 1.f, 0.f, (GLfloat)_tileMap->get(x, y),
-                -0.5f + stepX * (x + 1), -0.5f + stepY * (y + 1), 0.f, 1.f, 1.f, (GLfloat)_tileMap->get(x, y),
-                -0.5f + stepX * x, -0.5f + stepY * (y + 1), 0.f, 0.f, 1.f, (GLfloat)_tileMap->get(x, y)
-            };
-
-            memcpy(&vertexData[(y * _tileMap->width() + x) * TILE_SIZE], tileVertexData, TILE_SIZE * sizeof(GLfloat));
         }
+
+        glBufferData(GL_ARRAY_BUFFER, TILE_SIZE * tiles * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
     }
-    glBufferData(GL_ARRAY_BUFFER, TILE_SIZE * tiles * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
 
     delete [] vertexData;
 
