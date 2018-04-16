@@ -65,9 +65,7 @@ bool twoCoords::Texture::load() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
 
-    // set texture
-    const GLenum textureFormat = bitmapFormatToTextureFormat(bitmap->channels());
-    glTexImage2D(GL_TEXTURE_2D, 0, textureFormat, bitmap->width(), bitmap->height(), 0, textureFormat, GL_UNSIGNED_BYTE, bitmap->data());
+    glTexImage2D(GL_TEXTURE_2D, 0, bitmapFormatToTextureInternalFormat(bitmap->channels()), bitmap->width(), bitmap->height(), 0, bitmapFormatToTextureFormat(bitmap->channels()), GL_UNSIGNED_BYTE, bitmap->data());
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -104,6 +102,25 @@ GLenum twoCoords::Texture::bitmapFormatToTextureFormat(unsigned int channels) {
 
         case 4:
             return GL_RGBA;
+
+        default:
+            throw std::string("Not supported number of bitmap channels") + std::to_string(channels);
+    }
+}
+
+GLenum twoCoords::Texture::bitmapFormatToTextureInternalFormat(unsigned int channels) {
+    switch (channels) {
+        case 1:
+            return GL_LUMINANCE;
+
+        case 2:
+            return GL_LUMINANCE_ALPHA;
+
+        case 3:
+            return GL_RGB;
+
+        case 4:
+            return GL_RGBA8;
 
         default:
             throw std::string("Not supported number of bitmap channels") + std::to_string(channels);

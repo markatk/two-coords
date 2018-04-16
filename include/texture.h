@@ -54,6 +54,7 @@ namespace twoCoords {
 
     protected:
         static GLenum bitmapFormatToTextureFormat(unsigned int channels);
+        static GLenum bitmapFormatToTextureInternalFormat(unsigned int channels);
 
     private:
         // disable copying

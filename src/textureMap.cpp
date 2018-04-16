@@ -67,15 +67,15 @@ bool twoCoords::TextureMap::load() {
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
 
-    // set texture
-    const GLenum textureFormat = bitmapFormatToTextureFormat(bitmap->channels());
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, _tileWidth, _tileHeight, layers);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, bitmapFormatToTextureInternalFormat(bitmap->channels()), _tileWidth, _tileHeight, layers);
 
     // add layers
+    const GLenum textureFormat = bitmapFormatToTextureFormat(bitmap->channels());
+
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             auto tileBitmap = bitmap->rectFromBitmap(j * _tileWidth, i * _tileHeight, _tileWidth, _tileHeight);
-            glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i * columns + j, _tileWidth, _tileHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, tileBitmap->data());
+            glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i * columns + j, _tileWidth, _tileHeight, 1, textureFormat, GL_UNSIGNED_BYTE, tileBitmap->data());
         }
     }
 
