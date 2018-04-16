@@ -104,6 +104,14 @@ void ExampleScene::update(float delta) {
 		_animatedObject->setFrame(_animatedObject->frame() + 1);
 	}
 
+	if (key(GLFW_KEY_G) == GLFW_PRESS) {
+		camera()->setZoom(camera()->zoom() + 0.1 * delta);
+	}
+
+	if (key(GLFW_KEY_H) == GLFW_PRESS) {
+		camera()->setZoom(camera()->zoom() - 0.1 * delta);
+	}
+
 	_player->setPosition(pos);
 	camera()->setPosition(pos - glm::vec2(400, 300));
 

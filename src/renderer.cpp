@@ -100,8 +100,13 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // calculate camera projection
-    glm::mat4 projection = glm::ortho(scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsX) + scene->camera()->position().x, static_cast<GLfloat>(_screenUnitsY) + scene->camera()->position().y, scene->camera()->position().y, -100.0f, 0.1f);
+    glm::vec2 cameraViewSize = glm::vec2(static_cast<GLfloat>(_screenUnitsX) / (2 * scene->camera()->zoom()), static_cast<GLfloat>(_screenUnitsY) / (2 * scene->camera()->zoom()));
+    glm::vec2 viewStart(scene->camera()->position().x - cameraViewSize.x, scene->camera()->position().y - cameraViewSize.y);
+    glm::vec2 viewEnd(scene->camera()->position().x + cameraViewSize.x, scene->camera()->position().y + cameraViewSize.y);
+
+    glm::mat4 projection = glm::ortho(viewStart.x, viewEnd.x, viewEnd.y, viewStart.y, -100.0f, 0.1f);
     projection = glm::rotate(projection, scene->camera()->rotation(), glm::vec3(0.f, 0.f, 1.f));
+    projection = glm::scale(projection, glm::vec3(scene->camera()->zoom(), scene->camera()->zoom(), 1.0f));
 
     // clear render list
     _spriteNodes.clear();

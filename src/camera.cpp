@@ -38,6 +38,7 @@
 twoCoords::Camera::Camera() {
     _position = glm::vec2(0);
     _rotation = 0.f;
+    _zoom = 1.f;
 }
 
 twoCoords::Camera::~Camera() {
@@ -52,6 +53,14 @@ void twoCoords::Camera::setPosition(glm::vec2 position) {
 
 glm::vec2 twoCoords::Camera::position() const {
     return _position;
+}
+
+void twoCoords::Camera::setZoom(float zoom) {
+    _zoom = zoom;
+}
+
+float twoCoords::Camera::zoom() const {
+    return _zoom;
 }
 
 void twoCoords::Camera::setRotation(float rotation) {
