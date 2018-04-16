@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/sceneMap.h
- * Created: 08.04.2018
+ * File: include/sceneAnimatedObject.h
+ * Created: 16.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -33,31 +33,35 @@
 
 namespace twoCoords {
     class TextureMap;
-    class TileMap;
 
-    class SceneMap : public SceneObject {
+    class SceneAnimatedObject : public SceneObject {
     protected:
         std::weak_ptr<TextureMap> _textureMap;
-        std::shared_ptr<TileMap> _tileMap;
-        std::size_t _tileMapHash;
+        int _frame;
+        int _animation;
+        
+        int _maxFrame;
+        int _maxAnimation;
 
         GLuint _vao;
         GLuint _vbo;
 
     public:
-        SceneMap(std::shared_ptr<TextureMap> textureMap, std::shared_ptr<TileMap> tileMap, glm::vec2 position = glm::vec2(0));
-        virtual ~SceneMap();
+        SceneAnimatedObject(std::shared_ptr<TextureMap> textureMap, glm::vec2 position = glm::vec2(0));
+        virtual ~SceneAnimatedObject();
 
         virtual void render(std::shared_ptr<ShaderProgram> program);
-
-        void setTileMap(std::shared_ptr<TileMap> tileMap);
-        std::shared_ptr<TileMap> tileMap() const;
 
         void setTextureMap(std::shared_ptr<TextureMap> textureMap);
         std::shared_ptr<TextureMap> textureMap() const;
 
-    protected:
-        void calculateSize();
-        void updateRectangleMap();
+        void setFrame(int frame);
+        void setFrame(int frame, int animation);
+        void setAnimation(int animation);
+        int frame() const;
+        int animation() const;
+
+    private:
+        void updateRectangle();
     };
 }

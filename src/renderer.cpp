@@ -38,6 +38,7 @@
 #include "sceneObject.h"
 #include "sceneMap.h"
 #include "camera.h"
+#include "sceneAnimatedObject.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -153,7 +154,7 @@ void twoCoords::Renderer::renderEmptyScene() const {
 
 void twoCoords::Renderer::addNode(std::shared_ptr<SceneNode> node) {
     // add node itself
-    if (std::dynamic_pointer_cast<SceneMap>(node) != nullptr) {
+    if (std::dynamic_pointer_cast<SceneMap>(node) != nullptr || std::dynamic_pointer_cast<SceneAnimatedObject>(node) != nullptr) {
         _spriteMapNodes.push_back(node.get());
     } else if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
         _spriteNodes.push_back(node.get());

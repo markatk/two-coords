@@ -62,6 +62,9 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 
 	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), tileMap, glm::vec2(256, 256));
 	rootNode()->add(_background);
+
+	_animatedObject = std::make_shared<twoCoords::SceneAnimatedObject>(resourceManager()->textureMap("animation-001.png", 48, 48), glm::vec2(100, 100));
+	rootNode()->add(_animatedObject);
 }
 
 ExampleScene::~ExampleScene() {
@@ -95,6 +98,10 @@ void ExampleScene::update(float delta) {
 
 	if (key(GLFW_KEY_D) == GLFW_PRESS) {
 		pos.x += speed;
+	}
+
+	if (key(GLFW_KEY_SPACE) == GLFW_PRESS) {
+		_animatedObject->setFrame(_animatedObject->frame() + 1);
 	}
 
 	_player->setPosition(pos);

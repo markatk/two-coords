@@ -37,6 +37,7 @@ private:
     std::shared_ptr<twoCoords::SceneSound> _sound;
     std::shared_ptr<twoCoords::SceneButton> _button;
     std::shared_ptr<twoCoords::SceneMap> _background;
+    std::shared_ptr<twoCoords::SceneAnimatedObject> _animatedObject;
 
 public:
     ExampleScene();

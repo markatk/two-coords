@@ -103,10 +103,6 @@ std::shared_ptr<twoCoords::TextureMap> twoCoords::SceneMap::textureMap() const {
     return _textureMap.lock();
 }
 
-bool twoCoords::SceneMap::inside(glm::vec2 point) const {
-    return SceneObject::inside(point);
-}
-
 void twoCoords::SceneMap::calculateSize() {
     if (_tileMap == nullptr) {
         _size = glm::vec2(0);
