@@ -126,12 +126,15 @@ void twoCoords::SceneText::updateVertexArray(std::shared_ptr<Font> font) {
         auto textureWidth = character.width / font->_textureWidth;
         auto textureHeight = character.height / font->_textureHeight;
 
+        auto positionWidth = character.width / _size.x;
+        auto verticalOffset = 1.f - character.height / _size.y;
+
         GLfloat charVertexData[30] = {
-            -0.5f + offset, -0.5f, 0.f, textureOffset, 0.f,
+            -0.5f + offset, -0.5f + verticalOffset, 0.f, textureOffset, 0.f,
             -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight,
-            -0.5f + (offset + character.width / _size.x), -0.5f, 0.f, textureOffset + textureWidth, 0.f,
-            -0.5f + (offset + character.width / _size.x), -0.5f, 0.f, textureOffset + textureWidth, 0.f,
-            -0.5f + (offset + character.width / _size.x), 0.5f, 0.f, textureOffset + textureWidth, textureHeight,
+            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,
+            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,
+            -0.5f + offset + positionWidth, 0.5f, 0.f, textureOffset + textureWidth, textureHeight,
             -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight
         };
 

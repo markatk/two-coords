@@ -46,6 +46,7 @@ twoCoords::ResourceManager::ResourceManager() {
     _soundExtensionFilter.push_back(".wav");
 
     _fontExtensionFilter.push_back(".ttf");
+    _fontExtensionFilter.push_back(".otf");
 }
 
 twoCoords::ResourceManager::~ResourceManager() {
