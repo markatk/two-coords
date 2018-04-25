@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/spriteShader.h
- * Created: 13.02.2018
+ * File: include/textShader.h
+ * Created: 25.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -30,7 +30,7 @@
 #pragma once
 
 namespace twoCoords {
-	const char *SPRITE_VERTEX_SHADER = R"(
+    const char *TEXT_VERTEX_SHADER = R"(
 		#version 150
 
 		uniform mat4 projection;
@@ -53,7 +53,7 @@ namespace twoCoords {
 		}
 	)";
 
-	const char *SPRITE_FRAGMENT_SHADER = R"(
+	const char *TEXT_FRAGMENT_SHADER = R"(
 		#version 150
 
 		uniform sampler2D tex;
@@ -64,8 +64,8 @@ namespace twoCoords {
 		out vec4 finalColor;
 
 		void main() {
-			// finalColor = texture(tex, fragTexCoord) * fragColor;
-			finalColor = texture(tex, fragTexCoord);
+			// finalColor = fragColor * vec4(1, 1, 1, texture(tex, fragTexCoord).r);
+			finalColor = vec4(1, 1, 1, texture(tex, fragTexCoord).r);
 		}
 	)";
 }

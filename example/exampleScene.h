@@ -38,6 +38,7 @@ private:
     std::shared_ptr<twoCoords::SceneButton> _button;
     std::shared_ptr<twoCoords::SceneMap> _background;
     std::shared_ptr<twoCoords::SceneAnimatedObject> _animatedObject;
+    std::shared_ptr<twoCoords::SceneText> _text;
 
 public:
     ExampleScene();

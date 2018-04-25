@@ -38,6 +38,7 @@ namespace twoCoords {
     class Texture;
     class TextureMap;
     class SoundBuffer;
+    class Font;
 
     class ResourceManager {
     private:
@@ -45,6 +46,7 @@ namespace twoCoords {
 
         std::vector<std::string> _textureExtensionFilter;
         std::vector<std::string> _soundExtensionFilter;
+        std::vector<std::string> _fontExtensionFilter;
 
     public:
         ResourceManager();
@@ -58,6 +60,7 @@ namespace twoCoords {
         std::shared_ptr<Texture> texture(std::string name);
         std::shared_ptr<TextureMap> textureMap(std::string name, int tileWidth, int tileHeight);
         std::shared_ptr<SoundBuffer> soundBuffer(std::string name);
+        std::shared_ptr<Font> font(std::string name, int size);
 
     private:
         bool fileMatchesExtensionFilter(std::string extension) const;

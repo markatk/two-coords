@@ -33,6 +33,7 @@
 #include "texture.h"
 #include "textureMap.h"
 #include "soundBuffer.h"
+#include "font.h"
 
 #include <spdlog/spdlog.h>
 #include <tinydir.h>
@@ -43,6 +44,8 @@ twoCoords::ResourceManager::ResourceManager() {
     _textureExtensionFilter.push_back(".png");
 
     _soundExtensionFilter.push_back(".wav");
+
+    _fontExtensionFilter.push_back(".ttf");
 }
 
 twoCoords::ResourceManager::~ResourceManager() {
@@ -75,6 +78,8 @@ bool twoCoords::ResourceManager::addFile(std::string filePath) {
         resource = std::make_shared<Texture>(filePath);
     } else if (fileMatchesExtensionFilter(extension, _soundExtensionFilter)) {
         resource = std::make_shared<SoundBuffer>(filePath);
+    } else if (fileMatchesExtensionFilter(extension, _fontExtensionFilter)) {
+        resource = std::make_shared<Font>(filePath, 24);
     }
 
     if (resource == nullptr) {
@@ -212,8 +217,37 @@ std::shared_ptr<twoCoords::SoundBuffer> twoCoords::ResourceManager::soundBuffer(
     return nullptr;
 }
 
+std::shared_ptr<twoCoords::Font> twoCoords::ResourceManager::font(std::string name, int size) {
+    for (auto it = _resources.begin(); it != _resources.end(); it++) {
+        if (filename((*it)->filePath()) != name) {
+            continue;
+        }
+
+        auto font = std::dynamic_pointer_cast<Font>(*it);
+        if (font == nullptr) {
+            continue;
+        }
+
+        if (font->size() != size) {
+            font = std::make_shared<Font>(font->filePath(), size);
+            _resources.push_back(font);
+        }
+
+        if (font->isLoaded() == false) {
+            if (font->load() == false) {
+                return nullptr;
+            }
+        }
+
+        return font;
+    }
+
+    spdlog::get("console")->warn("Font not found for filename " + name);
+    return nullptr;
+}
+
 bool twoCoords::ResourceManager::fileMatchesExtensionFilter(std::string extension) const {
-    return fileMatchesExtensionFilter(extension, _textureExtensionFilter) || fileMatchesExtensionFilter(extension, _soundExtensionFilter);
+    return fileMatchesExtensionFilter(extension, _textureExtensionFilter) || fileMatchesExtensionFilter(extension, _soundExtensionFilter) || fileMatchesExtensionFilter(extension, _fontExtensionFilter);
 }
 
 bool twoCoords::ResourceManager::fileMatchesExtensionFilter(std::string extension, std::vector<std::string> filter) const {

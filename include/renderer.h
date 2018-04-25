@@ -42,12 +42,14 @@ namespace twoCoords {
     private:
         std::shared_ptr<ShaderProgram> _spriteProgram;
         std::shared_ptr<ShaderProgram> _spriteMapProgram;
+        std::shared_ptr<ShaderProgram> _textProgram;
 
         int _screenUnitsX;
         int _screenUnitsY;
 
         std::list<SceneNode *> _spriteNodes;
         std::list<SceneNode *> _spriteMapNodes;
+        std::list<SceneNode *> _textNodes;
 
     public:
         Renderer();

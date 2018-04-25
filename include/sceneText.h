@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/spriteShader.h
- * Created: 13.02.2018
+ * File: include/sceneText.h
+ * Created: 17.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,43 +29,34 @@
 
 #pragma once
 
+#include <GL/glew.h>
+#include <string>
+#include <memory>
+
+#include "sceneNode.h"
+
 namespace twoCoords {
-	const char *SPRITE_VERTEX_SHADER = R"(
-		#version 150
+    class Font;
+    class ShaderProgram;
 
-		uniform mat4 projection;
-		uniform mat4 model;
+    class SceneText : public SceneNode {
+    private:
+        std::weak_ptr<Font> _font;
+        std::string _text;
 
-		in vec3 vert;
-		in vec2 vertTexCoord;
-		in vec4 vertColor;
+        GLuint _vao;
+        GLuint _vbo;
 
-		out vec2 fragTexCoord;
-		out vec4 fragColor;
+    public:
+        SceneText(std::shared_ptr<Font> font, std::string text, glm::vec2 position = glm::vec2(0));
+        virtual ~SceneText();
 
-		void main() {
-			// Pass the tex coord straight through to the fragment shader
-			fragTexCoord = vertTexCoord;
-			fragColor = vertColor;
+        virtual void render(std::shared_ptr<ShaderProgram> program);
 
-			// Apply all matrix transformations to vert
-			gl_Position = projection * model * vec4(vert, 1);
-		}
-	)";
+        void setText(std::string text);
+        std::string text() const;
 
-	const char *SPRITE_FRAGMENT_SHADER = R"(
-		#version 150
-
-		uniform sampler2D tex;
-
-		in vec2 fragTexCoord;
-		in vec4 fragColor;
-
-		out vec4 finalColor;
-
-		void main() {
-			// finalColor = texture(tex, fragTexCoord) * fragColor;
-			finalColor = texture(tex, fragTexCoord);
-		}
-	)";
+    private:
+        void updateVertexArray(std::shared_ptr<Font> font);
+    };
 }

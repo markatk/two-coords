@@ -1,7 +1,7 @@
 /**
  * Project: Two-Coords
- * File: include/spriteShader.h
- * Created: 13.02.2018
+ * File: include/font.h
+ * Created: 17.04.2018
  * Author: MarkAtk
  * 
  * MIT License
@@ -29,43 +29,53 @@
 
 #pragma once
 
+#include "resource.h"
+
+#include <string>
+#include <GL/glew.h>
+
 namespace twoCoords {
-	const char *SPRITE_VERTEX_SHADER = R"(
-		#version 150
+    class SceneText;
 
-		uniform mat4 projection;
-		uniform mat4 model;
+    class Font : public Resource {
+    private:
+        struct {
+            float ax;
+            float ay;
 
-		in vec3 vert;
-		in vec2 vertTexCoord;
-		in vec4 vertColor;
+            float width;
+            float height;
 
-		out vec2 fragTexCoord;
-		out vec4 fragColor;
+            float left;
+            float top;
 
-		void main() {
-			// Pass the tex coord straight through to the fragment shader
-			fragTexCoord = vertTexCoord;
-			fragColor = vertColor;
+            float offset;
+        } _characterCache[128];
 
-			// Apply all matrix transformations to vert
-			gl_Position = projection * model * vec4(vert, 1);
-		}
-	)";
+        int _size;
+        GLfloat _textureWidth;
+        GLfloat _textureHeight;
 
-	const char *SPRITE_FRAGMENT_SHADER = R"(
-		#version 150
+        GLuint _object;
 
-		uniform sampler2D tex;
+    public:
+        Font(std::string filePath, int size);
+        virtual ~Font();
 
-		in vec2 fragTexCoord;
-		in vec4 fragColor;
+        bool load();
 
-		out vec4 finalColor;
+        void setSize(int size);
+        int size() const;
 
-		void main() {
-			// finalColor = texture(tex, fragTexCoord) * fragColor;
-			finalColor = texture(tex, fragTexCoord);
-		}
-	)";
+        GLuint texture() const;
+
+    private:
+        bool initializeLibrary();
+
+        // disable copying
+        Font(const Font &);
+        const Font &operator=(const Font &);
+
+        friend SceneText;
+    };
 }

@@ -37,14 +37,14 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
     // create player
     _player = std::make_shared<twoCoords::SceneObject>(resourceManager()->texture("prototype_player.tga"), glm::vec2(400, 300));
     _player->setLayer(2);
-    rootNode()->add(_player);
+	rootNode()->add(_player);
 
     // _sound = std::make_shared<twoCoords::SceneSound>(resourceManager()->soundBuffer("helloworld.wav"));
     // _sound->setLooping(true);
 	// rootNode()->add(_sound);
 
 	_button = std::make_shared<twoCoords::SceneButton>(resourceManager()->texture("prototype_button.tga"), resourceManager()->texture("prototype_button.tga"), 123);
-	rootNode()->add(_button);
+	// rootNode()->add(_button);
 
 	// auto tileMap = std::make_shared<twoCoords::TileMap>(64, 64, 9);
 	// tileMap->row(0, 1);
@@ -61,10 +61,13 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 	tileMap->set(0, 0, 1, 3);
 
 	_background = std::make_shared<twoCoords::SceneMap>(resourceManager()->textureMap("tiles-001.png", 32, 32), tileMap, glm::vec2(256, 256));
-	rootNode()->add(_background);
+	// rootNode()->add(_background);
 
 	_animatedObject = std::make_shared<twoCoords::SceneAnimatedObject>(resourceManager()->textureMap("animation-001.png", 48, 48), glm::vec2(100, 100));
-	rootNode()->add(_animatedObject);
+	// rootNode()->add(_animatedObject);
+
+	_text = std::make_shared<twoCoords::SceneText>(resourceManager()->font("editundo.ttf", 192), "a");
+	rootNode()->add(_text);
 }
 
 ExampleScene::~ExampleScene() {
@@ -113,7 +116,7 @@ void ExampleScene::update(float delta) {
 	}
 
 	_player->setPosition(pos);
-	camera()->setPosition(pos - glm::vec2(400, 300));
+	// camera()->setPosition(pos);
 
 	_animatedObject->setRotation(_animatedObject->rotation() + delta);
 }

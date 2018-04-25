@@ -33,6 +33,8 @@
 #include <GLFW/glfw3.h>
 #include <AL/alut.h>
 
+FT_Library freetype;
+
 static void errorCallback(int error, const char *description) {
     spdlog::get("console")->error(std::to_string(error) + ": " + description);
 }
@@ -65,6 +67,12 @@ bool twoCoords::initialize() {
         return false;
     }
 
+    // initialize freetype
+    if (FT_Init_FreeType(&freetype) != 0) {
+        console->error("Unable to initialize freetype");
+        return false;
+    }
+
     console->info("Two-Coords started");
 
     return true;
@@ -74,8 +82,13 @@ void twoCoords::deinitialize() {
     auto console = spdlog::get("console");
     console->info("Two-Coords stopping...");
 
+    FT_Done_FreeType(freetype);
     alutExit();
     glfwTerminate();
 
     console->info("Two-Coords stopped");
+}
+
+FT_Library twoCoords::freetypeHandle() {
+    return freetype;
 }

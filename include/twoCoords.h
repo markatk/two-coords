@@ -29,6 +29,9 @@
 
 #pragma once
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #ifdef _WIN32
 #ifdef TWOCOORDS_EXPORTS
 #define TWOCOORDS_API __declspec(dllexport)
@@ -60,8 +63,12 @@
 #include "sceneButton.h"
 #include "tileMap.h"
 #include "sceneAnimatedObject.h"
+#include "font.h"
+#include "sceneText.h"
 
 namespace twoCoords {
     TWOCOORDS_API bool initialize();
     TWOCOORDS_API void deinitialize();
+
+    FT_Library freetypeHandle();
 }

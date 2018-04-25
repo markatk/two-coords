@@ -32,6 +32,7 @@
 #include "shader.h"
 #include "spriteShader.h"
 #include "spriteMapShader.h"
+#include "textShader.h"
 #include "shaderProgram.h"
 #include "scene.h"
 #include "sceneNode.h"
@@ -39,6 +40,7 @@
 #include "sceneMap.h"
 #include "camera.h"
 #include "sceneAnimatedObject.h"
+#include "sceneText.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -63,6 +65,13 @@ twoCoords::Renderer::Renderer() {
     shaders.push_back(Shader(SPRITE_MAP_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
 
     _spriteMapProgram = std::make_shared<ShaderProgram>(shaders);
+
+    // create new program with text shaders
+    shaders.clear();
+    shaders.push_back(Shader(TEXT_VERTEX_SHADER, GL_VERTEX_SHADER));
+    shaders.push_back(Shader(TEXT_FRAGMENT_SHADER, GL_FRAGMENT_SHADER));
+
+    _textProgram = std::make_shared<ShaderProgram>(shaders);
 
     // set open gl properties
     glEnable(GL_DEPTH_TEST);
@@ -111,14 +120,16 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
     // clear render list
     _spriteNodes.clear();
     _spriteMapNodes.clear();
+    _textNodes.clear();
 
     addNode(scene->rootNode());
 
     // sort lists by layer from low to high
     _spriteNodes.sort(compareLayerLower);
     _spriteMapNodes.sort(compareLayerLower);
+    _textNodes.sort(compareLayerLower);
 
-    // render sprite nodes with projection
+    // render sprite nodes
     _spriteProgram->use();
     _spriteProgram->setUniform("projection", projection);
 
@@ -130,7 +141,6 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
         (*it)->render(_spriteProgram);
     }
 
-    // release shader
     _spriteProgram->stopUsing();
 
     // render map nodes
@@ -146,6 +156,20 @@ void twoCoords::Renderer::update(std::shared_ptr<Scene> scene) {
     }
 
     _spriteMapProgram->stopUsing();
+
+    // render text nodes
+    _textProgram->use();
+    _textProgram->setUniform("projection", projection);
+
+    for (auto it = _textNodes.begin(); it != _textNodes.end(); it++) {
+        if ((*it)->isHidden()) {
+            continue;
+        }
+
+        (*it)->render(_textProgram);
+    }
+
+    _textProgram->stopUsing();
 }
 
 std::shared_ptr<twoCoords::ShaderProgram> twoCoords::Renderer::shaderProgram() const {
@@ -164,6 +188,8 @@ void twoCoords::Renderer::addNode(std::shared_ptr<SceneNode> node) {
         _spriteMapNodes.push_back(node.get());
     } else if (std::dynamic_pointer_cast<SceneObject>(node) != nullptr) {
         _spriteNodes.push_back(node.get());
+    } else if (std::dynamic_pointer_cast<SceneText>(node) != nullptr) {
+        _textNodes.push_back(node.get());
     }
 
     // add children
