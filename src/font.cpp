@@ -99,11 +99,11 @@ bool twoCoords::Font::load() {
 
         _characterCache[i].ax = glyph->advance.x >> 6;
         _characterCache[i].ay = glyph->advance.y >> 6;
-        _characterCache[i].width = (float)glyph->bitmap.width / totalWidth;
-        _characterCache[i].height = (float)glyph->bitmap.rows / maxHeight;
-        _characterCache[i].left = (float)glyph->bitmap_left / totalWidth;
-        _characterCache[i].top = (float)glyph->bitmap_top / maxHeight;
-        _characterCache[i].offset = (float)offset / totalWidth;
+        _characterCache[i].width = glyph->bitmap.width;
+        _characterCache[i].height = glyph->bitmap.rows;
+        _characterCache[i].left = glyph->bitmap_left;
+        _characterCache[i].top = glyph->bitmap_top;
+        _characterCache[i].offset = offset;
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, offset, 0, glyph->bitmap.width, glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
 

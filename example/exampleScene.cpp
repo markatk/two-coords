@@ -66,7 +66,7 @@ ExampleScene::ExampleScene() : twoCoords::Scene(glm::vec3(0.2f)) {
 	_animatedObject = std::make_shared<twoCoords::SceneAnimatedObject>(resourceManager()->textureMap("animation-001.png", 48, 48), glm::vec2(100, 100));
 	// rootNode()->add(_animatedObject);
 
-	_text = std::make_shared<twoCoords::SceneText>(resourceManager()->font("editundo.ttf", 192), "a");
+	_text = std::make_shared<twoCoords::SceneText>(resourceManager()->font("editundo.ttf", 128), "abcdefgh");
 	rootNode()->add(_text);
 }
 

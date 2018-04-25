@@ -68,8 +68,7 @@ void twoCoords::SceneText::render(std::shared_ptr<ShaderProgram> program) {
     glBindTexture(GL_TEXTURE_2D, font->texture());
     program->setUniform("tex", 0);
 
-    // glDrawArrays(GL_TRIANGLES, 0, 6 * _text.length());
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6 * _text.length());
 }
 
 void twoCoords::SceneText::setText(std::string text) {
@@ -80,18 +79,19 @@ void twoCoords::SceneText::setText(std::string text) {
         return;
     }
 
+    // calculate node size based on the text characters
     float width = 0;
     float height = 0;
 
     for (std::size_t i = 0; i < _text.length(); i++) {
         auto character = font->_characterCache[(int)_text[i]];
 
-        width += character.width;
+        // ax describes offset for next character (sligthly more than character.width)
+        width += character.ax;
         height = std::max(height, character.height);
     }
 
-    _size = glm::vec2(width * font->_textureWidth, height * font->_textureHeight);
-    // _size = glm::vec2(600, 40);
+    _size = glm::vec2(width, height);
 
     updateVertexArray(font);
 }
@@ -115,40 +115,30 @@ void twoCoords::SceneText::updateVertexArray(std::shared_ptr<Font> font) {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
     // add character rectangles
-    GLfloat stepX = 1.f / _text.length();
+    GLfloat offset = 0.f;
 
-    GLfloat *vertexData = new GLfloat[30 * _text.length()];
-    memset(vertexData, 0, 30 * _text.length() * sizeof(GLfloat));
+    glBufferData(GL_ARRAY_BUFFER, 30 * _text.length() * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
 
     for (std::size_t i = 0; i < _text.length(); i++) {
         auto character = font->_characterCache[(int)_text[i]];
 
+        auto textureOffset = character.offset / font->_textureWidth;
+        auto textureWidth = character.width / font->_textureWidth;
+        auto textureHeight = character.height / font->_textureHeight;
+
         GLfloat charVertexData[30] = {
-            -0.5f + stepX * i, -0.5f, 0.f, character.offset, 0.f,
-            -0.5f + stepX * i, 0.5f, 0.f, character.offset, character.height,
-            -0.5f + stepX * (i + 1), -0.5f, 0.f, character.offset + character.width, 0.f,
-            -0.5f + stepX * (i + 1), -0.5f, 0.f, character.offset + character.width, 0.f,
-            -0.5f + stepX * (i + 1), 0.5f, 0.f, character.offset + character.width, character.height,
-            -0.5f + stepX * i, 0.5f, 0.f, character.offset, character.height
+            -0.5f + offset, -0.5f, 0.f, textureOffset, 0.f,
+            -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight,
+            -0.5f + (offset + character.width / _size.x), -0.5f, 0.f, textureOffset + textureWidth, 0.f,
+            -0.5f + (offset + character.width / _size.x), -0.5f, 0.f, textureOffset + textureWidth, 0.f,
+            -0.5f + (offset + character.width / _size.x), 0.5f, 0.f, textureOffset + textureWidth, textureHeight,
+            -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight
         };
 
-        memcpy(&vertexData[i * 30], charVertexData, 30 * sizeof(GLfloat));
+        glBufferSubData(GL_ARRAY_BUFFER, i * 30 * sizeof(GLfloat), 30 * sizeof(GLfloat), charVertexData);
+
+        offset += character.ax / _size.x;
     }
-
-    glBufferData(GL_ARRAY_BUFFER, 30 * _text.length() * sizeof(GLfloat), vertexData, GL_DYNAMIC_DRAW);
-
-    delete [] vertexData;
-
-    // GLfloat vertexData[] = {
-	// 	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	// 	-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	// 	0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	// 	0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	// 	0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-	// 	-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-    // };
-
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
     // unbind the VBO and VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
