@@ -58,10 +58,13 @@ void twoCoords::SceneText::render(std::shared_ptr<ShaderProgram> program) {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
     glEnableVertexAttribArray(program->attrib("vert"));
-    glVertexAttribPointer(program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), NULL);
+    glVertexAttribPointer(program->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), NULL);
 
     glEnableVertexAttribArray(program->attrib("vertTexCoord"));
-	glVertexAttribPointer(program->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat), (const GLvoid *)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(program->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE, 9 * sizeof(GLfloat), (const GLvoid *)(3 * sizeof(GLfloat)));
+
+    glEnableVertexAttribArray(program->attrib("vertColor"));
+	glVertexAttribPointer(program->attrib("vertColor"), 4, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (const GLvoid *)(5 * sizeof(GLfloat)));
 
     // bind texture
     glActiveTexture(GL_TEXTURE0);
@@ -115,9 +118,13 @@ void twoCoords::SceneText::updateVertexArray(std::shared_ptr<Font> font) {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
     // add character rectangles
+    const int VERTEX_DATA_SIZE = 6 * 9;
+
+    glm::vec4 color = glm::vec4(1, 0, 1, 1);
+
     GLfloat offset = 0.f;
 
-    glBufferData(GL_ARRAY_BUFFER, 30 * _text.length() * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, VERTEX_DATA_SIZE * _text.length() * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
 
     for (std::size_t i = 0; i < _text.length(); i++) {
         auto character = font->_characterCache[(int)_text[i]];
@@ -129,16 +136,17 @@ void twoCoords::SceneText::updateVertexArray(std::shared_ptr<Font> font) {
         auto positionWidth = character.width / _size.x;
         auto verticalOffset = 1.f - character.height / _size.y;
 
-        GLfloat charVertexData[30] = {
-            -0.5f + offset, -0.5f + verticalOffset, 0.f, textureOffset, 0.f,
-            -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight,
-            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,
-            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,
-            -0.5f + offset + positionWidth, 0.5f, 0.f, textureOffset + textureWidth, textureHeight,
-            -0.5f + offset, 0.5f, 0.f, textureOffset, textureHeight
+        GLfloat charVertexData[VERTEX_DATA_SIZE] = {
+            // x                             y                      z    u                             v              red      green    blue     alpha
+            -0.5f + offset,                 -0.5f + verticalOffset, 0.f, textureOffset,                0.f,           color.r, color.g, color.b, color.a,
+            -0.5f + offset,                  0.5f,                  0.f, textureOffset,                textureHeight, color.r, color.g, color.b, color.a,
+            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,           color.r, color.g, color.b, color.a,
+            -0.5f + offset + positionWidth, -0.5f + verticalOffset, 0.f, textureOffset + textureWidth, 0.f,           color.r, color.g, color.b, color.a,
+            -0.5f + offset + positionWidth,  0.5f,                  0.f, textureOffset + textureWidth, textureHeight, color.r, color.g, color.b, color.a,
+            -0.5f + offset,                  0.5f,                  0.f, textureOffset,                textureHeight, color.r, color.g, color.b, color.a
         };
 
-        glBufferSubData(GL_ARRAY_BUFFER, i * 30 * sizeof(GLfloat), 30 * sizeof(GLfloat), charVertexData);
+        glBufferSubData(GL_ARRAY_BUFFER, i * VERTEX_DATA_SIZE * sizeof(GLfloat), VERTEX_DATA_SIZE * sizeof(GLfloat), charVertexData);
 
         offset += character.ax / _size.x;
     }

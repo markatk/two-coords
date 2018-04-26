@@ -64,8 +64,8 @@ namespace twoCoords {
 		out vec4 finalColor;
 
 		void main() {
-			// finalColor = fragColor * vec4(1, 1, 1, texture(tex, fragTexCoord).r);
-			finalColor = vec4(1, 1, 1, texture(tex, fragTexCoord).r);
+			finalColor = fragColor * vec4(1, 1, 1, texture(tex, fragTexCoord).r);
+			// finalColor = vec4(1, 1, 1, texture(tex, fragTexCoord).r);
 		}
 	)";
 }
